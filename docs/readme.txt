@@ -7,8 +7,6 @@ clicking "customize".
 
 TODO:
 
-Change build infrastructure to use Maven instead of ant.
-
 Add NOAA weather forecast information from NOAA's web service. 
     (see Junk.java for experimental code)
     
