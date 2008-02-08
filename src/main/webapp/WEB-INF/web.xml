@@ -20,6 +20,8 @@
         <load-on-startup>1</load-on-startup>
     </servlet>
 
+    <!-- [INSERT JSPC FRAGMENT HERE] -->
+
     <servlet-mapping>
         <servlet-name>weather</servlet-name>
         <url-pattern>*.htm</url-pattern>
