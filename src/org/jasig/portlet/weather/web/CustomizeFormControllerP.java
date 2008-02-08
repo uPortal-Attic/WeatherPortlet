@@ -40,18 +40,18 @@ public class CustomizeFormControllerP  extends AbstractWizardFormController {
 	}
 	
 	@Override
-	protected Map<String, List> referenceData(PortletRequest request, Object command,
+	protected Map<String, List<?>> referenceData(PortletRequest request, Object command,
 			Errors errors, int page) throws Exception {
-		Map<String, List> data = null;
+		Map<String, List<?>> data = null;
 		if (page == 0){
-			data = new HashMap<String,List>();
+			data = new HashMap<String,List<?>>();
 			logger.error("getting states");
 			List<String> states = new ArrayList<String>(WeatherObservationService.getStates());
 			data.put("listStates",states);
 		}
 		
 		if (page==1){
-			data = new HashMap<String, List>();
+			data = new HashMap<String, List<?>>();
 			Config c = (Config)command;
 			String state = c.getState();
 			logger.error("getting stations for state "+state);
