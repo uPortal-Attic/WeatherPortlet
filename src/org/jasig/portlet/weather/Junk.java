@@ -25,6 +25,13 @@ import javax.xml.xpath.XPathExpressionException;
 
 import org.xml.sax.SAXException;
 
+/**
+ * This class contains experimental code that could be used
+ * to lookup locations by zip or by location name.
+ * 
+ * @author jjohnson
+ *
+ */
 public class Junk {
 	public static void main (String [] args) throws IOException, SAXException, ParserConfigurationException, XPathExpressionException{
 		
@@ -89,7 +96,8 @@ public class Junk {
 			throws FileNotFoundException, IOException {
 		Point myPoint = new Point();
 
-		BufferedReader is = new BufferedReader(new InputStreamReader(new FileInputStream("/home/jjohnson/workspace/ws-test2/places2k.txt")));
+		BufferedReader is = new BufferedReader(new InputStreamReader(
+				new FileInputStream("places2k.txt")));
 		String line;
 		
 		while ((line = is.readLine()) != null){
@@ -111,7 +119,8 @@ public class Junk {
 			throws FileNotFoundException, IOException {
 		Point myPoint = new Point();
 
-		BufferedReader is = new BufferedReader(new InputStreamReader(new FileInputStream("/home/jjohnson/workspace/ws-test2/zcta5.txt")));
+		BufferedReader is = new BufferedReader(new InputStreamReader(
+				new FileInputStream("zcta5.txt")));
 		String line;
 		
 		while ((line = is.readLine()) != null){
