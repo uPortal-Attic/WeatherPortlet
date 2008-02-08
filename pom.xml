@@ -11,12 +11,12 @@
     
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.jasig.portlet</groupId>
-    <artifactId>FeedbackPortlet</artifactId>
+    <artifactId>WeatherPortlet</artifactId>
     <packaging>war</packaging>
     <version>0.0.1-SNAPSHOT</version>
     
-    <name>Feedback Portlet</name>
-    <description>Feedback Portlet.</description>
+    <name>Weather Portlet</name>
+    <description>Weather Portlet.</description>
     
     <repositories>
         <repository>
@@ -82,7 +82,7 @@
                 </exclusion>
             </exclusions>
         </dependency>
-        
+
         <dependency>
             <groupId>commons-lang</groupId>
             <artifactId>commons-lang</artifactId>
@@ -187,6 +187,13 @@
         
         <!-- ===== Runtime Dependencies ================================== -->
         
+        <dependency>
+            <groupId>axis</groupId>
+            <artifactId>axis</artifactId>
+            <version>1.4</version>
+            <type>jar</type>
+        </dependency>
+
         <dependency>
             <groupId>commons-collections</groupId>
             <artifactId>commons-collections</artifactId>
@@ -302,7 +309,7 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
                 <configuration>
-                    <warName>FeedbackPortlet</warName>
+                    <warName>WeatherPortlet</warName>
                     <webXml>${basedir}/target/jspweb.xml</webXml>
                 </configuration>
             </plugin>
