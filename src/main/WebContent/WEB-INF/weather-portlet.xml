@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN 2.0//EN"
+        "http://www.springframework.org/dtd/spring-beans-2.0.dtd">
+<!--
+  - Application context definition for "dispatch" DispatcherServlet.
+  -->
+
+<beans>
+
+    <!-- This interceptor forwards the mapping request parameter from an ActionRequest to be used as a render parameter. -->
+    <bean id="parameterMappingInterceptor" class="org.springframework.web.portlet.handler.ParameterMappingInterceptor"/>
+
+
+    <!-- Handler Mappings -->
+
+    <bean id="portletModeParameterHandlerMapping" class="org.springframework.web.portlet.handler.PortletModeParameterHandlerMapping">
+        <property name="order" value="1"/>
+        <property name="interceptors">
+            <list>
+                <ref bean="parameterMappingInterceptor"/>
+            </list>
+        </property>
+        <property name="portletModeParameterMap">
+            <map>
+                <entry key="view">
+                    <map>
+                        <entry key="state" value-ref="customizeFormController"/>
+                    </map>
+                </entry>
+            </map>
+        </property>
+    </bean>
+    
+    <!-- handler directs requests for portlet mode "VIEW" to "feedbackFormController" -->
+    <bean id="portletModeHandlerMapping" class="org.springframework.web.portlet.handler.PortletModeHandlerMapping">
+        <property name="order" value="2"/>
+        <property name="portletModeMap">
+            <map>
+                <entry key="view"><ref bean="weatherController"/></entry>
+                <entry key="edit"><ref bean="weatherController"/></entry>
+            </map>
+        </property>
+    </bean>
+    
+    <!--  Controller for the initial Weather information page -->
+    
+    <bean id="weatherController" class="org.jasig.portlet.weather.web.WeatherControllerP">
+        <property name="configurationManager">
+            <ref bean="confMan"/>
+        </property>
+    </bean>
+    
+    <!--  Controller for the page that lets you customize the weather station -->
+    
+    <bean id="customizeFormController" class="org.jasig.portlet.weather.web.CustomizeFormControllerP">
+        <property name="sessionForm"><value>true</value></property>
+        <property name="commandName"><value>customize</value></property>
+        <property name="commandClass"><value>org.jasig.portlet.weather.bus.Config</value></property>
+        <property name="pageAttribute" value="page"/>
+        <property name="pages" value="customize,customize"/>
+        <!--<property name="validator" ref="petValidator"/>--> 
+        
+        <property name="configurationManager">
+            <ref bean="confMan"/>
+        </property>
+    </bean>
+    
+    <bean id="confMan" class="org.jasig.portlet.weather.bus.ConfigurationManager">
+        <property name="config"><ref bean="defaultConfig"/></property>
+    </bean>
+    
+    <bean id="defaultConfig" class="org.jasig.portlet.weather.bus.Config">
+        <property name="state"><value>TX</value></property>
+        <property name="stationId"><value>KLBB</value></property>
+    </bean> 
+
+    <bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
+        <property name="basename"><value>messages</value></property>
+    </bean>
+
+    <bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="cache"><value>false</value></property>
+        <property name="viewClass"><value>org.springframework.web.servlet.view.JstlView</value></property>
+        <property name="prefix"><value>/WEB-INF/jsp/</value></property>
+        <property name="suffix"><value>.jsp</value></property>
+    </bean>
+    
+</beans>
