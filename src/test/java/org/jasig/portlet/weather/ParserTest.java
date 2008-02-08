@@ -20,7 +20,7 @@ import junit.framework.TestCase;
 
 public class ParserTest extends TestCase{
 	
-	public void parserTest(){
+	public void testParser(){
 		
 		String url = "http://www.weather.gov/data/current_obs/index.xml";
 		
@@ -46,7 +46,7 @@ public class ParserTest extends TestCase{
 		        	}
 		        }
 		        assertTrue(states.size() > 50);
-		        assertTrue(states.size() < 60);
+		        assertTrue(states.size() < 80);
 		        assertTrue(foundStation);
 	            
 			} catch (ParserConfigurationException e) {
