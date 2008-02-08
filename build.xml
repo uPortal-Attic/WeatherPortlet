@@ -1,7 +1,13 @@
 <?xml version="1.0"?>
 
 <project>
-    <property name="build.dir" value="build"/>
+	<property file="build.properties" />
+	
+    <property name="tomcat" value="(set this in build.properties!)"/>
+    <property name="uportal-src" value="(set this in build.properties!)"/>
+    <property name="jasig-weather-portlet" value="(set this in build.properties!)"/>
+	
+	<property name="build.dir" value="build"/>
     <property name="src.dir" value="src"/>
 	
     <path id="master-classpath">
@@ -13,16 +19,21 @@
     
     <path id="build-classpath">
 
-        <fileset dir="/home/jjohnson/workspace/up2 - 2.6/lib/container-shared">
+        <fileset dir="${uportal-src}/lib/container-shared">
             <include name="portlet-api-1.0.jar"/>
         </fileset>
-        <fileset dir="/home/jjohnson/tomcat55/common/lib">
+        <fileset dir="${tomcat}/common/lib">
             <include name="servlet-api.jar"/>
         </fileset>
 
     </path>	
 	
+	<target name="clean">
+        <delete dir="${build.dir}" />
+	</target>
+	
 	<target name="compile">
+        <mkdir dir="${build.dir}"/>
         <mkdir dir="${build.dir}/classes"/>
 
         <javac destdir="${build.dir}/classes" source="1.5" target="1.5" debug="true"
@@ -42,14 +53,15 @@
     	
     </target>
 	
+	<!-- Call the uPortal ant target "deployPortletApp" -->
     <target name="deploy" depends="war">
     	<ant 
     	   antfile="build.xml" 
-    	   dir="/home/jjohnson/workspace/up2 - 2.6"
+    	   dir="${uportal-src}"
     	   target="deployPortletApp"
     	>
     		<property name="portletApp" 
-    			value="/home/jjohnson/workspace/jasig-weather-portlet/build/jasig-weather-portlet.war"/>
+    			value="${jasig-weather-portlet}/build/jasig-weather-portlet.war"/>
     	</ant>
         
     </target>
