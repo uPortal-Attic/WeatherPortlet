@@ -1,0 +1,57 @@
+<?xml version="1.0"?>
+
+<project>
+    <property name="build.dir" value="build"/>
+    <property name="src.dir" value="src"/>
+	
+    <path id="master-classpath">
+
+        <fileset dir="WebContent/WEB-INF/lib">
+            <include name="*.jar"/>
+        </fileset>
+    </path>
+    
+    <path id="build-classpath">
+
+        <fileset dir="/home/jjohnson/workspace/up2 - 2.6/lib/container-shared">
+            <include name="portlet-api-1.0.jar"/>
+        </fileset>
+        <fileset dir="/home/jjohnson/tomcat55/common/lib">
+            <include name="servlet-api.jar"/>
+        </fileset>
+
+    </path>	
+	
+	<target name="compile">
+        <mkdir dir="${build.dir}/classes"/>
+
+        <javac destdir="${build.dir}/classes" source="1.5" target="1.5" debug="true"
+	          deprecation="false" optimize="false" failonerror="true">
+	            <src path="${src.dir}"/>
+	            <classpath refid="master-classpath"/>
+	            <classpath refid="build-classpath"/>
+	    </javac>
+	</target>
+	
+    <target name="war" depends="compile">
+        <war warfile="${build.dir}/jasig-weather-portlet.war"
+        	webxml="WebContent/WEB-INF/web.xml">
+        	<classes dir="build/classes"/>
+        	<fileset dir="WebContent"/>
+    	</war>
+    	
+    </target>
+	
+    <target name="deploy" depends="war">
+    	<ant 
+    	   antfile="build.xml" 
+    	   dir="/home/jjohnson/workspace/up2 - 2.6"
+    	   target="deployPortletApp"
+    	>
+    		<property name="portletApp" 
+    			value="/home/jjohnson/workspace/jasig-weather-portlet/build/jasig-weather-portlet.war"/>
+    	</ant>
+        
+    </target>
+	
+</project>
