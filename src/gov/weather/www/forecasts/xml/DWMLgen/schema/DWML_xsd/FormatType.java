@@ -7,17 +7,16 @@
 
 package gov.weather.www.forecasts.xml.DWMLgen.schema.DWML_xsd;
 
+@SuppressWarnings("unchecked")
 public class FormatType implements java.io.Serializable {
     /**
 	 * 
 	 */
 	private static final long serialVersionUID = -7971868191300025859L;
 	private java.lang.String _value_;
-    @SuppressWarnings("unchecked")
 	private static java.util.HashMap _table_ = new java.util.HashMap();
 
     // Constructor
-    @SuppressWarnings("unchecked")
 	protected FormatType(java.lang.String value) {
         _value_ = value;
         _table_.put(_value_,this);
@@ -43,7 +42,6 @@ public class FormatType implements java.io.Serializable {
     public int hashCode() { return toString().hashCode();}
     public java.lang.String toString() { return _value_;}
     public java.lang.Object readResolve() throws java.io.ObjectStreamException { return fromValue(_value_);}
-    @SuppressWarnings("unchecked")
 	public static org.apache.axis.encoding.Serializer getSerializer(
            java.lang.String mechType, 
            java.lang.Class _javaType,  
@@ -52,7 +50,6 @@ public class FormatType implements java.io.Serializable {
           new org.apache.axis.encoding.ser.EnumSerializer(
             _javaType, _xmlType);
     }
-    @SuppressWarnings("unchecked")
 	public static org.apache.axis.encoding.Deserializer getDeserializer(
            java.lang.String mechType, 
            java.lang.Class _javaType,  

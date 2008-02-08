@@ -7,6 +7,7 @@
 
 package gov.weather.www.forecasts.xml.DWMLgen.wsdl.ndfdXML_wsdl;
 
+@SuppressWarnings("all")
 public class NdfdXMLBindingStub extends org.apache.axis.client.Stub implements gov.weather.www.forecasts.xml.DWMLgen.wsdl.ndfdXML_wsdl.NdfdXMLPortType {
     private java.util.Vector cachedSerClasses = new java.util.Vector();
     private java.util.Vector cachedSerQNames = new java.util.Vector();

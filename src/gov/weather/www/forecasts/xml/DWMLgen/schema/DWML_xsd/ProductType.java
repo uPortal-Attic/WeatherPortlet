@@ -7,8 +7,13 @@
 
 package gov.weather.www.forecasts.xml.DWMLgen.schema.DWML_xsd;
 
+@SuppressWarnings("unchecked")
 public class ProductType implements java.io.Serializable {
-    private java.lang.String _value_;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -6185300662762827733L;
+	private java.lang.String _value_;
     private static java.util.HashMap _table_ = new java.util.HashMap();
 
     // Constructor

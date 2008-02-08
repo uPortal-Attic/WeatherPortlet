@@ -7,8 +7,14 @@
 
 package gov.weather.www.forecasts.xml.DWMLgen.schema.DWML_xsd;
 
+@SuppressWarnings("unchecked")
 public class WeatherParametersType  implements java.io.Serializable {
-    private boolean maxt;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -3022447484218206109L;
+
+	private boolean maxt;
 
     private boolean mint;
 

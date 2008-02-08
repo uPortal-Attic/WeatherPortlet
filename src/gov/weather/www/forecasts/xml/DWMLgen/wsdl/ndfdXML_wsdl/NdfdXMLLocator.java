@@ -7,7 +7,13 @@
 
 package gov.weather.www.forecasts.xml.DWMLgen.wsdl.ndfdXML_wsdl;
 
+@SuppressWarnings("unchecked")
 public class NdfdXMLLocator extends org.apache.axis.client.Service implements gov.weather.www.forecasts.xml.DWMLgen.wsdl.ndfdXML_wsdl.NdfdXML {
+
+/**
+	 * 
+	 */
+	private static final long serialVersionUID = -2845018937938418511L;
 
 /**
  * The service has two exposed functions, NDFDgen and NDFDgenByDay.
