@@ -13,6 +13,7 @@ import org.springframework.web.portlet.mvc.SimpleFormController;
  * This class handles all interactions from the edit form.
  * 
  * @author Dustin Schultz
+ * @version $Id$
  */
 public class WeatherEditController extends SimpleFormController {
 

@@ -12,6 +12,7 @@ import java.util.Date;
  * This class models forecasted weather.
  * 
  * @author Dustin Schultz
+ * @version $Id$
  */
 public class Forecast implements Serializable {
 

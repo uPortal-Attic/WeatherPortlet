@@ -13,6 +13,7 @@ import org.springframework.web.portlet.mvc.AbstractController;
  * This class handles retrieves information and displays the view page.
  * 
  * @author Dustin Schultz
+ * @version $Id$
  */
 public class WeatherViewController extends AbstractController {
 	

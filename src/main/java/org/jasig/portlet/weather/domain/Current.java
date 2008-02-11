@@ -11,6 +11,7 @@ import java.io.Serializable;
  * This class models current weather.
  * 
  * @author Dustin Schultz
+ * @version $Id$
  */
 public class Current implements Serializable {
 

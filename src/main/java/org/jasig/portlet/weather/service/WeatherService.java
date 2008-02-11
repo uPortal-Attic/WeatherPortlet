@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * and find locations.
  * 
  * @author Dustin Schultz
+ * @version $Id$
  */
 public class WeatherService {
 

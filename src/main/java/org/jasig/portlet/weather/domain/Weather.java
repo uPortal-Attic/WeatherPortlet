@@ -13,6 +13,7 @@ import java.util.Collection;
  * current weather and optional forecast weather.
  * 
  * @author Dustin Schultz
+ * @version $Id$
  */
 public class Weather implements Serializable {
 

@@ -15,6 +15,7 @@ import org.jasig.portlet.weather.domain.Weather;
  * information from source.
  * 
  * @author Dustin Schultz
+ * @version $Id$
  */
 public interface IWeatherDao {
 

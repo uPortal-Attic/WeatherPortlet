@@ -11,6 +11,7 @@ import java.io.Serializable;
  * This class models an international location.
  * 
  * @author Dustin Schultz
+ * @version $Id$
  */
 public class Location implements Serializable {
 
