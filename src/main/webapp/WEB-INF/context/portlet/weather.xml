@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ehcache="http://www.springmodules.org/schema/ehcache"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+    http://www.springmodules.org/schema/ehcache
+    http://www.springmodules.org/schema/cache/springmodules-ehcache.xsd">
+
+    <!-- Controllers -->
+
+    <bean id="viewWeatherController"
+        class="edu.yale.its.tp.portlets.YahooServices.weather.ViewWeatherController">
+        <property name="weatherService">
+            <bean class="edu.yale.its.tp.portlets.YahooServices.weather.YahooWeatherService"/>
+        </property>
+    </bean>
+    <bean id="editWeatherController"
+        class="edu.yale.its.tp.portlets.YahooServices.weather.EditWeatherController">
+        <property name="formView">
+            <value>editWeatherPortlet</value>
+        </property>
+        <property name="sessionForm">
+            <value>false</value>
+        </property>
+    </bean>
+
+    <!-- Handler Mapping -->
+
+    <bean id="portletModeHandlerMapping"
+        class="org.springframework.web.portlet.handler.PortletModeHandlerMapping">
+        <property name="portletModeMap">
+            <map>
+                <entry key="view" value-ref="viewWeatherController"/>
+                <entry key="edit" value-ref="editWeatherController"/>
+            </map>
+        </property>
+    </bean>
+
+</beans>

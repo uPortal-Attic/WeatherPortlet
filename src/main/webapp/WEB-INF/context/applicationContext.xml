@@ -1,0 +1,47 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:ehcache="http://www.springmodules.org/schema/ehcache"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+		http://www.springmodules.org/schema/ehcache
+		http://www.springmodules.org/schema/cache/springmodules-ehcache.xsd">
+
+	<!-- EHCache Configuration -->
+	<ehcache:config configLocation="classpath:ehcache.xml"/>
+	
+	<ehcache:annotations>
+		<ehcache:caching id="weatherCacheModel" cacheName="weatherCache"/>
+	</ehcache:annotations>
+	
+	<!-- Message source for this context, loaded from localized "messages_xx" files -->
+	<bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
+		<property name="basenames">
+			<list>
+				<value>messages</value>
+			</list>
+		</property>
+	</bean>
+
+	<!-- Default View Resolver -->
+	<bean id="viewResolver"
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="cache" value="false"/>
+		<property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
+		<property name="prefix" value="/WEB-INF/jsp/"/>
+		<property name="suffix" value=".jsp"/>
+	</bean>
+
+	<!-- Abstract Default Exception Handler Bean -->
+	<bean id="defaultExceptionHandlerTemplate"
+		class="org.springframework.web.portlet.handler.SimpleMappingExceptionResolver"
+		abstract="true">
+		<property name="defaultErrorView" value="defError"/>
+		<property name="exceptionMappings">
+			<props>
+				<prop key="javax.portlet.PortletSecurityException">notAuthorized</prop>
+				<prop key="javax.portlet.UnavailableException">notAvailable</prop>
+			</props>
+		</property>
+	</bean>
+
+</beans>

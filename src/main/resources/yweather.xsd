@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+    targetNamespace="http://xml.weather.yahoo.com/ns/rss/1.0" xmlns="http://xml.weather.yahoo.com/ns/rss/1.0" 
+    elementFormDefault="qualified">
+
+    <xs:element name="location">
+        <xs:complexType>
+            <xs:attribute name="city" type="xs:string"/>
+            <xs:attribute name="region" type="xs:string"/>
+            <xs:attribute name="country" type="xs:string"/>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="units">
+        <xs:complexType>
+            <xs:attribute name="temperature" type="xs:string"/>
+            <xs:attribute name="distance" type="xs:string"/>
+            <xs:attribute name="pressure" type="xs:string"/>
+            <xs:attribute name="speed" type="xs:string"/>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="wind">
+        <xs:complexType>
+            <xs:attribute name="chill" type="xs:int"/>
+            <xs:attribute name="direction" type="xs:int"/>
+            <xs:attribute name="speed" type="xs:int"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="atmosphere">
+        <xs:complexType>
+            <xs:attribute name="humidity" type="xs:int"/>
+            <xs:attribute name="visibility" type="xs:int"/>
+            <xs:attribute name="pressure" type="xs:float"/>
+            <xs:attribute name="rising" type="xs:int"/>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="astronomy">
+        <xs:complexType>
+            <xs:attribute name="sunrise" type="xs:string"/>
+            <xs:attribute name="sunset" type="xs:string"/>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="condition">
+        <xs:complexType>
+            <xs:attribute name="text" type="xs:string"/>
+            <xs:attribute name="code" type="xs:int"/>
+            <xs:attribute name="temp" type="xs:int"/>
+            <xs:attribute name="date" type="xs:string"/>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="forecast">
+        <xs:complexType>
+            <xs:attribute name="day" type="xs:string"/>
+            <xs:attribute name="date" type="xs:string"/>
+            <xs:attribute name="low" type="xs:int"/>
+            <xs:attribute name="high" type="xs:int"/>
+            <xs:attribute name="text" type="xs:string"/>
+            <xs:attribute name="code" type="xs:int"/>
+        </xs:complexType>
+    </xs:element>
+    
+</xs:schema>
+
+<!-- ws03.search.scd.yahoo.com compressed/chunked Thu Jan 24 10:34:20 PST 2008 -->

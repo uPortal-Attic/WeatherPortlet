@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+    xmlns:yweather="http://xml.weather.yahoo.com/ns/rss/1.0" xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#" 
+    elementFormDefault="qualified">
+    <xs:import namespace="http://xml.weather.yahoo.com/ns/rss/1.0"
+        schemaLocation="yweather.xsd"/>
+    <xs:import namespace="http://www.w3.org/2003/01/geo/wgs84_pos#"
+        schemaLocation="geo.xsd"/>
+    
+    <xs:element name="rss">
+        <xs:complexType>
+                <xs:sequence>
+                    <xs:element name="channel" minOccurs="1" maxOccurs="1">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="link" type="xs:string" minOccurs="1" maxOccurs="1"/>
+                                <xs:element ref="yweather:location" minOccurs="1" maxOccurs="1"/>
+                                <xs:element ref="yweather:units" minOccurs="1" maxOccurs="1"/>
+                                <xs:element ref="yweather:wind" minOccurs="1" maxOccurs="1"/>
+                                <xs:element ref="yweather:atmosphere" minOccurs="1" maxOccurs="1"/>
+                                <xs:element ref="yweather:astronomy" minOccurs="1" maxOccurs="1"/>
+                                <xs:element name="item" minOccurs="1" maxOccurs="1">
+                                    <xs:complexType>
+                                        <xs:sequence>
+                                            <xs:element ref="geo:lat" minOccurs="1" maxOccurs="1"/>
+                                            <xs:element ref="geo:long" minOccurs="1" maxOccurs="1"/>
+                                            <xs:element ref="yweather:condition" minOccurs="1" maxOccurs="1"/>
+                                            <xs:element ref="yweather:forecast" minOccurs="1" maxOccurs="4"/>
+                                        </xs:sequence>
+                                    </xs:complexType>
+                                </xs:element>
+                            </xs:sequence>
+                        </xs:complexType>
+                    </xs:element>
+                </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+</xs:schema>
+
+<!-- ws03.search.scd.yahoo.com compressed/chunked Thu Jan 24 10:34:20 PST 2008 -->

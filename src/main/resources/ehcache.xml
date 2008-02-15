@@ -1,0 +1,18 @@
+<ehcache>
+
+    <!-- Default ehcache -->
+    <defaultCache
+        maxElementsInMemory="100"
+        eternal="true"
+        overflowToDisk="false"
+        memoryStoreEvictionPolicy="LFU"/>
+
+    <!-- Weather information cache -->
+    <cache name="weatherCache"
+        maxElementsInMemory="100"
+        eternal="false"
+        timeToLiveSeconds="900"
+        overflowToDisk="false"
+        memoryStoreEvictionPolicy="FLU"/>
+    
+</ehcache>
