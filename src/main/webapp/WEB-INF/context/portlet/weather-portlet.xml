@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "../../dtd/spring-beans.dtd">
+<!-- Author: Dustin Schultz | Version: $Id$ -->
+<beans>
+
+	<!-- Controllers -->
+	<bean id="weatherViewController" class="org.jasig.portlet.weather.portlet.WeatherViewController" autowire="byType"/>
+	
+	<bean id="weatherEditController" class="org.jasig.portlet.weather.portlet.WeatherEditController" autowire="byType">
+		<property name="formView" value="edit"/>
+		<property name="successView" value="view"/>
+		<property name="cacheSeconds" value="0"/>
+		<property name="commandName" value="weatherEditCommand"/>
+		<property name="commandClass" value="org.jasig.portlet.weather.portlet.WeatherEditCommand"/>
+		<property name="sessionForm" value="false"/>
+		<!-- <property name="validator" ref="zipCodeValidator"/> -->
+	</bean>
+	
+	<!-- Validators 
+	<bean id="zipCodeValidator" class="edu.suu.weather.portlet.validation.YahooZipCodeValidator"/>
+	-->
+	<!-- Handler Mapping -->
+	<bean id="portletModeHandlerMapping" class="org.springframework.web.portlet.handler.PortletModeHandlerMapping">		
+		<property name="portletModeMap">
+			<map>
+				<entry key="view"><ref bean="weatherViewController"/></entry>	
+				<entry key="edit"><ref bean="weatherEditController"/></entry>			
+			</map>
+		</property>
+	</bean>
+
+</beans>

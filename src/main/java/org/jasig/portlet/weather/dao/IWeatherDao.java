@@ -22,13 +22,15 @@ public interface IWeatherDao {
 	/**
 	 * Gets the weather from an implemented source.
 	 * 
-	 * @param location
-	 *            A location object representing the location of weather to
-	 *            retrieve.
+	 * @param locationCode
+	 *            A string value representing the location to retrieve weather
+	 *            from.
+	 * @param metric
+	 *            A boolean value representing metric or not.
 	 * @return A Weather object representing the current weather and an optional
 	 *         forecast.
 	 */
-	public Weather getWeather(Location location);
+	public Weather getWeather(String locationCode, Boolean metric);
 
 	/**
 	 * @param location

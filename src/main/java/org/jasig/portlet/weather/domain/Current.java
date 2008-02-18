@@ -16,17 +16,21 @@ import java.io.Serializable;
 public class Current implements Serializable {
 
 	private static final long serialVersionUID = 2204725860007975876L;
-	private Double temperature = null;
+	private Integer temperature = null;
 	private String condition = null;
-	private Double wind = null;
+	private String conditionImgPath = null; //relative path
+	private Integer conditionImgWidth = null;
+	private Integer conditionImgHeight = null;
+	private Double windSpeed = null;
 	private String windDirection = null;
-	private String humidity = null;
+	private Integer humidity = null;
+	private Double pressure = null;
 
-	public Double getTemperature() {
+	public Integer getTemperature() {
 		return temperature;
 	}
 
-	public void setTemperature(Double temperature) {
+	public void setTemperature(Integer temperature) {
 		this.temperature = temperature;
 	}
 
@@ -38,12 +42,12 @@ public class Current implements Serializable {
 		this.condition = condition;
 	}
 
-	public Double getWind() {
-		return wind;
+	public Double getWindSpeed() {
+		return windSpeed;
 	}
 
-	public void setWind(Double wind) {
-		this.wind = wind;
+	public void setWindSpeed(Double windSpeed) {
+		this.windSpeed = windSpeed;
 	}
 
 	public String getWindDirection() {
@@ -54,11 +58,43 @@ public class Current implements Serializable {
 		this.windDirection = windDirection;
 	}
 
-	public String getHumidity() {
+	public Integer getHumidity() {
 		return humidity;
 	}
 
-	public void setHumidity(String humidity) {
+	public void setHumidity(Integer humidity) {
 		this.humidity = humidity;
 	}
+
+	public String getConditionImgPath() {
+		return conditionImgPath;
+	}
+
+	public Integer getConditionImgWidth() {
+		return conditionImgWidth;
+	}
+
+	public void setConditionImgWidth(Integer conditionImgWidth) {
+		this.conditionImgWidth = conditionImgWidth;
+	}
+
+	public Integer getConditionImgHeight() {
+		return conditionImgHeight;
+	}
+
+	public void setConditionImgHeight(Integer conditionImgHeight) {
+		this.conditionImgHeight = conditionImgHeight;
+	}
+
+	public void setConditionImgPath(String conditionImgPath) {
+		this.conditionImgPath = conditionImgPath;
+	}
+
+	public Double getPressure() {
+		return pressure;
+	}
+
+	public void setPressure(Double pressure) {
+		this.pressure = pressure;
+	}	
 }

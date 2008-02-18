@@ -16,44 +16,14 @@ import java.io.Serializable;
 public class Location implements Serializable {
 
 	private static final long serialVersionUID = -4301186984139190062L;
-	private String location = null; // city, country or city, state
-	private String locationCode = null;
-	private String region = null;
-	private String country = null;
+	private String locationCode = null; // zipcode or some other code that represents this location
 	private String city = null;
-	private String state = null;
-	private Integer zipCode = null;
-
-	public String getLocation() {
-		return location;
-	}
-
-	public void setLocation(String location) {
-		this.location = location;
-	}
-
-	public String getLocationCode() {
-		return locationCode;
-	}
+	private String stateOrCountry = null;
+	private Double latitude = null;
+	private Double longitude = null;
 
 	public void setLocationCode(String locationCode) {
 		this.locationCode = locationCode;
-	}
-
-	public String getRegion() {
-		return region;
-	}
-
-	public void setRegion(String region) {
-		this.region = region;
-	}
-
-	public String getCountry() {
-		return country;
-	}
-
-	public void setCountry(String country) {
-		this.country = country;
 	}
 
 	public String getCity() {
@@ -64,20 +34,31 @@ public class Location implements Serializable {
 		this.city = city;
 	}
 
-	public String getState() {
-		return state;
+	public String getStateOrCountry() {
+		return stateOrCountry;
 	}
 
-	public void setState(String state) {
-		this.state = state;
+	public void setStateOrCountry(String stateOrCountry) {
+		this.stateOrCountry = stateOrCountry;
 	}
 
-	public Integer getZipCode() {
-		return zipCode;
+	public Double getLatitude() {
+		return latitude;
 	}
 
-	public void setZipCode(Integer zipCode) {
-		this.zipCode = zipCode;
+	public void setLatitude(Double latitude) {
+		this.latitude = latitude;
 	}
 
+	public Double getLongitude() {
+		return longitude;
+	}
+
+	public void setLongitude(Double longitude) {
+		this.longitude = longitude;
+	}
+
+	public String getLocationCode() {
+		return locationCode;
+	}
 }
