@@ -18,6 +18,9 @@
 		</property>										
 	</bean>
 	
+	<!-- This interceptor forwards the mapping request parameter from an ActionRequest to be used as a render parameter. -->
+	<bean id="parameterMappingInterceptor" class="org.springframework.web.portlet.handler.ParameterMappingInterceptor"/>
+	
 	<!-- ========================= PORTLET SPECIFIC DEFINITIONS ========================= -->
 	<!-- Default View Resolver -->
 	<bean id="viewResolver"
@@ -44,7 +47,17 @@
 	-->
 	
 	<!-- ========================= DAO Defenitions ============================ -->
-	<bean id="weatherDao" class="org.jasig.portlet.weather.dao.accuweather.WeatherDaoImpl"/>
+	
+	<!-- Choose an implementation (DOM4J or Xstream), uncomment one and comment out the other. 
+		Also, don't forget to do the same in testContext.xml
+	-->
+	
+	<!-- DOM4J Impl
+	<bean id="weatherDao" class="org.jasig.portlet.weather.dao.accuweather.dom4j.WeatherDaoImpl"/>
+	-->
+	
+	<!-- Xstream Impl -->
+	<bean id="weatherDao" class="org.jasig.portlet.weather.dao.accuweather.xstream.WeatherDaoImpl"/>
 
 	<!-- ========================= SERVICE DEFENITIONS ========================= -->
 	<bean id="weatherService" class="org.jasig.portlet.weather.service.WeatherServiceImpl"/>

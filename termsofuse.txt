@@ -1,0 +1,15 @@
+ACCUWEATHER.COM TERMS OF USE
+-----------------------------------------------------------------------------------------
+The data feed of AccuWeather is provided to you free of 
+charge in exchange for your promise to display the AccuWeather.com® 
+logo in your application and, if feasible, provide a link which clicks through
+to AccuWeather.com. Use of the data feed is for personal, non-commercial
+purposes only. The data feed is provided “as is” and AccuWeather makes 
+no warranties or guarantees regarding the accuracy of the weather content. 
+We reserve all rights to the logo AccuWeather.com and the data feed. If any 
+issues regarding excessive use or misuse of the data feed arise, we will 
+contact you for resolution. AccuWeather reserves the right to discontinue 
+the data feed, if we deem necessary.
+
+Commercial usage is possible with explicit permission from AccuWeather.com.
+Please contact developer@accuweather.com for more details.

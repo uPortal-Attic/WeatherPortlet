@@ -3,7 +3,7 @@
  *  available online at http://www.uportal.org/license.html
  */
 
-package org.jasig.portlet.weather.dao.accuweather;
+package org.jasig.portlet.weather.dao.accuweather.dom4j;
 
 import java.util.Collection;
 
@@ -14,7 +14,7 @@ import org.jasig.portlet.weather.domain.Weather;
 
 /**
  * AccuWeather.com weather data implementation. Methods delegate work to
- * respective worker classes.
+ * respective worker classes which use DOM4J.
  * 
  * @see LocationUtil
  * @see WeatherUtil
@@ -47,11 +47,6 @@ public class WeatherDaoImpl implements IWeatherDao {
 		// fill and set the current object
 		Current currentWeather = new Current();
 		currentWeather.setCondition(weatherUtil.getCurrentCondition());
-		currentWeather.setConditionImgPath(weatherUtil
-				.getCurrentConditionImgPath());
-		currentWeather.setConditionImgHeight(weatherUtil
-				.getImgConditionHeight());
-		currentWeather.setConditionImgWidth(weatherUtil.getImgConditionWidth());
 		currentWeather.setTemperature(weatherUtil.getCurrentTemperature());
 		currentWeather.setHumidity(weatherUtil.getHumidity());
 		currentWeather.setPressure(weatherUtil.getPressure());
@@ -62,19 +57,13 @@ public class WeatherDaoImpl implements IWeatherDao {
 		// set the forecast collection
 		weather.setForecast(weatherUtil.getForecast());
 
-		// set logo path, height, width, and more information link
-		weather.setLogoPath(weatherUtil.getLogoPath());
+		// set more information link
 		weather.setMoreInformationLink(weatherUtil.getMoreInformationLink());
-		weather.setLogoHeight(weatherUtil.getLogoHeight());
-		weather.setLogoWidth(weatherUtil.getLogoWidth());
 
 		// set units
 		weather.setPressureUnit(weatherUtil.getPressureUnit());
 		weather.setWindUnit(weatherUtil.getWindUnit());
 		weather.setTemperatureUnit(weatherUtil.getTemperatureUnit());
-
-		// set provided by
-		weather.setProvidedBy("Weather provided by AccuWeather.com");
 
 		return weather;
 	}

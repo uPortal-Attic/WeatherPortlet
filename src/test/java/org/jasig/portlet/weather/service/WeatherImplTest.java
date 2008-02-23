@@ -8,6 +8,7 @@ package org.jasig.portlet.weather.service;
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
 import static junit.framework.Assert.assertNull;
+import static junit.framework.Assert.assertTrue;
 
 import java.util.Collection;
 
@@ -59,8 +60,7 @@ public class WeatherImplTest {
 		// Test the values of the retrieved location
 		Location retrievedLocation = weather.getLocation();
 		assertEquals("Invalid city", CITY_NAME, retrievedLocation.getCity());
-		assertEquals("Invalid state", CITY_STATE, retrievedLocation
-				.getStateOrCountry());
+		assertEquals("Invalid state", CITY_STATE, retrievedLocation.getStateOrCountry());
 		assertEquals("Invalid code", CITY_CODE, retrievedLocation
 				.getLocationCode());
 
@@ -72,34 +72,19 @@ public class WeatherImplTest {
 		Current currentWeather = weather.getCurrentWeather();
 		assertNotNull("Invalid temperature", currentWeather.getTemperature());
 		assertNotNull("Invalid condition", currentWeather.getCondition());
-		assertNotNull("Invalid condition img path", currentWeather
-				.getConditionImgPath());
-		assertNotNull("Invalid condition img height", currentWeather
-				.getConditionImgHeight());
-		assertNotNull("Invalid condition img width", currentWeather
-				.getConditionImgWidth());
 
 		// a forecast is not required so ensure we have one
 		Collection<Forecast> forecastCol = weather.getForecast();
 		if (forecastCol != null) {
+			assertTrue("Invalid forecast collection size", forecastCol.size() > 0);
 			for (Forecast forecast : forecastCol) {
 				assertNotNull(forecast);
-				assertNotNull("Invalid forecast condition", forecast
-						.getCondition());
-				assertNotNull("Invalid forecast condition img path", forecast
-						.getConditionImgPath());
-				assertNotNull("Invalid forecast condition img height", forecast
-						.getConditionImgHeight());
-				assertNotNull("Invalid forecast condition img width", forecast
-						.getConditionImgWidth());
-				assertNotNull("Invalid forecast high", forecast
-						.getHighTemperature());
-				assertNotNull("Invalid forecast low", forecast
-						.getLowTemperature());
-				assertNotNull("Invalid forecast day", forecast.getDay());
-				// ensure its length 3
-				assertEquals("Invalid day size", DAY_LENGTH, forecast.getDay()
-						.length());
+				assertNotNull("Invalid forecast condition", forecast.getCondition());
+				assertNotNull("Invalid forecast condition img name", forecast.getImgName());
+				assertNotNull("Invalid forecast high", forecast.getHighTemperature());
+				assertNotNull("Invalid forecast low", forecast.getLowTemperature());
+				assertNotNull("Invalid forecast day", forecast.getDay()); // ensure its length 3
+				assertEquals("Invalid day size", DAY_LENGTH, forecast.getDay().length());
 			}
 		}
 
@@ -114,32 +99,30 @@ public class WeatherImplTest {
 		// Search by zip code
 		Collection<Location> location1 = weatherService.find(CITY_CODE);
 		assertNotNull("Did not find location 1", location1);
+		assertTrue("Invalid location size at location 1", location1.size() > 0);
 		// This should only loop once, if it doesn't that's good, it'll fail
 		for (Location location : location1) {
 			assertEquals("Invalid code", CITY_CODE, location.getLocationCode());
 			assertEquals("Invalid city name", CITY_NAME, location.getCity());
 			if (location.getStateOrCountry().length() > 2) {
-				assertEquals("Invalid state", CITY_STATE_FULL, location
-						.getStateOrCountry());
+				assertEquals("Invalid state", CITY_STATE_FULL, location.getStateOrCountry());
 			} else {
-				assertEquals("Invalid state", CITY_STATE, location
-						.getStateOrCountry());
+				assertEquals("Invalid state", CITY_STATE, location.getStateOrCountry());
 			}
 		}
 
 		// Search by city name
 		Collection<Location> location2 = weatherService.find(CITY_NAME);
 		assertNotNull("Did not find location 2", location2);
+		assertTrue("Invalid location size at location 2", location2.size() > 0);
 		// This should only loop once, if it doesn't that's good, it'll fail
 		for (Location location : location2) {
 			assertEquals("Invalid code", CITY_CODE, location.getLocationCode());
 			assertEquals("Invalid city name", CITY_NAME, location.getCity());
 			if (location.getStateOrCountry().length() > 2) {
-				assertEquals("Invalid state", CITY_STATE_FULL, location
-						.getStateOrCountry());
+				assertEquals("Invalid state", CITY_STATE_FULL, location.getStateOrCountry());
 			} else {
-				assertEquals("Invalid state", CITY_STATE, location
-						.getStateOrCountry());
+				assertEquals("Invalid state", CITY_STATE, location.getStateOrCountry());
 			}
 		}
 

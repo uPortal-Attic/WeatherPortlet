@@ -20,10 +20,7 @@ public class Forecast implements Serializable {
 	private Integer highTemperature = null;
 	private Integer lowTemperature = null;
 	private String condition = null;
-	private String conditionImgPath = null;
-	//this allows for different sizes of for different days
-	private Integer conditionImgHeight = null;
-	private Integer conditionImgWidth = null;
+	private String imgName = null;
 
 	public String getDay() {
 		return day;
@@ -56,28 +53,13 @@ public class Forecast implements Serializable {
 	public void setCondition(String condition) {
 		this.condition = condition;
 	}
+
+	public String getImgName() {
+		return imgName;
+	}
+
+	public void setImgName(String imgName) {
+		this.imgName = imgName;
+	}
 	
-	public String getConditionImgPath() {
-		return conditionImgPath;
-	}
-
-	public Integer getConditionImgHeight() {
-		return conditionImgHeight;
-	}
-
-	public void setConditionImgHeight(Integer conditionImgHeight) {
-		this.conditionImgHeight = conditionImgHeight;
-	}
-
-	public Integer getConditionImgWidth() {
-		return conditionImgWidth;
-	}
-
-	public void setConditionImgWidth(Integer conditionImgWidth) {
-		this.conditionImgWidth = conditionImgWidth;
-	}
-
-	public void setConditionImgPath(String conditionImgPath) {
-		this.conditionImgPath = conditionImgPath;
-	}
 }

@@ -3,7 +3,7 @@
  *  available online at http://www.uportal.org/license.html
  */
 
-package org.jasig.portlet.weather.dao.accuweather;
+package org.jasig.portlet.weather.dao.accuweather.dom4j;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -19,7 +19,7 @@ import org.jasig.portlet.weather.domain.Location;
 
 /**
  * This is the worker class that finds locations. It is called from
- * WeatherDaoImpl,
+ * WeatherDaoImpl
  * 
  * @see WeatherDaoImpl
  * 
@@ -30,11 +30,12 @@ public class LocationUtil {
 
 	private Logger logger = Logger.getLogger(LocationUtil.class);
 	private Element root = null;
+	
+	private static String BASE_URL = "http://uport.accu-weather.com/widget/uport/city-find.asp?location=";
 
 	public LocationUtil(String location) {
-		logger.debug("Retrieving location xml...");
-		String accuweatherUrl = "http://uport.accu-weather.com/widget/uport/city-find.asp?location= "
-				+ location;
+		logger.debug("Retrieving location xml for " + location + " using DOM4J");
+		String accuweatherUrl = BASE_URL + location;
 		SAXReader reader = new SAXReader();
 		Document document = null;
 		try {
@@ -43,7 +44,6 @@ public class LocationUtil {
 			de.printStackTrace();
 			throw new RuntimeException("Unable to retrieve xml", de);
 		}
-		logger.debug("Successfully retrieved location xml");
 
 		// get top level element
 		root = document.getRootElement();

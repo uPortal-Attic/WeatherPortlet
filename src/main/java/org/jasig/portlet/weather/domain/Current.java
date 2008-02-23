@@ -18,13 +18,11 @@ public class Current implements Serializable {
 	private static final long serialVersionUID = 2204725860007975876L;
 	private Integer temperature = null;
 	private String condition = null;
-	private String conditionImgPath = null; //relative path
-	private Integer conditionImgWidth = null;
-	private Integer conditionImgHeight = null;
 	private Double windSpeed = null;
 	private String windDirection = null;
 	private Integer humidity = null;
 	private Double pressure = null;
+	private String imgName = null;
 
 	public Integer getTemperature() {
 		return temperature;
@@ -66,35 +64,20 @@ public class Current implements Serializable {
 		this.humidity = humidity;
 	}
 
-	public String getConditionImgPath() {
-		return conditionImgPath;
-	}
-
-	public Integer getConditionImgWidth() {
-		return conditionImgWidth;
-	}
-
-	public void setConditionImgWidth(Integer conditionImgWidth) {
-		this.conditionImgWidth = conditionImgWidth;
-	}
-
-	public Integer getConditionImgHeight() {
-		return conditionImgHeight;
-	}
-
-	public void setConditionImgHeight(Integer conditionImgHeight) {
-		this.conditionImgHeight = conditionImgHeight;
-	}
-
-	public void setConditionImgPath(String conditionImgPath) {
-		this.conditionImgPath = conditionImgPath;
-	}
-
 	public Double getPressure() {
 		return pressure;
 	}
 
 	public void setPressure(Double pressure) {
 		this.pressure = pressure;
-	}	
+	}
+
+	public String getImgName() {
+		return imgName;
+	}
+
+	public void setImgName(String imgName) {
+		this.imgName = imgName;
+	}
+
 }

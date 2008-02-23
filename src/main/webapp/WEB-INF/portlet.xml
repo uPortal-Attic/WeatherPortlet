@@ -20,7 +20,7 @@
             <portlet-mode>edit</portlet-mode>
         </supports>
         <portlet-info>
-            <title>JA-Sig Weather Portlet</title>
+            <title>JA-SIG Weather Portlet</title>
         </portlet-info>   
     </portlet>
 

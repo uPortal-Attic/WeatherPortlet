@@ -14,7 +14,7 @@ package org.jasig.portlet.weather.portlet;
 public class WeatherEditCommand {
 
 	private String location = null; //this represents the text box
-	private String code = null; //this is internal and passed to getWeather
+	private String locationCode = null; //this is internal and passed to getWeather
 	private String metric = null; //this represents the drop down
 
 	public String getLocation() {
@@ -25,12 +25,12 @@ public class WeatherEditCommand {
 		this.location = location;
 	}
 
-	public String getCode() {
-		return code;
+	public String getLocationCode() {
+		return locationCode;
 	}
 
-	public void setCode(String code) {
-		this.code = code;
+	public void setLocationCode(String locationCode) {
+		this.locationCode = locationCode;
 	}
 
 	public String getMetric() {

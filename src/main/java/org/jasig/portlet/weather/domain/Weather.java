@@ -24,11 +24,7 @@ public class Weather implements Serializable {
 	private String pressureUnit = null;
 	private String temperatureUnit = null;
 	private String windUnit = null;
-	private String logoPath = null; //relative path
-	private Integer logoWidth = null;
-	private Integer logoHeight = null;
-	private String moreInformationLink = null;
-	private String providedBy = null;
+	private String moreInformationLink = null; //for this weather object
 
 	public Current getCurrentWeather() {
 		return currentWeather;
@@ -78,43 +74,11 @@ public class Weather implements Serializable {
 		this.windUnit = windUnit;
 	}
 
-	public String getLogoPath() {
-		return logoPath;
-	}
-
-	public void setLogoPath(String logoPath) {
-		this.logoPath = logoPath;
-	}
-
-	public Integer getLogoWidth() {
-		return logoWidth;
-	}
-
-	public void setLogoWidth(Integer logoWidth) {
-		this.logoWidth = logoWidth;
-	}
-
-	public Integer getLogoHeight() {
-		return logoHeight;
-	}
-
-	public void setLogoHeight(Integer logoHeight) {
-		this.logoHeight = logoHeight;
-	}
-
 	public String getMoreInformationLink() {
 		return moreInformationLink;
 	}
 
 	public void setMoreInformationLink(String moreInformationLink) {
 		this.moreInformationLink = moreInformationLink;
-	}
-
-	public String getProvidedBy() {
-		return providedBy;
-	}
-
-	public void setProvidedBy(String providedBy) {
-		this.providedBy = providedBy;
 	}
 }

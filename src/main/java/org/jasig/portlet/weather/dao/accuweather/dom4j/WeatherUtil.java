@@ -3,7 +3,7 @@
  *  available online at http://www.uportal.org/license.html
  */
 
-package org.jasig.portlet.weather.dao.accuweather;
+package org.jasig.portlet.weather.dao.accuweather.dom4j;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -19,6 +19,7 @@ import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
+import org.jasig.portlet.weather.dao.accuweather.constants.Constants;
 import org.jasig.portlet.weather.domain.Forecast;
 
 /**
@@ -41,19 +42,11 @@ public class WeatherUtil {
 	private Element forecast = null;
 	private Element planets = null;
 
-	// Read only values
-	private static final String BASE = "images/accuweather/";
-	private static final String EXTENSION = ".png";
-	private static final Integer LOGO_WIDTH = 150;
-	private static final Integer LOGO_HEIGHT = 12;
-	private static final Integer CONDITION_WIDTH = 64;
-	private static final Integer CONDITION_HEIGHT = 40;
-
 	public WeatherUtil(String locationCode, Boolean metric) {
-		logger.debug("Retrieving weather xml for location " + locationCode
+		logger.debug("Retrieving weather xml using DOM4J for location " + locationCode
 				+ " with metric " + metric);
-		String accuweatherUrl = "http://uport.accu-weather.com/widget/uport/weather-data.asp?location="
-				+ locationCode + "&metric=" + ((metric) ? "1" : "0");
+		String accuweatherUrl = Constants.BASE_GET_URL + locationCode
+				+ "&metric=" + ((metric) ? "1" : "0");
 		SAXReader reader = new SAXReader();
 		Document document = null;
 		try {
@@ -62,20 +55,19 @@ public class WeatherUtil {
 			de.printStackTrace();
 			throw new RuntimeException("Unable to retrieve xml", de);
 		}
-		logger.debug("Successfully retrieved weather xml");
 
 		// get top level elements
 		root = document.getRootElement();
-		units = root.element("units");
-		local = root.element("local");
-		currentConditions = root.element("currentconditions");
-		forecast = root.element("forecast");
-		planets = root.element("planets");
+		units = root.element(Constants.UNITS_TAG);
+		local = root.element(Constants.LOCAL_TAG);
+		currentConditions = root.element(Constants.CURRENT_TAG);
+		forecast = root.element(Constants.FORECAST_TAG);
+		planets = root.element(Constants.PLANETS_TAG);
 	}
 
 	public String getCity() {
 		if (local != null) {
-			Element localCity = local.element("city");
+			Element localCity = local.element(Constants.CITY_TAG);
 			return (localCity != null) ? localCity.getText() : null;
 		} else {
 			return null;
@@ -84,7 +76,7 @@ public class WeatherUtil {
 
 	public String getState() {
 		if (local != null) {
-			Element localState = local.element("state");
+			Element localState = local.element(Constants.STATE_TAG);
 			return (localState != null) ? localState.getText() : null;
 		} else {
 			return null;
@@ -93,7 +85,7 @@ public class WeatherUtil {
 
 	public Double getLatitude() {
 		if (local != null) {
-			Element localLat = local.element("lat");
+			Element localLat = local.element(Constants.LAT_TAG);
 			return (localLat != null) ? Double.valueOf(localLat.getText())
 					: null;
 		} else {
@@ -103,7 +95,7 @@ public class WeatherUtil {
 
 	public Double getLongitude() {
 		if (local != null) {
-			Element localLon = local.element("lon");
+			Element localLon = local.element(Constants.LON_TAG);
 			return (localLon != null) ? Double.valueOf(localLon.getText())
 					: null;
 		} else {
@@ -113,7 +105,8 @@ public class WeatherUtil {
 
 	public Integer getCurrentTemperature() {
 		if (currentConditions != null) {
-			Element currTemp = currentConditions.element("temperature");
+			Element currTemp = currentConditions
+					.element(Constants.CURR_TEMP_TAG);
 			return (currTemp != null) ? Integer.valueOf(currTemp.getText())
 					: null;
 		} else {
@@ -123,7 +116,8 @@ public class WeatherUtil {
 
 	public String getCurrentCondition() {
 		if (currentConditions != null) {
-			Element currCondition = currentConditions.element("weathertext");
+			Element currCondition = currentConditions
+					.element(Constants.CURR_COND_TAG);
 			return (currCondition != null) ? currCondition.getText() : null;
 		} else {
 			return null;
@@ -132,9 +126,8 @@ public class WeatherUtil {
 
 	public String getCurrentConditionImgPath() {
 		if (currentConditions != null) {
-			Element currImgPath = currentConditions.element("weathericon");
-			return (currImgPath != null) ? BASE + currImgPath.getText()
-					+ EXTENSION : null;
+			Element currImgName = currentConditions.element(Constants.CURR_ICON_TAG);
+			return (currImgName != null) ? currImgName.getText() : null;
 		} else {
 			return null;
 		}
@@ -142,7 +135,8 @@ public class WeatherUtil {
 
 	public Double getWindSpeed() {
 		if (currentConditions != null) {
-			Element currWindSpeed = currentConditions.element("windspeed");
+			Element currWindSpeed = currentConditions
+					.element(Constants.CURR_WIND_SPEED_TAG);
 			return (currWindSpeed != null) ? Double.valueOf(currWindSpeed
 					.getText()) : null;
 		} else {
@@ -152,7 +146,8 @@ public class WeatherUtil {
 
 	public String getWindDirection() {
 		if (currentConditions != null) {
-			Element currWindDir = currentConditions.element("winddirection");
+			Element currWindDir = currentConditions
+					.element(Constants.CURR_WIND_DIR_TAG);
 			return (currWindDir != null) ? currWindDir.getText() : null;
 		} else {
 			return null;
@@ -161,7 +156,8 @@ public class WeatherUtil {
 
 	public Integer getHumidity() {
 		if (currentConditions != null) {
-			Element currHumidity = currentConditions.element("humidity");
+			Element currHumidity = currentConditions
+					.element(Constants.CURR_HUMIDITY_TAG);
 			return (currHumidity != null) ? Integer.valueOf(currHumidity
 					.getText()
 					.substring(0, currHumidity.getText().indexOf('%'))) : null;
@@ -172,7 +168,7 @@ public class WeatherUtil {
 
 	public String getPressureUnit() {
 		if (units != null) {
-			Element pressure = units.element("pres");
+			Element pressure = units.element(Constants.PRES_TAG);
 			return (pressure != null) ? pressure.getText() : null;
 		} else {
 			return null;
@@ -181,7 +177,7 @@ public class WeatherUtil {
 
 	public String getTemperatureUnit() {
 		if (units != null) {
-			Element temperature = units.element("temp");
+			Element temperature = units.element(Constants.TEMP_TAG);
 			return (temperature != null) ? temperature.getText() : null;
 		} else {
 			return null;
@@ -190,7 +186,7 @@ public class WeatherUtil {
 
 	public String getWindUnit() {
 		if (units != null) {
-			Element wind = units.element("speed");
+			Element wind = units.element(Constants.SPEED_TAG);
 			return (wind != null) ? wind.getText() : null;
 		} else {
 			return null;
@@ -199,7 +195,8 @@ public class WeatherUtil {
 
 	public Double getPressure() {
 		if (currentConditions != null) {
-			Element currPressure = currentConditions.element("pressure");
+			Element currPressure = currentConditions
+					.element(Constants.CURR_PRESSURE_TAG);
 			// -999 means pressure is unavailable
 			return (currPressure != null && !("-999").equals(currPressure
 					.getText())) ? Double.valueOf(currPressure.getText())
@@ -215,8 +212,8 @@ public class WeatherUtil {
 
 		String sunsetTime = null;
 		if (planets != null) {
-			Element sun = planets.element("sun");
-			Attribute set = sun.attribute("set");
+			Element sun = planets.element(Constants.SUN_TAG);
+			Attribute set = sun.attribute(Constants.SUNSET_ATTR);
 			sunsetTime = set.getValue();
 		}
 
@@ -255,7 +252,8 @@ public class WeatherUtil {
 		}
 
 		Collection<Forecast> forecastCol = new ArrayList<Forecast>();
-		List<Element> forecastElements = forecast.elements("day");
+		List<Element> forecastElements = forecast
+				.elements(Constants.FORECAST_DAY_TAG);
 
 		if (forecastElements.size() <= 0) {
 			logger.error("Empty forecast list");
@@ -268,27 +266,24 @@ public class WeatherUtil {
 			Element timeOfDay = null;
 			if (sunsetDate.before(obsDate)) {
 				// its night
-				timeOfDay = ele.element("nighttime");
+				timeOfDay = ele.element(Constants.NIGHTTIME_TAG);
 			} else {
 				// its day
-				timeOfDay = ele.element("daytime");
+				timeOfDay = ele.element(Constants.DAYTIME_TAG);
 			}
 
-			Element day = ele.element("daycode");
-			Element condition = timeOfDay.element("txtshort");
-			Element high = timeOfDay.element("hightemperature");
-			Element low = timeOfDay.element("lowtemperature");
-			Element img = timeOfDay.element("weathericon");
+			Element day = ele.element(Constants.FORECAST_DAYCODE_TAG);
+			Element condition = timeOfDay.element(Constants.FORECAST_COND_TAG);
+			Element high = timeOfDay.element(Constants.FORECAST_HIGH_TAG);
+			Element low = timeOfDay.element(Constants.FORECAST_LOW_TAG);
+			Element img = timeOfDay.element(Constants.FORECAST_IMG_ICON_TAG);
 
 			Forecast forecast = new Forecast();
 			forecast.setCondition(condition.getText());
-			forecast.setConditionImgPath(BASE + img.getText() + EXTENSION);
-			forecast.setDay(day.getText().substring(0, 3)); // Just get 3
-			// letters
+			forecast.setDay(day.getText().substring(0, 3)); // Just get 3 letters
+			forecast.setImgName(img.getText());
 			forecast.setHighTemperature(Integer.valueOf(high.getText()));
 			forecast.setLowTemperature(Integer.valueOf(low.getText()));
-			forecast.setConditionImgWidth(CONDITION_WIDTH);
-			forecast.setConditionImgHeight(CONDITION_HEIGHT);
 			forecastCol.add(forecast);
 		}
 
@@ -297,30 +292,10 @@ public class WeatherUtil {
 
 	public String getMoreInformationLink() {
 		if (currentConditions != null) {
-			Element moreInfo = currentConditions.element("url");
+			Element moreInfo = currentConditions.element(Constants.URL_TAG);
 			return (moreInfo != null) ? moreInfo.getText() : null;
 		} else {
 			return null;
 		}
-	}
-
-	public String getLogoPath() {
-		return BASE + "logo" + EXTENSION;
-	}
-
-	public Integer getLogoHeight() {
-		return LOGO_HEIGHT;
-	}
-
-	public Integer getLogoWidth() {
-		return LOGO_WIDTH;
-	}
-
-	public Integer getImgConditionHeight() {
-		return CONDITION_HEIGHT;
-	}
-
-	public Integer getImgConditionWidth() {
-		return CONDITION_WIDTH;
 	}
 }

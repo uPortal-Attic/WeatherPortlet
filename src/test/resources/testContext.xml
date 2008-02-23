@@ -11,7 +11,17 @@
 	<context:annotation-config/>
 	
 	<!-- ========================= DAO Defenitions ============================ -->
-	<bean id="weatherDao" class="org.jasig.portlet.weather.dao.accuweather.WeatherDaoImpl"/>
+	
+	<!-- Choose an implementation (DOM4J or Xstream), uncomment one and comment out the other. 
+		Also, don't forget to do the same in applicationContext.xml
+	-->
+	
+	<!-- DOM4J Impl
+	<bean id="weatherDao" class="org.jasig.portlet.weather.dao.accuweather.dom4j.WeatherDaoImpl"/>
+	-->
+	
+	<!-- Xstream Impl -->
+	<bean id="weatherDao" class="org.jasig.portlet.weather.dao.accuweather.xstream.WeatherDaoImpl"/>
 
 	<!-- ========================= SERVICE DEFENITIONS ========================= -->
 	<bean id="weatherService" class="org.jasig.portlet.weather.service.WeatherServiceImpl"/>

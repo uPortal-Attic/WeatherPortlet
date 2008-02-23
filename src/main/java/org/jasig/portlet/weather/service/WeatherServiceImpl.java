@@ -25,7 +25,7 @@ public class WeatherServiceImpl implements IWeatherService {
 
 	public Collection<Location> find(String location) {
 		//no location is set, don't try to search for anything
-		if (location == null) {
+		if (location == null || location.length() == 0) {
 			return null;
 		}
 		return weatherDao.find(location);
