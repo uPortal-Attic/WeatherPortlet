@@ -154,11 +154,11 @@ public class WeatherUtil {
 		}
 	}
 
-	public Integer getHumidity() {
+	public Double getHumidity() {
 		if (currentConditions != null) {
 			Element currHumidity = currentConditions
 					.element(Constants.CURR_HUMIDITY_TAG);
-			return (currHumidity != null) ? Integer.valueOf(currHumidity
+			return (currHumidity != null) ? Double.valueOf(currHumidity
 					.getText()
 					.substring(0, currHumidity.getText().indexOf('%'))) : null;
 		} else {

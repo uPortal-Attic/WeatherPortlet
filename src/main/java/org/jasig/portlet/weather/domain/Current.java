@@ -20,7 +20,7 @@ public class Current implements Serializable {
 	private String condition = null;
 	private Double windSpeed = null;
 	private String windDirection = null;
-	private Integer humidity = null;
+	private Double humidity = null;
 	private Double pressure = null;
 	private String imgName = null;
 
@@ -56,11 +56,11 @@ public class Current implements Serializable {
 		this.windDirection = windDirection;
 	}
 
-	public Integer getHumidity() {
+	public Double getHumidity() {
 		return humidity;
 	}
 
-	public void setHumidity(Integer humidity) {
+	public void setHumidity(Double humidity) {
 		this.humidity = humidity;
 	}
 

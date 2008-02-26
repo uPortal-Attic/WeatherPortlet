@@ -63,7 +63,7 @@ public class CurrentConverter implements Converter {
 				current.setTemperature(Integer.valueOf(reader.getValue()));
 			} else if (Constants.CURR_HUMIDITY_TAG.equals(reader.getNodeName())) {
 				String humidity = reader.getValue();
-				current.setHumidity(Integer.valueOf(humidity.substring(0, humidity.indexOf('%'))));
+				current.setHumidity(Double.valueOf(humidity.substring(0, humidity.indexOf('%'))));
 			} else if (Constants.CURR_COND_TAG.equals(reader.getNodeName())) {
 				current.setCondition(reader.getValue());
 			} else if (Constants.CURR_ICON_TAG.equals(reader.getNodeName())) {
