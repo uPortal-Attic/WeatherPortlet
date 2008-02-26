@@ -6,6 +6,7 @@
 package org.jasig.portlet.weather.dao.accuweather.xstream;
 
 import java.io.IOException;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
@@ -33,14 +34,14 @@ public class WeatherDaoImpl implements IWeatherDao {
 	public Collection<Location> find(String location) {
 		String accuweatherUrl = Constants.BASE_FIND_URL + location;
 		URL urlObj = null;
-		URLConnection connection = null;
+		HttpURLConnection connection = null;
 		XStream xstream = new XStream();
 		xstream.alias("adc_database", Collection.class);
 		xstream.registerConverter(new FinderConverter());
 		Collection<Location> locations = null;
 		try {
 			urlObj = new URL(accuweatherUrl);
-			connection = urlObj.openConnection();
+			connection = (HttpURLConnection)urlObj.openConnection();
 			logger.debug("Retrieving location xml for " + location + " using Xstream");
 			locations = (Collection<Location>)xstream.fromXML(connection.getInputStream());
 		} catch (MalformedURLException mue) {
