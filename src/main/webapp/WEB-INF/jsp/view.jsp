@@ -1,7 +1,7 @@
 <%-- Author: Dustin Schultz | Version $Id$ --%>
 <%@ include file="/WEB-INF/jsp/include.jsp" %>
-<div id="weatherportlet">
 <c:set var="context" value="${pageContext.request.contextPath}"/>
+<div class="weatherportlet">
 <c:choose>
 	<c:when test="${empty weathers}">
 		<p><spring:message code="view.location.notset"/></p>
@@ -10,7 +10,7 @@
 		<spring:message var="logo" code="logo.img.full.path"/>
 		<spring:message var="provByLink" code="view.weather.providedBy.link"/>
 		<c:if test="${fn:length(logo) > 0 && fn:length(provByLink) > 0}">
-			<div style="float:right;">
+			<div class="weather-logo">
 				<spring:message var="logoW" code="logo.img.width"/>
 				<spring:message var="logoH" code="logo.img.height"/>
 				<a href="${provByLink}" target="_blank"><img width="${logoW}" height="${logoH}" src="${context}/${logo}"/></a>
@@ -37,6 +37,7 @@
 								<spring:message var="currH" code="current.condition.img.height"/>
 								<spring:message var="currImgPath" code="current.condition.img.path"/>
 								<spring:message var="currExt" code="current.condition.img.extension"/>
+								<spring:message code="view.currently"/><br/>
 								<img width="${currW}" height="${currH}" src="${context}/${currImgPath}/${current.imgName}${currExt}" alt="${current.condition}" title="${current.condition}"/><br/>
 								${current.temperature}&#xB0; ${weather.temperatureUnit}
 							</c:when>
@@ -92,7 +93,7 @@
 		</c:forEach>
 		<spring:message var="providedBy" code="view.weather.providedBy"/>
 		<c:if test="${fn:length(providedBy) > 0}">
-			<div style="clear:both;font-size:70%;text-align:left;">
+			<div class="provided-by">
 				${providedBy}
 			</div>
 		</c:if>

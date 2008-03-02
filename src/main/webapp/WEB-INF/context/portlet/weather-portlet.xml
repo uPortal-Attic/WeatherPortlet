@@ -8,35 +8,27 @@
 	
 	<bean id="weatherEditController" class="org.jasig.portlet.weather.portlet.WeatherEditController" autowire="byType">
 		<property name="formView" value="edit"/>
-		<property name="successView" value="edit"/>
 		<property name="commandName" value="weatherEditCommand"/>
 		<property name="commandClass" value="org.jasig.portlet.weather.portlet.WeatherEditCommand"/>
 	</bean>
 	
-	<bean id="weatherAddController" class="org.jasig.portlet.weather.portlet.WeatherAddController">
+	<bean id="weatherAddController" class="org.jasig.portlet.weather.portlet.WeatherAddController" autowire="byType">
 		<property name="formView" value="edit"/>
-		<property name="successView" value="edit"/>
 		<property name="commandName" value="weatherEditCommand"/>
 		<property name="commandClass" value="org.jasig.portlet.weather.portlet.WeatherEditCommand"/>
 	</bean>
 	
-	<bean id="weatherDeleteController" class="org.jasig.portlet.weather.portlet.WeatherDeleteController">
+	<bean id="weatherDeleteController" class="org.jasig.portlet.weather.portlet.WeatherDeleteController" autowire="byType">
 		<property name="formView" value="edit"/>
-		<property name="successView" value="edit"/>
 		<property name="commandName" value="weatherEditCommand"/>
 		<property name="commandClass" value="org.jasig.portlet.weather.portlet.WeatherEditCommand"/>
 	</bean>
 	
 	<bean id="weatherSearchController" class="org.jasig.portlet.weather.portlet.WeatherSearchController" autowire="byType">
 		<property name="formView" value="edit"/>
-		<property name="successView" value="edit"/>
 		<property name="commandName" value="weatherEditCommand"/>
 		<property name="commandClass" value="org.jasig.portlet.weather.portlet.WeatherEditCommand"/>
 	</bean>
-	
-	<!-- Validators 
-	<bean id="zipCodeValidator" class="edu.suu.weather.portlet.validation.YahooZipCodeValidator"/>
-	-->
 	
 	<!-- Handler Mapping -->
 	<bean id="portletModeParameterHandlerMapping" class="org.springframework.web.portlet.handler.PortletModeParameterHandlerMapping">

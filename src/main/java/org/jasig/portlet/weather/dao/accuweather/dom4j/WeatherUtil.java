@@ -124,7 +124,7 @@ public class WeatherUtil {
 		}
 	}
 
-	public String getCurrentConditionImgPath() {
+	public String getCurrentConditionImg() {
 		if (currentConditions != null) {
 			Element currImgName = currentConditions.element(Constants.CURR_ICON_TAG);
 			return (currImgName != null) ? currImgName.getText() : null;

@@ -52,6 +52,7 @@ public class WeatherDaoImpl implements IWeatherDao {
 		currentWeather.setPressure(weatherUtil.getPressure());
 		currentWeather.setWindSpeed(weatherUtil.getWindSpeed());
 		currentWeather.setWindDirection(weatherUtil.getWindDirection());
+		currentWeather.setImgName(weatherUtil.getCurrentConditionImg());
 		weather.setCurrentWeather(currentWeather);
 
 		// set the forecast collection

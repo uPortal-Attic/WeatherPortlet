@@ -6,10 +6,12 @@
 package org.jasig.portlet.weather.dao.accuweather.xstream;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.net.URLEncoder;
 import java.util.Collection;
 
 import org.apache.log4j.Logger;
@@ -32,7 +34,13 @@ public class WeatherDaoImpl implements IWeatherDao {
 		
 	@SuppressWarnings("unchecked")
 	public Collection<Location> find(String location) {
-		String accuweatherUrl = Constants.BASE_FIND_URL + location;
+		String accuweatherUrl = null;
+		try {
+			accuweatherUrl = Constants.BASE_FIND_URL + URLEncoder.encode(location, Constants.URL_ENCODING);
+		} catch (UnsupportedEncodingException uee) {
+			uee.printStackTrace();
+			throw new RuntimeException("Unable to encode url with " + Constants.URL_ENCODING + " encoding");
+		}
 		URL urlObj = null;
 		HttpURLConnection connection = null;
 		XStream xstream = new XStream();
@@ -55,7 +63,13 @@ public class WeatherDaoImpl implements IWeatherDao {
 	}
 
 	public Weather getWeather(String locationCode, Boolean metric) {
-		String accuweatherUrl = Constants.BASE_GET_URL + locationCode + "&metric=" + ((metric) ? "1" : "0");
+		String accuweatherUrl = null;
+		try {
+			accuweatherUrl = Constants.BASE_GET_URL + URLEncoder.encode(locationCode, Constants.URL_ENCODING) + "&metric=" + ((metric) ? "1" : "0");
+		} catch (UnsupportedEncodingException uee) {
+			uee.printStackTrace();
+			throw new RuntimeException("Unable to encode url with " + Constants.URL_ENCODING + " encoding");
+		}
 		URL urlObj = null;
 		URLConnection connection = null;
 		XStream xstream = new XStream();

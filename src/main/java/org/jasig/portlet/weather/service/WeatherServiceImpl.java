@@ -13,13 +13,13 @@ import org.jasig.portlet.weather.domain.Weather;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
- * This service class makes calls to IWeatherDao to retrieve weather information
- * and find locations.
+ * This service class completes the implementation of IWeatherService and makes
+ * calls to IWeatherDao to retrieve weather information and find locations.
  * 
  * @author Dustin Schultz
  * @version $Id$
  */
-public class WeatherServiceImpl implements IWeatherService {
+public class WeatherServiceImpl extends AbstractWeatherService {
 
 	private IWeatherDao weatherDao = null; // Spring managed.
 
@@ -38,7 +38,7 @@ public class WeatherServiceImpl implements IWeatherService {
 		}
 		return weatherDao.getWeather(locationCode, metric);
 	}
-
+	
 	@Autowired
 	public void setWeatherDao(IWeatherDao weatherDao) {
 		this.weatherDao = weatherDao;

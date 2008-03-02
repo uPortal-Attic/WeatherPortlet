@@ -21,7 +21,33 @@
         </supports>
         <portlet-info>
             <title>JA-SIG Weather Portlet</title>
-        </portlet-info>   
+        </portlet-info>
+        <portlet-preferences>
+        <!-- US zip codes should work fine for locationCodes but for foreign locations
+        	(assuming your using AccuWeather as the source) you'll need to visit
+        	accuweather.com and search for the location. Once you've found the location
+        	and your looking at the weather, look at the current URL and the locationCode should
+        	be the parameter locCode=... You can then enter that below along with the city
+        	name and whether its metric or standard.
+         -->
+         <!-- Uncomment this for default location(s). Below are pre-filled examples... 
+            <preference>
+                <name>locationCodes</name>
+                <value>90210</value>
+                <value>EUR|FR|FR012|PARIS</value>
+            </preference>
+            <preference>
+            	<name>locations</name>
+            	<value>Beverly Hills, CA</value>
+            	<value>Paris, France (Ile-De-France)</value>
+            </preference>
+            <preference>
+                <name>metrics</name>
+                <value>false</value>
+                <value>true</value>
+            </preference>
+        -->
+        </portlet-preferences>   
     </portlet>
 
 </portlet-app>

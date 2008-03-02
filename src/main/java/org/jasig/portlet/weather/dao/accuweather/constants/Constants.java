@@ -17,7 +17,8 @@ public interface Constants {
 	// url constants
 	public static final String BASE_GET_URL = "http://uport.accu-weather.com/widget/uport/weather-data.asp?location=";
 	public static final String BASE_FIND_URL = "http://uport.accu-weather.com/widget/uport/city-find.asp?location=";
-
+	public static final String URL_ENCODING = "UTF-8";
+	
 	// xml root tags
 	public static final String UNITS_TAG = "units";
 	public static final String LOCAL_TAG = "local";

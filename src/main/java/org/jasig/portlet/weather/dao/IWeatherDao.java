@@ -9,6 +9,7 @@ import java.util.Collection;
 
 import org.jasig.portlet.weather.domain.Location;
 import org.jasig.portlet.weather.domain.Weather;
+import org.springmodules.cache.annotations.Cacheable;
 
 /**
  * Weather data access interface. Implement this interface to retrieve weather
@@ -30,6 +31,7 @@ public interface IWeatherDao {
 	 * @return A Weather object representing the current weather and an optional
 	 *         forecast.
 	 */
+	@Cacheable(modelId="weatherDataCacheModel")
 	public Weather getWeather(String locationCode, Boolean metric);
 
 	/**
@@ -38,6 +40,7 @@ public interface IWeatherDao {
 	 * @return A collection of locations representing the possible location or
 	 *         an empty or null collection representing location not found.
 	 */
+	@Cacheable(modelId="weatherSearchCacheModel")
 	public Collection<Location> find(String location);
 
 }

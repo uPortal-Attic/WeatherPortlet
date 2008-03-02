@@ -1,0 +1,93 @@
+/*
+ * @author Parker Grimes
+ * @version $Id$
+ */
+
+/* JA-SIG Weather Portlet */
+
+.weather-logo {
+	float: right;
+}
+.provided-by {
+	font-size: 10px;
+	text-align: left;
+	clear: both;
+	color: #666;
+}
+.location {
+    border-bottom: 1px dotted #666;
+    font-weight: bold;
+    padding-bottom: 5px;
+}
+.current {
+    text-align: left;
+    float: left;
+    padding-top: 5px;
+    font-size: 10px;
+    overflow: hidden;
+    width: 120px;
+}
+.weather-location {
+	margin-top: 5px;
+}
+.forecast {
+    float: left;
+    margin-bottom: 40px;
+    padding-bottom: 15px;
+    padding-top: 5px;
+    padding-right: 0px;
+    text-align: center;
+    font-size: 10px;    
+}
+.conditions {
+	overflow: hidden;
+	height: 115px;
+}
+.weatherportlet table {
+	margin: 5px 0;
+	border-collapse: collapse;
+}
+.weatherportlet td, .weatherportlet th {
+	border:1px solid #ddd;
+	font-size:11px;
+	line-height:13px;
+	padding:5px;
+	vertical-align:top;
+	white-space:nowrap;
+}
+.weatherportlet th {
+	background-color: #ccc;
+	text-align: left;
+}
+.weatherportlet input {
+	margin-right: 
+	8px;
+}
+.r1 {
+	background-color: #fff;
+}
+.r2 {
+	background-color: #eee;
+}
+.locations {
+	margin-top: 25px;
+	margin-bottom: 5px;
+	border-top: 1px dotted #444;
+}
+.search-results {
+	margin-top: 25px;
+	margin-bottom: 5px;
+	border-top: 1px dotted #444;
+}
+.locations p, .search-results p { 
+	font-weight: bold; 
+	font-size: 13px; 
+	padding: 5px 0;
+}
+.delete {
+	text-align: center;
+}
+#searchForm p {
+	font-weight: bold; 
+	margin-bottom: 15px;
+}
