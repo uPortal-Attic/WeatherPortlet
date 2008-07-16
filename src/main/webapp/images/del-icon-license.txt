@@ -1,4 +1,4 @@
-Delete icon taken from NouveXT icon pack avialable at http://www.gnome-look.org/content/show.php/NouveXT+Icons+by+Drake?content=76063
+Delete icon taken from NouveXT icon pack available at http://www.gnome-look.org/content/show.php/NouveXT+Icons+by+Drake?content=76063
 Icons are released under the LGPL, see license below
 -------------------------------------------------------------------------------------------------------------------------------------		   
 
