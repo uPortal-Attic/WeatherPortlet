@@ -1,6 +1,7 @@
 <%-- Author: Dustin Schultz | Version $Id$ --%>
 <%@ include file="/WEB-INF/jsp/include.jsp" %>
 <c:set var="context" value="${pageContext.request.contextPath}"/>
+<link rel="stylesheet" href="<c:url value="/css/weather.css"/>" type="text/css" />
 <div class="weatherportlet">
 <c:choose>
 	<c:when test="${empty weathers}">

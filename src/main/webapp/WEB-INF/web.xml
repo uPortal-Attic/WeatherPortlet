@@ -37,6 +37,10 @@
 		</listener-class>
 	</listener>
 	<servlet>
+		<servlet-name>FindCity</servlet-name>
+		<servlet-class>org.jasig.portlet.weather.servlet.FindCity</servlet-class>
+    </servlet>
+	<servlet>
 		<servlet-name>ViewRendererServlet</servlet-name>
 		<servlet-class>
 			org.springframework.web.servlet.ViewRendererServlet
@@ -45,5 +49,9 @@
 	<servlet-mapping>
 		<servlet-name>ViewRendererServlet</servlet-name>
 		<url-pattern>/WEB-INF/servlet/view</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>FindCity</servlet-name>
+		<url-pattern>/FindCity</url-pattern>
 	</servlet-mapping>
 </web-app>
