@@ -20,7 +20,7 @@
 			</div>
 		</c:if>
 		<c:forEach var="weather" items="${weathers}">
-			<div class="weather_location">
+			<div class="weather-location">
 				<div class="location">
 					<c:choose>
 						<c:when test="${not empty weather.moreInformationLink}">
