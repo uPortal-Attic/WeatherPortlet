@@ -7,11 +7,19 @@
                         http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd">
     <!-- Author: Dustin Schultz | Version: $Id$ -->
     <portlet>
-        <portlet-name>jasigWeatherPortlet</portlet-name>
+        <portlet-name>WeatherPortlet</portlet-name>
         <portlet-class>org.springframework.web.portlet.DispatcherPortlet</portlet-class>
         <init-param>
             <name>contextConfigLocation</name>
             <value>/WEB-INF/context/portlet/weather-portlet.xml</value>
+        </init-param>
+        <init-param>
+        	<name>jQueryEnabled</name>
+        	<value>false</value>
+        </init-param>
+        <init-param>
+        	<name>useInlineCSSTags</name>
+        	<value>true</value>
         </init-param>
         <expiration-cache>0</expiration-cache>
         <supports>
@@ -30,7 +38,6 @@
         	be the parameter locCode=... You can then enter that below along with the city
         	name and whether its metric or standard.
          -->
-         <!-- Uncomment this for default location(s). Below are pre-filled examples... 
             <preference>
                 <name>locationCodes</name>
                 <value>90210</value>
@@ -46,7 +53,6 @@
                 <value>false</value>
                 <value>true</value>
             </preference>
-        -->
         </portlet-preferences>   
     </portlet>
 

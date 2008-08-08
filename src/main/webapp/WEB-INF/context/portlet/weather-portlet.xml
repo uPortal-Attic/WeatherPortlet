@@ -30,12 +30,16 @@
 		<property name="commandClass" value="org.jasig.portlet.weather.portlet.WeatherEditCommand"/>
 	</bean>
 	
+	<!-- This interceptor adds initparams to the model so they are available to the JSP -->
+	<bean id="addInitParamsInterceptor" class="org.jasig.portlet.weather.portlet.interceptor.AddInitParamsInterceptor"/>
+	
 	<!-- Handler Mapping -->
 	<bean id="portletModeParameterHandlerMapping" class="org.springframework.web.portlet.handler.PortletModeParameterHandlerMapping">
         <property name="order" value="1"/>
 		<property name="interceptors">
 			<list>
 				<ref bean="parameterMappingInterceptor"/>
+				<ref bean="addInitParamsInterceptor"/>
 			</list>
 		</property>
 		<property name="portletModeParameterMap">
@@ -52,6 +56,12 @@
 	</bean>
 	
 	<bean id="portletModeHandlerMapping" class="org.springframework.web.portlet.handler.PortletModeHandlerMapping">		
+		<property name="order" value="2"/>
+		<property name="interceptors">
+			<list>
+				<ref bean="addInitParamsInterceptor"/>
+			</list>
+		</property>
 		<property name="portletModeMap">
 			<map>
 				<entry key="view"><ref bean="weatherViewController"/></entry>	

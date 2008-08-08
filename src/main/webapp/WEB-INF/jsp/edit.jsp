@@ -1,17 +1,20 @@
 <%-- Author: Dustin Schultz | Version $Id$ --%>
 <%@ include file="/WEB-INF/jsp/include.jsp" %>
 <c:set var="context" value="${pageContext.request.contextPath}"/>
-<link rel="stylesheet" href="<c:url value="/css/weather.css"/>" type="text/css" />
-<link rel="stylesheet" href="<c:url value="/css/jquery.autocomplete.css"/>" type="text/css" />
+<c:if test="${useInlineCSSTags}">
+	<link rel="stylesheet" href="<c:url value="/css/weather.css"/>" type="text/css" />
+	<link rel="stylesheet" href="<c:url value="/css/jquery.autocomplete.css"/>" type="text/css" />
+</c:if>
 <c:set var="namespace"><portlet:namespace/></c:set>
 <div class="weatherportlet">
-    <spring:message var="jQueryEnabled" code="jQuery.enabled"/>
     <c:if test="${jQueryEnabled}">
         <script type="text/javascript" src="${context}/js/cities.js"></script>
         <script type="text/javascript" src="${context}/js/jquery.autocomplete.js"></script>
-        <style type="text/css">
-            @import url("${context}/css/jquery.autocomplete.css");
-        </style>
+        <c:if test="${useInlineCSSTags}">
+	        <style type="text/css">
+	            @import url("${context}/css/jquery.autocomplete.css");
+	        </style>
+        </c:if>
         <script>
             $(document).ready(function(){
                 $("#${namespace}location").autocompleteArray(cities,
