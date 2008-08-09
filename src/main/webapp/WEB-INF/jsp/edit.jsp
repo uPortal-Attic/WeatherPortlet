@@ -3,7 +3,6 @@
 <c:set var="context" value="${pageContext.request.contextPath}"/>
 <c:if test="${useInlineCSSTags}">
 	<link rel="stylesheet" href="<c:url value="/css/weather.css"/>" type="text/css" />
-	<link rel="stylesheet" href="<c:url value="/css/jquery.autocomplete.css"/>" type="text/css" />
 </c:if>
 <c:set var="namespace"><portlet:namespace/></c:set>
 <div class="weatherportlet">
