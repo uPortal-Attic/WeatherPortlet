@@ -1,6 +1,9 @@
 <%-- Author: Dustin Schultz | Version $Id$ --%>
 <%@ include file="/WEB-INF/jsp/include.jsp" %>
 <c:set var="context" value="${pageContext.request.contextPath}"/>
+<c:if test="${useInlineCSSTags}">
+	<link rel="stylesheet" href="<c:url value="/css/weather.css"/>" type="text/css" />
+</c:if>
 <div class="weatherportlet">
 <c:choose>
 	<c:when test="${empty weathers}">
@@ -17,7 +20,7 @@
 			</div>
 		</c:if>
 		<c:forEach var="weather" items="${weathers}">
-			<div class="weather_location">
+			<div class="weather-location">
 				<div class="location">
 					<c:choose>
 						<c:when test="${not empty weather.moreInformationLink}">
