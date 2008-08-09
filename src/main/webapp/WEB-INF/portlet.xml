@@ -14,11 +14,11 @@
             <value>/WEB-INF/context/portlet/weather-portlet.xml</value>
         </init-param>
         <init-param>
-        	<name>jQueryEnabled</name>
+        	<name>model:jQueryEnabled</name>
         	<value>false</value>
         </init-param>
         <init-param>
-        	<name>useInlineCSSTags</name>
+        	<name>model:useInlineCSSTags</name>
         	<value>true</value>
         </init-param>
         <expiration-cache>0</expiration-cache>
