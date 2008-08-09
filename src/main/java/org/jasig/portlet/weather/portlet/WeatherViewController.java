@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping("VIEW")
-public class WeatherController {
+public class WeatherViewController {
 	
 	@Autowired
 	private IWeatherService weatherService;
