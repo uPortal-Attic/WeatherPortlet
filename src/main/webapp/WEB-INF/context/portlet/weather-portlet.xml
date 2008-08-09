@@ -1,73 +1,94 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "../../dtd/spring-beans.dtd">
-<!-- Author: Dustin Schultz | Version: $Id$ -->
-<beans>
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:p="http://www.springframework.org/schema/p"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xsi:schemaLocation="
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context-2.5.xsd">
+        
+	<!-- Author: Dustin Schultz | Version: $Id$ -->
 
+	<context:component-scan base-package="org.jasig.portlet.weather.portlet"/>
+	
+	<bean class="org.springframework.web.portlet.mvc.annotation.DefaultAnnotationHandlerMapping">
+	  <property name="interceptors">
+	  	<list>
+	  		<!-- This interceptor forwards the mapping request parameter from an ActionRequest to be used as a render parameter. -->
+	    	<bean class="org.springframework.web.portlet.handler.ParameterMappingInterceptor"/>
+	  		<!-- This interceptor adds initparams to the model so they are available to the model -->
+			<bean id="addInitParamsInterceptor" class="org.jasig.portlet.weather.portlet.interceptor.AddInitParamsInterceptor"/>
+	  	</list>
+	  </property>
+	</bean>
+	
 	<!-- Controllers -->
-	<bean id="weatherViewController" class="org.jasig.portlet.weather.portlet.WeatherViewController" autowire="byType"/>
+<!--	<bean id="weatherViewController" class="org.jasig.portlet.weather.portlet.WeatherController"/>-->
+
+<!--	 Controllers -->
+<!--	<bean id="weatherViewController" class="org.jasig.portlet.weather.portlet.WeatherViewController" autowire="byType"/>-->
+<!--	-->
+<!--	<bean id="weatherEditController" class="org.jasig.portlet.weather.portlet.WeatherEditController" autowire="byType">-->
+<!--		<property name="formView" value="edit"/>-->
+<!--		<property name="commandName" value="weatherEditCommand"/>-->
+<!--		<property name="commandClass" value="org.jasig.portlet.weather.portlet.WeatherEditCommand"/>-->
+<!--	</bean>-->
+<!--	-->
+<!--	<bean id="weatherAddController" class="org.jasig.portlet.weather.portlet.WeatherAddController" autowire="byType">-->
+<!--		<property name="formView" value="edit"/>-->
+<!--		<property name="commandName" value="weatherEditCommand"/>-->
+<!--		<property name="commandClass" value="org.jasig.portlet.weather.portlet.WeatherEditCommand"/>-->
+<!--	</bean>-->
+<!--	-->
+<!--	<bean id="weatherDeleteController" class="org.jasig.portlet.weather.portlet.WeatherDeleteController" autowire="byType">-->
+<!--		<property name="formView" value="edit"/>-->
+<!--		<property name="commandName" value="weatherEditCommand"/>-->
+<!--		<property name="commandClass" value="org.jasig.portlet.weather.portlet.WeatherEditCommand"/>-->
+<!--	</bean>-->
+<!--	-->
+<!--	<bean id="weatherSearchController" class="org.jasig.portlet.weather.portlet.WeatherSearchController" autowire="byType">-->
+<!--		<property name="formView" value="edit"/>-->
+<!--		<property name="commandName" value="weatherEditCommand"/>-->
+<!--		<property name="commandClass" value="org.jasig.portlet.weather.portlet.WeatherEditCommand"/>-->
+<!--	</bean>-->
 	
-	<bean id="weatherEditController" class="org.jasig.portlet.weather.portlet.WeatherEditController" autowire="byType">
-		<property name="formView" value="edit"/>
-		<property name="commandName" value="weatherEditCommand"/>
-		<property name="commandClass" value="org.jasig.portlet.weather.portlet.WeatherEditCommand"/>
-	</bean>
-	
-	<bean id="weatherAddController" class="org.jasig.portlet.weather.portlet.WeatherAddController" autowire="byType">
-		<property name="formView" value="edit"/>
-		<property name="commandName" value="weatherEditCommand"/>
-		<property name="commandClass" value="org.jasig.portlet.weather.portlet.WeatherEditCommand"/>
-	</bean>
-	
-	<bean id="weatherDeleteController" class="org.jasig.portlet.weather.portlet.WeatherDeleteController" autowire="byType">
-		<property name="formView" value="edit"/>
-		<property name="commandName" value="weatherEditCommand"/>
-		<property name="commandClass" value="org.jasig.portlet.weather.portlet.WeatherEditCommand"/>
-	</bean>
-	
-	<bean id="weatherSearchController" class="org.jasig.portlet.weather.portlet.WeatherSearchController" autowire="byType">
-		<property name="formView" value="edit"/>
-		<property name="commandName" value="weatherEditCommand"/>
-		<property name="commandClass" value="org.jasig.portlet.weather.portlet.WeatherEditCommand"/>
-	</bean>
-	
-	<!-- This interceptor adds initparams to the model so they are available to the JSP -->
-	<bean id="addInitParamsInterceptor" class="org.jasig.portlet.weather.portlet.interceptor.AddInitParamsInterceptor"/>
-	
-	<!-- Handler Mapping -->
-	<bean id="portletModeParameterHandlerMapping" class="org.springframework.web.portlet.handler.PortletModeParameterHandlerMapping">
-        <property name="order" value="1"/>
-		<property name="interceptors">
-			<list>
-				<ref bean="parameterMappingInterceptor"/>
-				<ref bean="addInitParamsInterceptor"/>
-			</list>
-		</property>
-		<property name="portletModeParameterMap">
-			<map>
-				<entry key="edit">
-					<map>
-						<entry key="add" value-ref="weatherAddController"/>
-						<entry key="delete" value-ref="weatherDeleteController"/>
-						<entry key="search" value-ref="weatherSearchController"/>
-					</map>
-				</entry>
-			</map>
-		</property>
-	</bean>
-	
-	<bean id="portletModeHandlerMapping" class="org.springframework.web.portlet.handler.PortletModeHandlerMapping">		
-		<property name="order" value="2"/>
-		<property name="interceptors">
-			<list>
-				<ref bean="addInitParamsInterceptor"/>
-			</list>
-		</property>
-		<property name="portletModeMap">
-			<map>
-				<entry key="view"><ref bean="weatherViewController"/></entry>	
-				<entry key="edit"><ref bean="weatherEditController"/></entry>			
-			</map>
-		</property>
-	</bean>
+<!--	 Handler Mapping -->
+<!--	<bean id="portletModeParameterHandlerMapping" class="org.springframework.web.portlet.handler.PortletModeParameterHandlerMapping">-->
+<!--        <property name="order" value="1"/>-->
+<!--		<property name="interceptors">-->
+<!--			<list>-->
+<!--				<ref bean="parameterMappingInterceptor"/>-->
+<!--				-->
+<!--			</list>-->
+<!--		</property>-->
+<!--		<property name="portletModeParameterMap">-->
+<!--			<map>-->
+<!--				<entry key="edit">-->
+<!--					<map>-->
+<!--						<entry key="add" value-ref="weatherAddController"/>-->
+<!--						<entry key="delete" value-ref="weatherDeleteController"/>-->
+<!--						<entry key="search" value-ref="weatherSearchController"/>-->
+<!--					</map>-->
+<!--				</entry>-->
+<!--			</map>-->
+<!--		</property>-->
+<!--	</bean>-->
+<!--	-->
+<!--	<bean id="portletModeHandlerMapping" class="org.springframework.web.portlet.handler.PortletModeHandlerMapping">		-->
+<!--		<property name="order" value="2"/>-->
+<!--		<property name="interceptors">-->
+<!--			<list>-->
+<!--				<ref bean="addInitParamsInterceptor"/>-->
+<!--			</list>-->
+<!--		</property>-->
+<!--		<property name="portletModeMap">-->
+<!--			<map>-->
+<!--				<entry key="view"><ref bean="weatherViewController"/></entry>	-->
+<!--				<entry key="edit"><ref bean="weatherEditController"/></entry>			-->
+<!--			</map>-->
+<!--		</property>-->
+<!--	</bean>-->
 
 </beans>

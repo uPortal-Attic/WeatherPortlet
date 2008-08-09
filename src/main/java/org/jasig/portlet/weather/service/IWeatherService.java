@@ -17,6 +17,8 @@ import org.jasig.portlet.weather.domain.Weather;
 public interface IWeatherService {
 
 	public Weather getWeather(String locationCode, Boolean metric);
+	
+	public Collection<Weather> getAllWeather(PortletPreferences preferences);
 
 	public Collection<Location> find(String location);
 	

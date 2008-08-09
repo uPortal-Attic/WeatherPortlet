@@ -5,7 +5,10 @@
 
 package org.jasig.portlet.weather.service;
 
+import java.util.ArrayList;
 import java.util.Collection;
+
+import javax.portlet.PortletPreferences;
 
 import org.jasig.portlet.weather.dao.IWeatherDao;
 import org.jasig.portlet.weather.domain.Location;
@@ -39,6 +42,19 @@ public class WeatherServiceImpl extends AbstractWeatherService {
 		return weatherDao.getWeather(locationCode, metric);
 	}
 	
+	public Collection<Weather> getAllWeather(PortletPreferences preferences) {
+		String[] locationCodes = preferences.getValues(LOCATION_CODES_KEY, null);
+		String[] metrics = preferences.getValues(METRICS_KEY, null);
+		Collection<Weather> weathers = new ArrayList<Weather>();
+		if (locationCodes != null && metrics != null) {
+			for (int i = 0; i < locationCodes.length && i < metrics.length; i++) {
+				Weather weather = getWeather(locationCodes[i], new Boolean(metrics[i]));
+				weathers.add(weather);
+			}
+		}
+		return weathers;
+	}
+
 	@Autowired
 	public void setWeatherDao(IWeatherDao weatherDao) {
 		this.weatherDao = weatherDao;

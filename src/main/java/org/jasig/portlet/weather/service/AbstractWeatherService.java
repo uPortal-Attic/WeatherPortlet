@@ -33,16 +33,19 @@ import org.springframework.context.support.MessageSourceAccessor;
 public abstract class AbstractWeatherService implements IWeatherService, MessageSourceAware {
 	
 	private MessageSourceAccessor messageSourceAccessor = null; //needed for resolving messages.properties values	
-	private static final Logger logger = Logger.getLogger(AbstractWeatherService.class);
-
-	public abstract Collection<Location> find(String location);
 	
-	public abstract Weather getWeather(String locationCode, Boolean metric);
+	protected final Logger logger = Logger.getLogger(getClass());
+
+	protected static final String LOCATIONS_KEY = "locations";
+	
+	protected static final String LOCATION_CODES_KEY = "locationCodes";
+	
+	protected static final String METRICS_KEY = "metrics";
 
 	public Map<String, String[]> getSavedLocationsMap(PortletPreferences prefs) {
-		String[] locationCodes = prefs.getValues("locationCodes", null);
-		String[] locations = prefs.getValues("locations", null);
-		String[] metrics = prefs.getValues("metrics", null);
+		String[] locationCodes = prefs.getValues("LOCATION_CODES_KEY", null);
+		String[] locations = prefs.getValues(LOCATIONS_KEY, null);
+		String[] metrics = prefs.getValues(METRICS_KEY, null);
 		if (locationCodes != null && locations != null && metrics != null) {
 			Map<String, String[]> savedLocationsMap = new HashMap<String, String[]>();
 			int length = locationCodes.length;
@@ -63,16 +66,16 @@ public abstract class AbstractWeatherService implements IWeatherService, Message
 		logger.debug("Saving locationCode " + locationCode);
 		logger.debug("Saving location " + location);
 		logger.debug("Saving metric value of " + metric);
-		String[] locationCodes = prefs.getValues("locationCodes", new String[0]);
-		String[] locations = prefs.getValues("locations", new String[0]);
-		String[] metrics = prefs.getValues("metrics", new String[0]);
+		String[] locationCodes = prefs.getValues(LOCATION_CODES_KEY, new String[0]);
+		String[] locations = prefs.getValues(LOCATIONS_KEY, new String[0]);
+		String[] metrics = prefs.getValues(METRICS_KEY, new String[0]);
 		String[] newLocationCodes = addItemToArray(locationCodes, locationCode);
 		String[] newLocations = addItemToArray(locations, location);
 		String[] newMetrics = addItemToArray(metrics, metric);
 		try {
-			prefs.setValues("locationCodes", newLocationCodes);
-			prefs.setValues("locations", newLocations);
-			prefs.setValues("metrics", newMetrics);
+			prefs.setValues(LOCATION_CODES_KEY, newLocationCodes);
+			prefs.setValues(LOCATIONS_KEY, newLocations);
+			prefs.setValues(METRICS_KEY, newMetrics);
 			prefs.store();
 		} catch (ReadOnlyException roe) {
 			roe.printStackTrace();
@@ -86,17 +89,17 @@ public abstract class AbstractWeatherService implements IWeatherService, Message
 	public void deleteWeatherLocation(PortletPreferences prefs,
 			String locationCode) {
 		logger.debug("Deleting location referred to by locationCode " + locationCode);
-		String[] locationCodes = prefs.getValues("locationCodes", null);
-		String[] locations = prefs.getValues("locations", null);
-		String[] metrics = prefs.getValues("metrics", null);
+		String[] locationCodes = prefs.getValues(LOCATION_CODES_KEY, null);
+		String[] locations = prefs.getValues(LOCATIONS_KEY, null);
+		String[] metrics = prefs.getValues(METRICS_KEY, null);
 		int index = findIndex(locationCodes, locationCode);
 		String[] newLocationCodes = deleteItemFromArray(locationCodes, index);
 		String[] newLocations = deleteItemFromArray(locations, index);
 		String[] newMetrics = deleteItemFromArray(metrics, index);
 		try {
-			prefs.setValues("locationCodes", newLocationCodes);
-			prefs.setValues("locations", newLocations);
-			prefs.setValues("metrics", newMetrics);
+			prefs.setValues(LOCATION_CODES_KEY, newLocationCodes);
+			prefs.setValues(LOCATIONS_KEY, newLocations);
+			prefs.setValues(METRICS_KEY, newMetrics);
 			prefs.store();
 		} catch (ReadOnlyException roe) {
 			roe.printStackTrace();
@@ -137,4 +140,8 @@ public abstract class AbstractWeatherService implements IWeatherService, Message
 	public void setMessageSource(MessageSource messageSource) {
 		this.messageSourceAccessor = new MessageSourceAccessor(messageSource);
 	}
+	
+	public abstract Collection<Location> find(String location);
+	
+	public abstract Weather getWeather(String locationCode, Boolean metric);
 }
