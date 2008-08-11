@@ -52,6 +52,9 @@ public class AddInitParamsInterceptor extends HandlerInterceptorAdapter
 	public void postHandleRender(RenderRequest request,
 			RenderResponse response, Object handler, ModelAndView modelAndView)
 			throws Exception {
+		if (modelAndView == null) {
+			return;
+		}
 		Enumeration<String> initNames = portletConfig.getInitParameterNames();
 		while (initNames.hasMoreElements()) {
 			String initParamName = initNames.nextElement();

@@ -19,6 +19,7 @@ import javax.portlet.ValidatorException;
 import org.apache.log4j.Logger;
 import org.jasig.portlet.weather.domain.Location;
 import org.jasig.portlet.weather.domain.Weather;
+import org.jasig.portlet.weather.portlet.WeatherEdController.WeatherFormModel;
 import org.springframework.context.MessageSource;
 import org.springframework.context.MessageSourceAware;
 import org.springframework.context.support.MessageSourceAccessor;
@@ -43,7 +44,7 @@ public abstract class AbstractWeatherService implements IWeatherService, Message
 	protected static final String METRICS_KEY = "metrics";
 
 	public Map<String, String[]> getSavedLocationsMap(PortletPreferences prefs) {
-		String[] locationCodes = prefs.getValues("LOCATION_CODES_KEY", null);
+		String[] locationCodes = prefs.getValues(LOCATION_CODES_KEY, null);
 		String[] locations = prefs.getValues(LOCATIONS_KEY, null);
 		String[] metrics = prefs.getValues(METRICS_KEY, null);
 		if (locationCodes != null && locations != null && metrics != null) {
@@ -61,8 +62,10 @@ public abstract class AbstractWeatherService implements IWeatherService, Message
 		return null;
 	}
 
-	public void addWeatherLocation(PortletPreferences prefs,
-			String locationCode, String location, String metric) {
+	public void addWeatherLocation(PortletPreferences prefs, WeatherFormModel formModel) {
+		String locationCode = formModel.getLocationCode().substring((formModel.getLocationCode().indexOf('+') + 1), formModel.getLocationCode().length());
+		String location = formModel.getLocationCode().substring(0, formModel.getLocationCode().indexOf('+'));;
+		String metric = formModel.getMetric();
 		logger.debug("Saving locationCode " + locationCode);
 		logger.debug("Saving location " + location);
 		logger.debug("Saving metric value of " + metric);

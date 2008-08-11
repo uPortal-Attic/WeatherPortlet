@@ -73,17 +73,17 @@
     <portlet:actionURL var="formSearchAction">
         <portlet:param name="action" value="search"/>
     </portlet:actionURL>
-    <form:form commandName="weatherEditCommand" action="${formSearchAction}" id="${namespace}weatherSearchForm">
+    <form:form modelAttribute="weatherFormModel" action="${formSearchAction}" id="${namespace}weatherSearchForm">
         <form:errors path="*" cssClass="error"/>
         <p><spring:message code="edit.enter.location"/>:</p>
         <spring:message var="search" code="edit.search.button"/>
         <form:input path="location" id="${namespace}location"/><input type="submit" id="${namespace}searchSubmit" name="searchSubmit" value="${search}"/>
     </form:form>
-    <div class="search-results" style="display: none;">
+    <div class="search-results" style="${(jQueryEnabled || empty locationResults) ? 'display: none;' : ''}">
         <portlet:actionURL var="formAddAction">
             <portlet:param name="action" value="add"/>
         </portlet:actionURL>
-        <form:form commandName="weatherEditCommand" action="${formAddAction}" id="${namespace}addForm">
+        <form:form modelAttribute="weatherFormModel" action="${formAddAction}" id="${namespace}addForm">
             <p><spring:message code="edit.multiple.locations"/></p>
             <form:select path="locationCode" id="${namespace}locationCode">
                 <c:forEach var="location" items="${locationResults}">
@@ -130,9 +130,7 @@
             </table>
         </form:form>
     </div>
-    <portlet:actionURL var="formDoneAction">
-        <portlet:param name="action" value="done"/>
-    </portlet:actionURL>
+	<portlet:renderURL var="formDoneAction" portletMode="view"/>
     <form:form action="${formDoneAction}" id="${namespace}doneForm">
         <spring:message var="done" code="edit.done.button"/>
         <input type="submit" id="${namespace}doneSubmit" name="doneSubmit" value="${done}"/>

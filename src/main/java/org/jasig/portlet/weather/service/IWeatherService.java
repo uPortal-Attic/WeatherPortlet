@@ -7,6 +7,7 @@ import javax.portlet.PortletPreferences;
 
 import org.jasig.portlet.weather.domain.Location;
 import org.jasig.portlet.weather.domain.Weather;
+import org.jasig.portlet.weather.portlet.WeatherEdController.WeatherFormModel;
 
 /**
  * Weather Service interface. Interfaced in case others want to implement the
@@ -24,7 +25,7 @@ public interface IWeatherService {
 	
 	public Map<String, String[]> getSavedLocationsMap(PortletPreferences prefs);
 	
-	public void addWeatherLocation(PortletPreferences prefs, String locationCode, String location, String metric);
+	public void addWeatherLocation(PortletPreferences prefs, WeatherFormModel formModel);
 	
 	public void deleteWeatherLocation(PortletPreferences prefs, String locationCode);
 
