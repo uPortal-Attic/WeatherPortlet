@@ -7,7 +7,7 @@
                         http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd">
     <!-- Author: Dustin Schultz | Version: $Id$ -->
     <portlet>
-        <portlet-name>WeatherPortlet</portlet-name>
+        <portlet-name>jasigWeatherPortlet</portlet-name>
         <portlet-class>org.springframework.web.portlet.DispatcherPortlet</portlet-class>
         <init-param>
             <name>contextConfigLocation</name>
