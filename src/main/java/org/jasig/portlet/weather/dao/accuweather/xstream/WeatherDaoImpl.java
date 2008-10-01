@@ -79,6 +79,8 @@ public class WeatherDaoImpl implements IWeatherDao {
 		try {
 			urlObj = new URL(accuweatherUrl);
 			connection = urlObj.openConnection();
+			connection.setConnectTimeout(5000); // five second connect timeout
+			connection.setReadTimeout(5000); // five second read timeout
 			logger.debug("Retrieving weather xml using Xstream for location " + locationCode + " with metric " + metric);
 			weather = (Weather)xstream.fromXML(connection.getInputStream());
 		} catch (MalformedURLException mue) {
