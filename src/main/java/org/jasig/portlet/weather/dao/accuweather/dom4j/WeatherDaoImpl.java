@@ -7,6 +7,7 @@ package org.jasig.portlet.weather.dao.accuweather.dom4j;
 
 import java.util.Collection;
 
+import org.apache.commons.httpclient.HttpClient;
 import org.jasig.portlet.weather.dao.IWeatherDao;
 import org.jasig.portlet.weather.domain.Current;
 import org.jasig.portlet.weather.domain.Location;
@@ -23,15 +24,25 @@ import org.jasig.portlet.weather.domain.Weather;
  * @version $Id$
  */
 public class WeatherDaoImpl implements IWeatherDao {
+	
+	//Define the HttpClient here and pass it so we only define one instance
+	private final HttpClient httpClient = new HttpClient();
+	
+	//Default timeout of 5 seconds
+	private int connectionTimeout = 5000;
 
+	public WeatherDaoImpl() {
+		httpClient.getHttpConnectionManager().getParams().setConnectionTimeout(connectionTimeout);
+	}
+	
 	public Collection<Location> find(String location) {
-		LocationUtil locationUtil = new LocationUtil(location);
+		LocationUtil locationUtil = new LocationUtil(httpClient, location);
 		return locationUtil.getLocations();
 	}
 
 	public Weather getWeather(String locationCode, Boolean metric) {
 		// delegate parsing to WeatherUtil class
-		WeatherUtil weatherUtil = new WeatherUtil(locationCode, metric);
+		WeatherUtil weatherUtil = new WeatherUtil(httpClient, locationCode, metric);
 
 		Weather weather = new Weather();
 
@@ -68,4 +79,9 @@ public class WeatherDaoImpl implements IWeatherDao {
 
 		return weather;
 	}
+
+	public void setConnectionTimeout(int connectionTimeout) {
+		this.connectionTimeout = connectionTimeout;
+	}
+	
 }

@@ -6,14 +6,16 @@
 package org.jasig.portlet.weather.dao.accuweather.xstream;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.util.Collection;
 
+import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.HttpException;
+import org.apache.commons.httpclient.HttpMethod;
+import org.apache.commons.httpclient.HttpStatus;
+import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.log4j.Logger;
 import org.jasig.portlet.weather.dao.IWeatherDao;
 import org.jasig.portlet.weather.dao.accuweather.constants.Constants;
@@ -31,33 +33,60 @@ import com.thoughtworks.xstream.XStream;
 public class WeatherDaoImpl implements IWeatherDao {
 	
 	private static final Logger logger = Logger.getLogger(WeatherDaoImpl.class);
-		
+	private final HttpClient httpClient = new HttpClient();
+
+	//Default timeout of 5 seconds
+	private int connectionTimeout = 5000;
+	
+	public WeatherDaoImpl() {
+		httpClient.getHttpConnectionManager().getParams().setConnectionTimeout(connectionTimeout);
+	}
+	
 	@SuppressWarnings("unchecked")
 	public Collection<Location> find(String location) {
 		String accuweatherUrl = null;
 		try {
-			accuweatherUrl = Constants.BASE_FIND_URL + URLEncoder.encode(location, Constants.URL_ENCODING);
+			accuweatherUrl = Constants.BASE_FIND_URL
+					+ URLEncoder.encode(location, Constants.URL_ENCODING);
 		} catch (UnsupportedEncodingException uee) {
 			uee.printStackTrace();
-			throw new RuntimeException("Unable to encode url with " + Constants.URL_ENCODING + " encoding");
+			throw new RuntimeException("Unable to encode url with "
+					+ Constants.URL_ENCODING + " encoding");
 		}
-		URL urlObj = null;
-		HttpURLConnection connection = null;
+		HttpMethod getMethod = new GetMethod(accuweatherUrl);
+		InputStream inputStream = null;
 		XStream xstream = new XStream();
 		xstream.alias("adc_database", Collection.class);
 		xstream.registerConverter(new FinderConverter());
 		Collection<Location> locations = null;
 		try {
-			urlObj = new URL(accuweatherUrl);
-			connection = (HttpURLConnection)urlObj.openConnection();
-			logger.debug("Retrieving location xml for " + location + " using Xstream");
-			locations = (Collection<Location>)xstream.fromXML(connection.getInputStream());
-		} catch (MalformedURLException mue) {
-			mue.printStackTrace();
-			throw new RuntimeException("Unable to build url");
-		} catch (IOException ioe) {
-			ioe.printStackTrace();
-			throw new RuntimeException("Unable to get connection or create locations collection from xml");
+			// Execute the method.
+			int statusCode = httpClient.executeMethod(getMethod);
+			if (statusCode != HttpStatus.SC_OK) {
+				logger.error("Method failed: " + getMethod.getStatusLine());
+				throw new RuntimeException("Unable to retrieve locations from feed, invalid status code");
+			}
+			// Read the response body
+			inputStream = getMethod.getResponseBodyAsStream();
+			if (logger.isDebugEnabled()) {
+				logger.debug("Retrieving location xml for " + location + " using Xstream");
+			}
+			locations = (Collection<Location>) xstream.fromXML(inputStream);
+		} catch (HttpException e) {
+			logger.error("Fatal protocol violation", e);
+			throw new RuntimeException("Unable to retrieve locations from feed, http protocol exception");
+		} catch (IOException e) {
+			logger.error("Fatal transport error", e);
+			throw new RuntimeException("Unable to retrieve locations from feed, IO exception");
+		} finally {
+			//try to close the inputstream
+			try {
+				inputStream.close();
+			} catch (IOException e) {
+				logger.warn("Unable to close input stream while retrieving locations");
+			}
+			//release the connection
+			getMethod.releaseConnection();
 		}
 		return (locations != null && locations.size() > 0) ? locations : null;
 	}
@@ -65,32 +94,53 @@ public class WeatherDaoImpl implements IWeatherDao {
 	public Weather getWeather(String locationCode, Boolean metric) {
 		String accuweatherUrl = null;
 		try {
-			accuweatherUrl = Constants.BASE_GET_URL + URLEncoder.encode(locationCode, Constants.URL_ENCODING) + "&metric=" + ((metric) ? "1" : "0");
+			accuweatherUrl = Constants.BASE_GET_URL + URLEncoder.encode(locationCode, Constants.URL_ENCODING)
+					+ "&metric=" + ((metric) ? "1" : "0");
 		} catch (UnsupportedEncodingException uee) {
 			uee.printStackTrace();
-			throw new RuntimeException("Unable to encode url with " + Constants.URL_ENCODING + " encoding");
+			throw new RuntimeException("Unable to encode url with "
+					+ Constants.URL_ENCODING + " encoding");
 		}
-		URL urlObj = null;
-		URLConnection connection = null;
+		HttpMethod getMethod = new GetMethod(accuweatherUrl);
+		InputStream inputStream = null;
 		XStream xstream = new XStream();
 		xstream.registerConverter(new WeatherConverter(locationCode));
 		xstream.alias("adc_database", Weather.class);
 		Weather weather = null;
 		try {
-			urlObj = new URL(accuweatherUrl);
-			connection = urlObj.openConnection();
-			connection.setConnectTimeout(5000); // five second connect timeout
-			connection.setReadTimeout(5000); // five second read timeout
-			logger.debug("Retrieving weather xml using Xstream for location " + locationCode + " with metric " + metric);
-			weather = (Weather)xstream.fromXML(connection.getInputStream());
-		} catch (MalformedURLException mue) {
-			mue.printStackTrace();
-			throw new RuntimeException("Unable to build url");
-		} catch (IOException ioe) {
-			ioe.printStackTrace();
-			throw new RuntimeException("Unable to get connection or create weather object from XML");
+			// Execute the method.
+			int statusCode = httpClient.executeMethod(getMethod);
+			if (statusCode != HttpStatus.SC_OK) {
+				logger.error("Method failed: " + getMethod.getStatusLine());
+				throw new RuntimeException("Unable to retrieve weather from feed, invalid status code");
+			}
+			// Read the response body
+			inputStream = getMethod.getResponseBodyAsStream();
+			if (logger.isDebugEnabled()) {
+				logger.debug("Retrieving weather xml using Xstream for location " + locationCode + " with metric " + metric);
+			}
+			weather = (Weather) xstream.fromXML(inputStream);
+		} catch (HttpException e) {
+			logger.error("Fatal protocol violation", e);
+			throw new RuntimeException("Unable to retrieve weather from feed, http protocol exception");
+		} catch (IOException e) {
+			logger.error("Fatal transport error", e);
+			throw new RuntimeException("Unable to retrieve weather from feed, IO exception");
+		} finally {
+			//try to close the inputstream
+			try {
+				inputStream.close();
+			} catch (IOException e) {
+				logger.warn("Unable to close input stream while retrieving weather");
+			}
+			//release the connection
+			getMethod.releaseConnection();
 		}
 		return weather;
+	}
+
+	public void setConnectionTimeout(int connectionTimeout) {
+		this.connectionTimeout = connectionTimeout;
 	}
 
 }
