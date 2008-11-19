@@ -30,9 +30,13 @@ public class WeatherDaoImpl implements IWeatherDao {
 	
 	//Default timeout of 5 seconds
 	private int connectionTimeout = 5000;
+	
+	//Default timeout of 5 seconds
+	private int readTimeout = 5000;
 
 	public WeatherDaoImpl() {
 		httpClient.getHttpConnectionManager().getParams().setConnectionTimeout(connectionTimeout);
+		httpClient.getHttpConnectionManager().getParams().setSoTimeout(readTimeout);
 	}
 	
 	public Collection<Location> find(String location) {
@@ -83,5 +87,9 @@ public class WeatherDaoImpl implements IWeatherDao {
 	public void setConnectionTimeout(int connectionTimeout) {
 		this.connectionTimeout = connectionTimeout;
 	}
-	
+
+	public void setReadTimeout(int readTimeout) {
+		this.readTimeout = readTimeout;
+	}
+
 }
