@@ -71,6 +71,7 @@
 	<bean id="weatherDao" class="org.jasig.portlet.weather.dao.accuweather.dom4j.WeatherDaoImpl"
 		p:connectionTimeout="1000"
 		p:readTimeout="3000"
+		p:timesToRetry="5"
 	/>
 	-->
 	
@@ -78,6 +79,7 @@
 	<bean id="weatherDao" class="org.jasig.portlet.weather.dao.accuweather.xstream.WeatherDaoImpl"
 		p:connectionTimeout="1000"
 		p:readTimeout="3000"
+		p:timesToRetry="5"
 	/>
 	
 	<!-- ========================= SERVICE DEFENITIONS ========================= -->
