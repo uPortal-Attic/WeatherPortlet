@@ -5,6 +5,10 @@
 
 package org.jasig.portlet.weather.dao.accuweather.dom4j;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -13,6 +17,11 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.HttpException;
+import org.apache.commons.httpclient.HttpMethod;
+import org.apache.commons.httpclient.HttpStatus;
+import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.log4j.Logger;
 import org.dom4j.Attribute;
 import org.dom4j.Document;
@@ -42,18 +51,51 @@ public class WeatherUtil {
 	private Element forecast = null;
 	private Element planets = null;
 
-	public WeatherUtil(String locationCode, Boolean metric) {
-		logger.debug("Retrieving weather xml using DOM4J for location " + locationCode
-				+ " with metric " + metric);
-		String accuweatherUrl = Constants.BASE_GET_URL + locationCode
-				+ "&metric=" + ((metric) ? "1" : "0");
+	public WeatherUtil(HttpClient httpClient, String locationCode, Boolean metric) {
+		String accuweatherUrl = null;
+		try {
+			accuweatherUrl = Constants.BASE_GET_URL + URLEncoder.encode(locationCode, Constants.URL_ENCODING)
+					+ "&metric=" + ((metric) ? "1" : "0");
+		} catch (UnsupportedEncodingException uee) {
+			uee.printStackTrace();
+			throw new RuntimeException("Unable to encode url with "
+					+ Constants.URL_ENCODING + " encoding");
+		}
 		SAXReader reader = new SAXReader();
+		HttpMethod getMethod = new GetMethod(accuweatherUrl);
+		InputStream inputStream = null;
 		Document document = null;
 		try {
-			document = reader.read(accuweatherUrl);
-		} catch (DocumentException de) {
-			de.printStackTrace();
-			throw new RuntimeException("Unable to retrieve xml", de);
+			// Execute the method.
+			int statusCode = httpClient.executeMethod(getMethod);
+			if (statusCode != HttpStatus.SC_OK) {
+				logger.error("Method failed: " + getMethod.getStatusLine());
+				throw new RuntimeException("Unable to retrieve weather from feed, invalid status code");
+			}
+			// Read the response body
+			inputStream = getMethod.getResponseBodyAsStream();
+			if (logger.isDebugEnabled()) {
+				logger.debug("Retrieving weather xml using DOM4J for location " + locationCode + " with metric " + metric);
+			}
+			document = reader.read(inputStream);
+		} catch (HttpException e) {
+			logger.error("Fatal protocol violation", e);
+			throw new RuntimeException("Unable to retrieve weather from feed, http protocol exception");
+		} catch (IOException e) {
+			logger.error("Fatal transport error", e);
+			throw new RuntimeException("Unable to retrieve weather from feed, IO exception");
+		} catch (DocumentException e) {
+			logger.error("Document Exception while retrieving weather, most likely there is a problem with parsing the document");
+			throw new RuntimeException("Unable to retrieve xml", e);
+		} finally {
+			//try to close the inputstream
+			try {
+				inputStream.close();
+			} catch (IOException e) {
+				logger.warn("Unable to close input stream while retrieving weather");
+			}
+			//release the connection
+			getMethod.releaseConnection();
 		}
 
 		// get top level elements

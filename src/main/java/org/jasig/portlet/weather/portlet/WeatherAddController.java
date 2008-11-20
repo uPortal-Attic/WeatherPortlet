@@ -38,7 +38,6 @@ public class WeatherAddController extends SimpleFormController {
 		super.processFormSubmission(request, response, command, errors);
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	protected void onSubmitAction(ActionRequest request,
 			ActionResponse response, Object command, BindException errors)

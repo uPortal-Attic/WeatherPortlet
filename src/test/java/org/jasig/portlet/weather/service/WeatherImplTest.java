@@ -32,7 +32,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
  * @see WeatherDaoImpl
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = { "/testContext.xml" })
+@ContextConfiguration(
+		locations = { "file:src/main/webapp/WEB-INF/context/applicationContext.xml" })
 public class WeatherImplTest {
 
 	@Autowired
