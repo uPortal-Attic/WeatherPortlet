@@ -13,7 +13,7 @@
 	<groupId>org.jasig.portlet</groupId>
 	<artifactId>WeatherPortlet</artifactId>
 	<packaging>war</packaging>
-	<version>1.0.3-SNAPSHOT</version>
+	<version>1.0.3-RC2</version>
 	<description>JA-Sig Weather Portlet</description>
 	<properties>
 		<issues.projectKey></issues.projectKey>
