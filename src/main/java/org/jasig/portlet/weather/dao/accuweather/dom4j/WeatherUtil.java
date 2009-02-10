@@ -90,7 +90,9 @@ public class WeatherUtil {
 		} finally {
 			//try to close the inputstream
 			try {
-				inputStream.close();
+				if (inputStream != null){
+					inputStream.close();
+				}
 			} catch (IOException e) {
 				logger.warn("Unable to close input stream while retrieving weather");
 			}
