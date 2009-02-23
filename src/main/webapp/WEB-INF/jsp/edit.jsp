@@ -4,7 +4,10 @@
 <c:if test="${useInlineCSSTags}">
 	<link rel="stylesheet" href="<c:url value="/css/weather.css"/>" type="text/css" />
 </c:if>
-<c:set var="namespace"><portlet:namespace/></c:set>
+
+<%-- Avoid issue PLUTO-120  --%>
+<c:set var="namespace"><%= ((javax.portlet.RenderResponse)request.getAttribute("javax.portlet.response")).getNamespace() %></c:set>
+
 <div class="weatherportlet">
     <c:if test="${jQueryEnabled}">
         <script type="text/javascript" src="${context}/js/cities.js"></script>
@@ -79,7 +82,9 @@
         <spring:message var="search" code="edit.search.button"/>
         <form:input path="location" id="${namespace}location"/><input type="submit" id="${namespace}searchSubmit" name="searchSubmit" value="${search}"/>
     </form:form>
-    <div class="search-results" style="display: none;">
+    
+    <c:if test="${(not empty locationResults) or jQueryEnabled}">
+    <div class="search-results">
         <portlet:actionURL var="formAddAction">
             <portlet:param name="action" value="add"/>
         </portlet:actionURL>
@@ -101,6 +106,7 @@
             <input type="submit" id="${namespace}addSubmit" name="addSubmit" value="${addLocation}"/><input type="submit" id="${namespace}cancelSearchSubmit" name="cancelSearchSubmit" value="${cancelSearch}"/>
         </form:form>
     </div>
+    </c:if>
     <div class="locations">
         <p><spring:message code="edit.saved.locations.title"/></p>
         <form:form id="${namespace}deleteForm">
