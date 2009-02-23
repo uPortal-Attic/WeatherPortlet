@@ -11,6 +11,7 @@ import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.Date;
 
+import org.apache.log4j.Logger;
 import org.jasig.portlet.weather.domain.Current;
 import org.jasig.portlet.weather.domain.Forecast;
 import org.jasig.portlet.weather.domain.Location;
@@ -36,6 +37,8 @@ import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
  */
 public class WeatherConverter implements Converter {
 	
+	private static final Logger logger = Logger.getLogger(WeatherConverter.class);
+
 	private Date observationTime = null;
 	private Date sunsetTime = null;
 	private DateFormat dateFormatter = new SimpleDateFormat("h:mm a");
@@ -81,13 +84,18 @@ public class WeatherConverter implements Converter {
 				try {
 					sunsetTime = dateFormatter.parse(sunTime.trim());
 				} catch (ParseException pe) {
-					pe.printStackTrace();
-					throw new RuntimeException("Unable to parse sunset time",pe);
+					sunsetTime = null;
+					logger.warn("Unable to parse sunset time",pe);
 				}
 				reader.moveUp();
 			} else if (Constants.FORECAST_TAG.equals(reader.getNodeName())) {
-				String timeOfDay = (sunsetTime.before(observationTime) ? Constants.NIGHTTIME_TAG : Constants.DAYTIME_TAG);
-				Collection<Forecast> forecasts = (Collection<Forecast>)context.convertAnother(weather, Forecast.class, new ForecastsConverter(timeOfDay));
+				// Assume daytime if we don't know the sunset time
+				String timeOfDay = Constants.DAYTIME_TAG;
+				if (sunsetTime != null && sunsetTime.before(observationTime)){
+					timeOfDay = Constants.NIGHTTIME_TAG;
+				}
+				Collection<Forecast> forecasts = (Collection<Forecast>)context.convertAnother(
+						weather, Forecast.class, new ForecastsConverter(timeOfDay));
 				weather.setForecast(forecasts);
 			}
 			reader.moveUp();
