@@ -5,6 +5,11 @@
 
 package org.jasig.portlet.weather.dao.accuweather.constants;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collection;
+
 /**
  * Constants interface to hold all constant information such as tag names,
  * attribute names, or image sizes/paths.
@@ -12,12 +17,22 @@ package org.jasig.portlet.weather.dao.accuweather.constants;
  * @author schultzd
  * @version $Id$
  */
+
 public interface Constants {
 
 	// url constants
 	public static final String BASE_GET_URL = "http://uport.accu-weather.com/widget/uport/weather-data.asp?location=";
 	public static final String BASE_FIND_URL = "http://uport.accu-weather.com/widget/uport/city-find.asp?location=";
 	public static final String URL_ENCODING = "UTF-8";
+	
+	//formatting constants
+	@SuppressWarnings("serial")
+	public static final Collection<DateFormat> dateFormatters = new ArrayList<DateFormat>() {
+		{
+			add(new SimpleDateFormat("h:mm a")); //12 hour
+			add(new SimpleDateFormat("kk:mm")); //24 hour
+		}
+	};
 	
 	// xml root tags
 	public static final String UNITS_TAG = "units";

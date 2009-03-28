@@ -7,10 +7,10 @@ package org.jasig.portlet.weather.dao.accuweather.xstream;
 
 import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.Date;
 
+import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.jasig.portlet.weather.domain.Current;
 import org.jasig.portlet.weather.domain.Forecast;
@@ -41,7 +41,6 @@ public class WeatherConverter implements Converter {
 
 	private Date observationTime = null;
 	private Date sunsetTime = null;
-	private DateFormat dateFormatter = new SimpleDateFormat("h:mm a");
 	private String locationCode = null;
 
 	public WeatherConverter(String locationCode) {
@@ -81,18 +80,27 @@ public class WeatherConverter implements Converter {
 			} else if (Constants.PLANETS_TAG.equals(reader.getNodeName())) {
 				reader.moveDown();
 				String sunTime = reader.getAttribute(Constants.SUNSET_ATTR);
-				try {
-					sunsetTime = dateFormatter.parse(sunTime.trim());
-				} catch (ParseException pe) {
-					sunsetTime = null;
-					logger.warn("Unable to parse sunset time",pe);
+				for (DateFormat formatter : Constants.dateFormatters) {
+					//if we already successfully converted the sunsetTime, don't try again
+					if (sunsetTime != null) { continue; }
+					try {
+						sunsetTime = formatter.parse(sunTime.trim());
+					} catch (ParseException pe) {
+						if (logger.isEnabledFor(Level.WARN)) {
+							logger.warn("Unable to parse sunset time " + sunTime);
+						}
+					}
 				}
 				reader.moveUp();
 			} else if (Constants.FORECAST_TAG.equals(reader.getNodeName())) {
-				// Assume daytime if we don't know the sunset time
+				// Default daytime in case we don't know the sunset time
 				String timeOfDay = Constants.DAYTIME_TAG;
-				if (sunsetTime != null && sunsetTime.before(observationTime)){
-					timeOfDay = Constants.NIGHTTIME_TAG;
+				if (sunsetTime != null && observationTime != null) {
+					timeOfDay = (sunsetTime.before(observationTime) ? Constants.NIGHTTIME_TAG : Constants.DAYTIME_TAG);
+				} else {
+					if (logger.isEnabledFor(Level.WARN)) {
+						logger.warn("Unable to determine time of day for forecast rendering, defaulting to day time");
+					}
 				}
 				Collection<Forecast> forecasts = (Collection<Forecast>)context.convertAnother(
 						weather, Forecast.class, new ForecastsConverter(timeOfDay));

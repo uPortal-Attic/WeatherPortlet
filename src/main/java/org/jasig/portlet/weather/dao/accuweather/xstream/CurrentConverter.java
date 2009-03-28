@@ -7,8 +7,10 @@ package org.jasig.portlet.weather.dao.accuweather.xstream;
 
 import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.util.Date;
 
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
 import org.jasig.portlet.weather.dao.accuweather.constants.Constants;
 import org.jasig.portlet.weather.domain.Current;
 
@@ -29,7 +31,7 @@ import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
  */
 public class CurrentConverter implements Converter {
 	
-	private DateFormat dateFormatter = new SimpleDateFormat("h:mm a");
+	private static final Logger logger = Logger.getLogger(CurrentConverter.class);
 
 	public void marshal(Object arg0, HierarchicalStreamWriter arg1,
 			MarshallingContext arg2) {
@@ -46,13 +48,20 @@ public class CurrentConverter implements Converter {
 				context.put("moreInformationLink", reader.getValue());
 			} else if (Constants.OBS_TIME_TAG.equals(reader.getNodeName())) {
 				String obsTime = reader.getValue();
-				try {
-					//put this in context because it is not part of the current object
-					context.put("observationTime", dateFormatter.parse(obsTime.trim()));
-				} catch (ParseException pe) {
-					pe.printStackTrace();
-					throw new RuntimeException("Unable to parse observation time", pe);
+				Date observationTime = null;
+				for (DateFormat formatter : Constants.dateFormatters) {
+					//if we already successfully converted the sunsetTime, don't try again
+					if (observationTime != null) { continue; }
+					try {
+						observationTime = formatter.parse(obsTime.trim());
+					} catch (ParseException pe) {
+						if (logger.isEnabledFor(Level.WARN)) {
+							logger.warn("Unable to parse observation time " + obsTime);
+						}
+					}
 				}
+				//put this in context because it is not part of the current object
+				context.put("observationTime", observationTime);
 			} else if (Constants.CURR_PRESSURE_TAG.equals(reader.getNodeName())) {
 				Double pressure = null;
 				if (!Constants.PRESSURE_UNKNOWN.equals(reader.getValue())) {

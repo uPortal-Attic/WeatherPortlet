@@ -11,7 +11,6 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -22,6 +21,7 @@ import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.methods.GetMethod;
+import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.dom4j.Attribute;
 import org.dom4j.Document;
@@ -252,8 +252,7 @@ public class WeatherUtil {
 
 	@SuppressWarnings("unchecked")
 	public Collection<Forecast> getForecast() {
-		DateFormat df1 = new SimpleDateFormat("h:mm a");
-
+		
 		String sunsetTime = null;
 		if (planets != null) {
 			Element sun = planets.element(Constants.SUN_TAG);
@@ -279,20 +278,30 @@ public class WeatherUtil {
 
 		Date sunsetDate = null;
 
-		try {
-			sunsetDate = df1.parse(sunsetTime.trim());
-		} catch (ParseException pe) {
-			pe.printStackTrace();
-			throw new RuntimeException("Unable to parse sunset value");
+		for (DateFormat formatter : Constants.dateFormatters) {
+			//if we already successfully converted the sunsetTime, don't try again
+			if (sunsetDate != null) { continue; }
+			try {
+				sunsetDate = formatter.parse(sunsetTime.trim());
+			} catch (ParseException pe) {
+				if (logger.isEnabledFor(Level.WARN)) {
+					logger.warn("Unable to parse sunset time " + sunsetTime);
+				}
+			}
 		}
 
 		Date obsDate = null;
-
-		try {
-			obsDate = df1.parse(obsTime.trim());
-		} catch (ParseException pe) {
-			pe.printStackTrace();
-			throw new RuntimeException("Unable to parse observation value");
+		
+		for (DateFormat formatter : Constants.dateFormatters) {
+			//if we already successfully converted the sunsetTime, don't try again
+			if (obsDate != null) { continue; }
+			try {
+				obsDate = formatter.parse(obsTime.trim());
+			} catch (ParseException pe) {
+				if (logger.isEnabledFor(Level.WARN)) {
+					logger.warn("Unable to parse observation time " + obsTime);
+				}
+			}
 		}
 
 		Collection<Forecast> forecastCol = new ArrayList<Forecast>();
@@ -306,14 +315,14 @@ public class WeatherUtil {
 
 		for (Element ele : forecastElements) {
 			// Have to see what time of day it is to determine what forecast
-			// element to get
-			Element timeOfDay = null;
-			if (sunsetDate.before(obsDate)) {
-				// its night
-				timeOfDay = ele.element(Constants.NIGHTTIME_TAG);
+			// element to get, default to daytime.
+			Element timeOfDay = ele.element(Constants.DAYTIME_TAG);
+			if (sunsetDate != null && obsDate != null) {
+				timeOfDay = sunsetDate.before(obsDate) ? ele.element(Constants.NIGHTTIME_TAG) : ele.element(Constants.DAYTIME_TAG);
 			} else {
-				// its day
-				timeOfDay = ele.element(Constants.DAYTIME_TAG);
+				if (logger.isEnabledFor(Level.WARN)) {
+					logger.warn("Unable to determine time of day for forecast rendering, defaulting to day time");
+				}
 			}
 
 			Element day = ele.element(Constants.FORECAST_DAYCODE_TAG);
