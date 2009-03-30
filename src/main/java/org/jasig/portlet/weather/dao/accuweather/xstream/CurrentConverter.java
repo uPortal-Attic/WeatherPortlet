@@ -7,6 +7,7 @@ package org.jasig.portlet.weather.dao.accuweather.xstream;
 
 import java.text.DateFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.apache.log4j.Level;
@@ -49,9 +50,10 @@ public class CurrentConverter implements Converter {
 			} else if (Constants.OBS_TIME_TAG.equals(reader.getNodeName())) {
 				String obsTime = reader.getValue();
 				Date observationTime = null;
-				for (DateFormat formatter : Constants.dateFormatters) {
+				for (String pattern : Constants.dateFormatterPatterns) {
 					//if we already successfully converted the sunsetTime, don't try again
 					if (observationTime != null) { continue; }
+					DateFormat formatter = new SimpleDateFormat(pattern);
 					try {
 						observationTime = formatter.parse(obsTime.trim());
 					} catch (ParseException pe) {

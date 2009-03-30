@@ -11,6 +11,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.text.DateFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -278,9 +279,10 @@ public class WeatherUtil {
 
 		Date sunsetDate = null;
 
-		for (DateFormat formatter : Constants.dateFormatters) {
+		for (String pattern : Constants.dateFormatterPatterns) {
 			//if we already successfully converted the sunsetTime, don't try again
 			if (sunsetDate != null) { continue; }
+			DateFormat formatter = new SimpleDateFormat(pattern);
 			try {
 				sunsetDate = formatter.parse(sunsetTime.trim());
 			} catch (ParseException pe) {
@@ -292,9 +294,10 @@ public class WeatherUtil {
 
 		Date obsDate = null;
 		
-		for (DateFormat formatter : Constants.dateFormatters) {
+		for (String pattern : Constants.dateFormatterPatterns) {
 			//if we already successfully converted the sunsetTime, don't try again
 			if (obsDate != null) { continue; }
+			DateFormat formatter = new SimpleDateFormat(pattern);
 			try {
 				obsDate = formatter.parse(obsTime.trim());
 			} catch (ParseException pe) {

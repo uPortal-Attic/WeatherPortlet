@@ -7,6 +7,7 @@ package org.jasig.portlet.weather.dao.accuweather.xstream;
 
 import java.text.DateFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.Date;
 
@@ -80,9 +81,10 @@ public class WeatherConverter implements Converter {
 			} else if (Constants.PLANETS_TAG.equals(reader.getNodeName())) {
 				reader.moveDown();
 				String sunTime = reader.getAttribute(Constants.SUNSET_ATTR);
-				for (DateFormat formatter : Constants.dateFormatters) {
+				for (String pattern : Constants.dateFormatterPatterns) {
 					//if we already successfully converted the sunsetTime, don't try again
 					if (sunsetTime != null) { continue; }
+					DateFormat formatter = new SimpleDateFormat(pattern);
 					try {
 						sunsetTime = formatter.parse(sunTime.trim());
 					} catch (ParseException pe) {

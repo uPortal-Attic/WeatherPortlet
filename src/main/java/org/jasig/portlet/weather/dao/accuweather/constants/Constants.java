@@ -5,8 +5,6 @@
 
 package org.jasig.portlet.weather.dao.accuweather.constants;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -27,10 +25,10 @@ public interface Constants {
 	
 	//formatting constants
 	@SuppressWarnings("serial")
-	public static final Collection<DateFormat> dateFormatters = new ArrayList<DateFormat>() {
+	public static final Collection<String> dateFormatterPatterns = new ArrayList<String>() {
 		{
-			add(new SimpleDateFormat("h:mm a")); //12 hour
-			add(new SimpleDateFormat("kk:mm")); //24 hour
+			add(new String("h:mm a")); //12 hour
+			add(new String("kk:mm")); //24 hour
 		}
 	};
 	
