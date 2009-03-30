@@ -18,6 +18,7 @@ import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.HttpMethodRetryHandler;
 import org.apache.commons.httpclient.HttpStatus;
+import org.apache.commons.httpclient.MultiThreadedHttpConnectionManager;
 import org.apache.commons.httpclient.NoHttpResponseException;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.params.HttpMethodParams;
@@ -38,7 +39,13 @@ import com.thoughtworks.xstream.XStream;
 public class WeatherDaoImpl implements IWeatherDao {
 	
 	private static final Logger logger = Logger.getLogger(WeatherDaoImpl.class);
-	private final HttpClient httpClient = new HttpClient();
+	
+	//Multi-threaded connection manager for exclusive access
+	private final MultiThreadedHttpConnectionManager connectionManager = 
+		new MultiThreadedHttpConnectionManager();
+	
+	//Define the HttpClient here and pass it so we only define one instance
+	private final HttpClient httpClient = new HttpClient(connectionManager);
 
 	//Default timeout of 5 seconds
 	private int connectionTimeout = 5000;
@@ -53,7 +60,7 @@ public class WeatherDaoImpl implements IWeatherDao {
 		init();
 	}
 	
-	public void init() {
+	private void init() {
 		httpClient.getHttpConnectionManager().getParams().setConnectionTimeout(connectionTimeout);
 		httpClient.getHttpConnectionManager().getParams().setSoTimeout(readTimeout);
 		

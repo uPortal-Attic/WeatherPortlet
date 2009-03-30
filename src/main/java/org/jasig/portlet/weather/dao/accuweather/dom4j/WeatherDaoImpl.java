@@ -13,6 +13,7 @@ import java.util.Collection;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.HttpMethodRetryHandler;
+import org.apache.commons.httpclient.MultiThreadedHttpConnectionManager;
 import org.apache.commons.httpclient.NoHttpResponseException;
 import org.apache.commons.httpclient.params.HttpMethodParams;
 import org.jasig.portlet.weather.dao.IWeatherDao;
@@ -32,8 +33,12 @@ import org.jasig.portlet.weather.domain.Weather;
  */
 public class WeatherDaoImpl implements IWeatherDao {
 	
+	//Multi-threaded connection manager for exclusive access
+	private final MultiThreadedHttpConnectionManager connectionManager = 
+		new MultiThreadedHttpConnectionManager();
+	
 	//Define the HttpClient here and pass it so we only define one instance
-	private final HttpClient httpClient = new HttpClient();
+	private final HttpClient httpClient = new HttpClient(connectionManager);
 	
 	//Default timeout of 5 seconds
 	private int connectionTimeout = 5000;
@@ -48,7 +53,7 @@ public class WeatherDaoImpl implements IWeatherDao {
 		init();
 	}
 	
-	public void init() {
+	private void init() {
 		httpClient.getHttpConnectionManager().getParams().setConnectionTimeout(connectionTimeout);
 		httpClient.getHttpConnectionManager().getParams().setSoTimeout(readTimeout);
 		
