@@ -15,7 +15,11 @@
         </init-param>
         <init-param>
         	<name>model:jQueryEnabled</name>
-        	<value>false</value>
+        	<value>true</value>
+        </init-param>
+        <init-param>
+            <name>model:includeJQuery</name>
+            <value>true</value>
         </init-param>
         <init-param>
         	<name>model:useInlineCSSTags</name>

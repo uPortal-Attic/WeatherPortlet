@@ -287,5 +287,13 @@
                 </exclusion>
             </exclusions>
         </dependency>
+	    
+	    <!-- Jasig resource server -->
+	    <dependency>
+	        <groupId>org.jasig.resourceserver</groupId>
+	        <artifactId>resource-server-utils</artifactId>
+	        <version>1.0.4</version>
+	        <scope>runtime</scope>
+	    </dependency>	    
 	</dependencies>
 </project>

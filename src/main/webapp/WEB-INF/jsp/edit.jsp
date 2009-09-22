@@ -1,5 +1,8 @@
 <%-- Author: Dustin Schultz | Version $Id$ --%>
 <%@ include file="/WEB-INF/jsp/include.jsp" %>
+<portlet:defineObjects/>
+
+<c:set var="n"><portlet:namespace/></c:set>
 <c:set var="context" value="${pageContext.request.contextPath}"/>
 <c:if test="${useInlineCSSTags}">
 	<link rel="stylesheet" href="<c:url value="/css/weather.css"/>" type="text/css" />
@@ -10,6 +13,9 @@
 
 <div class="weatherportlet">
     <c:if test="${jQueryEnabled}">
+        <c:if test="${includeJQuery}">
+            <script type="text/javascript" src="<rs:resourceURL value="/rs/jquery/1.3.2/jquery-1.3.2.min.js"/>"></script>
+        </c:if>
         <script type="text/javascript" src="${context}/js/cities.js"></script>
         <script type="text/javascript" src="${context}/js/jquery.autocomplete.js"></script>
         <c:if test="${useInlineCSSTags}">
@@ -18,59 +24,64 @@
 	        </style>
         </c:if>
         <script>
-            $(document).ready(function(){
-                $("#${namespace}location").autocompleteArray(cities,
-                    {
-                        delay:10,
-                        minChars:1,
-                        matchSubset:1,
-                        autoFill:true,
-                        maxItemsToShow:10
-                    }
-                );
-                $("#${namespace}location").click(function() {
-                    $("#${namespace}location")[0].autocompleter.findValue();
-                    return false;
-                });
-                
-                $("#${namespace}searchSubmit").click(function() {
-                    var locVal = $("#${namespace}location").val();
-                    $.ajax( {
-                        type: "GET",
-                        url: "${context}/FindCity",
-                        data: "location=" + locVal,
-                        dataType: "xml",
-                        success: function(xml) {
-                            var html = "";
-                            $("location", xml).each(function() {
-                                html += "\t<option value = \"" + $(this).attr("city") + ", " + $(this).attr("state") + "+" + $(this).attr("location") + "\">" + $(this).attr("city") + ", " + $(this).attr("state") + "</option>\r\n";
-                            });
-                            $("#${namespace}locationCode").html(html);
-                            $("#${namespace}locationCode").find("option")[0].selected = true;
-                        }
-                    });
-                    $(".search-results").show();
-                    return false;
-                });
-                
-<!--                $("#${namespace}addSubmit").click(function() {-->
-<!--                    var locVals = $("#${namespace}locationCode").val().split("+");-->
-<!--                    var stndVals = $("#${namespace}temperatureUnit").val();-->
-<!--                    var html = "<tr>\r\n";-->
-<!--                    html += "\t<td>" + locVals[0]; + "</td>\r\n";-->
-<!--                    html += "\t<td>" + stndVals; + "</td>\r\n";-->
-<!--                    html += "\t<td>delete</td>\r\n";-->
-<!--                    html += "</tr>\r\n";-->
-<!--                    $(".locations").find("table").append(html);-->
-<!--                    $(".search-results").hide();-->
-<!--                    $(".locations").show();-->
-<!--                    $.post(-->
-<!--                       $("#${namespace}addForm").attr("action"),-->
-<!--                       { locationCode: $("#${namespace}locationCode").val(), metric: $("#${namespace}temperatureUnit").val() }-->
-<!--                    );-->
-<!--                    return false;-->
-<!--                });-->
-            });
+	        var ${n} = ${n} || {};
+	        ${n}.jQuery = ${ includeJQuery ? 'jQuery.noConflict(true)' : 'jQuery' };
+	        ${n}.jQuery(function(){
+	            var $ = ${n}.jQuery;
+	            $(document).ready(function(){
+	                $("#${namespace}location").autocompleteArray(cities,
+	                    {
+	                        delay:10,
+	                        minChars:1,
+	                        matchSubset:1,
+	                        autoFill:true,
+	                        maxItemsToShow:10
+	                    }
+	                );
+	                $("#${namespace}location").click(function() {
+	                    $("#${namespace}location")[0].autocompleter.findValue();
+	                    return false;
+	                });
+	                
+	                $("#${namespace}searchSubmit").click(function() {
+	                    var locVal = $("#${namespace}location").val();
+	                    $.ajax( {
+	                        type: "GET",
+	                        url: "${context}/FindCity",
+	                        data: "location=" + locVal,
+	                        dataType: "xml",
+	                        success: function(xml) {
+	                            var html = "";
+	                            $("location", xml).each(function() {
+	                                html += "\t<option value = \"" + $(this).attr("city") + ", " + $(this).attr("state") + "+" + $(this).attr("location") + "\">" + $(this).attr("city") + ", " + $(this).attr("state") + "</option>\r\n";
+	                            });
+	                            $("#${namespace}locationCode").html(html);
+	                            $("#${namespace}locationCode").find("option")[0].selected = true;
+	                        }
+	                    });
+	                    $(".search-results").show();
+	                    return false;
+	                });
+	                
+	<!--                $("#${namespace}addSubmit").click(function() {-->
+	<!--                    var locVals = $("#${namespace}locationCode").val().split("+");-->
+	<!--                    var stndVals = $("#${namespace}temperatureUnit").val();-->
+	<!--                    var html = "<tr>\r\n";-->
+	<!--                    html += "\t<td>" + locVals[0]; + "</td>\r\n";-->
+	<!--                    html += "\t<td>" + stndVals; + "</td>\r\n";-->
+	<!--                    html += "\t<td>delete</td>\r\n";-->
+	<!--                    html += "</tr>\r\n";-->
+	<!--                    $(".locations").find("table").append(html);-->
+	<!--                    $(".search-results").hide();-->
+	<!--                    $(".locations").show();-->
+	<!--                    $.post(-->
+	<!--                       $("#${namespace}addForm").attr("action"),-->
+	<!--                       { locationCode: $("#${namespace}locationCode").val(), metric: $("#${namespace}temperatureUnit").val() }-->
+	<!--                    );-->
+	<!--                    return false;-->
+	<!--                });-->
+	            });
+	        });
         </script>
     </c:if>
     <portlet:actionURL var="formSearchAction">

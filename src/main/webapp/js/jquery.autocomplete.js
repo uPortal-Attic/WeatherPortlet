@@ -1,4 +1,6 @@
-jQuery.autocomplete = function(input, options) {
+(function($){
+
+$.autocomplete = function(input, options) {
 	// Create a link to self
 	var me = this;
 
@@ -453,7 +455,7 @@ jQuery.autocomplete = function(input, options) {
 	}
 }
 
-jQuery.fn.autocomplete = function(url, options, data) {
+$.fn.autocomplete = function(url, options, data) {
 	// Make sure options exists
 	options = options || {};
 	// Set url as option
@@ -483,20 +485,22 @@ jQuery.fn.autocomplete = function(url, options, data) {
 
 	this.each(function() {
 		var input = this;
-		new jQuery.autocomplete(input, options);
+		new $.autocomplete(input, options);
 	});
 
 	// Don't break the chain
 	return this;
 }
 
-jQuery.fn.autocompleteArray = function(data, options) {
+$.fn.autocompleteArray = function(data, options) {
 	return this.autocomplete(null, options, data);
 }
 
-jQuery.fn.indexOf = function(e){
+$.fn.indexOf = function(e){
 	for( var i=0; i<this.length; i++ ){
 		if( this[i] == e ) return i;
 	}
 	return -1;
 };
+
+})(jQuery);
