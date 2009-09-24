@@ -5,16 +5,19 @@
 
 package org.jasig.portlet.weather.portlet;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 import javax.portlet.PortletPreferences;
 
+import net.sf.json.JSONObject;
+
 import org.jasig.portlet.weather.service.IWeatherService;
+import org.jasig.web.portlet.mvc.AbstractAjaxController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
-import org.springframework.validation.BindException;
-import org.springframework.web.portlet.mvc.SimpleFormController;
-import org.springframework.web.portlet.util.PortletUtils;
 
 /**
  * Handles adding weather locations to portlet preferences
@@ -22,42 +25,37 @@ import org.springframework.web.portlet.util.PortletUtils;
  * @author Dustin Schultz
  * @version $Id$
  */
-public class WeatherAddController extends SimpleFormController {
+public class WeatherAddController extends AbstractAjaxController {
 	
 	private IWeatherService weatherService = null;
 	
-	@Override
-	protected void processFormSubmission(ActionRequest request,
-			ActionResponse response, Object command, BindException errors)
-			throws Exception {
-		if (request.getParameter("cancelSearchSubmit") != null) {
-			PortletUtils.clearAllRenderParameters(response);
-			return;
-		}
-		
-		super.processFormSubmission(request, response, command, errors);
-	}
-
-	@Override
-	protected void onSubmitAction(ActionRequest request,
-			ActionResponse response, Object command, BindException errors)
-			throws Exception {
-		WeatherEditCommand formData = (WeatherEditCommand)command;
-		PortletPreferences prefs = request.getPreferences();
-		//make sure they chose a location
-		if (StringUtils.hasText(formData.getLocationCode())) {
-			String locationCode = formData.getLocationCode().substring((formData.getLocationCode().indexOf('+') + 1), formData.getLocationCode().length());
-			String location = formData.getLocationCode().substring(0, formData.getLocationCode().indexOf('+'));;
-			String metric = formData.getMetric();
-			weatherService.addWeatherLocation(prefs, locationCode, location, metric);
-		} 
-		
-		//Don't do any rendering with this controller
-		PortletUtils.clearAllRenderParameters(response);
-	}
-
 	@Autowired
 	public void setWeatherService(IWeatherService weatherService) {
 		this.weatherService = weatherService;
+	}
+
+	@Override
+	protected Map<Object, Object> handleAjaxRequestInternal(ActionRequest request,
+			ActionResponse response) throws Exception {
+		PortletPreferences prefs = request.getPreferences();
+		
+		Map<Object, Object> model = new HashMap<Object, Object>();
+		
+		// collect the parameters for the new location
+		String location = request.getParameter("location");
+		String locationCode = request.getParameter("locationCode");
+		String metric = request.getParameter("metric");
+		
+		// validate the submitted data
+		if (!StringUtils.hasText(location) || !StringUtils.hasLength(locationCode)) {
+	        model.put("status", "failure");
+			return model;
+		}
+		
+		// add the new location to the user's preferences
+		weatherService.addWeatherLocation(prefs, locationCode, location, metric);
+
+        model.put("status", "success");
+		return model;
 	}
 }

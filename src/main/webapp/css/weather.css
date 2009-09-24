@@ -15,7 +15,6 @@
 	color: #666;
 }
 .location {
-    border-bottom: 1px dotted #666;
     font-weight: bold;
     padding-bottom: 5px;
 }
@@ -72,12 +71,10 @@
 .locations {
 	margin-top: 25px;
 	margin-bottom: 5px;
-	border-top: 1px dotted #444;
 }
 .search-results {
 	margin-top: 25px;
 	margin-bottom: 5px;
-	border-top: 1px dotted #444;
 }
 .locations p, .search-results p { 
 	font-weight: bold; 

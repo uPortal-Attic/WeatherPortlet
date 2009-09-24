@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>org.jasig</groupId>
 		<artifactId>jasig-parent</artifactId>
-		<version>5</version>
+		<version>8</version>
 	</parent>
 
 	<modelVersion>4.0.0</modelVersion>
@@ -18,6 +18,7 @@
 	<properties>
 		<issues.projectKey></issues.projectKey>
 		<scm.path></scm.path>
+	    <spring.version>2.5.6</spring.version>
 	</properties>
 	<repositories>
 		<repository>
@@ -38,7 +39,25 @@
 	</repositories>
 	<build>
 		<plugins>
-			<plugin>
+		    <plugin>
+		        <groupId>net.sf.alchim</groupId>
+		        <artifactId>yuicompressor-maven-plugin</artifactId>
+		        <version>0.7.1</version>
+		        <executions>
+		            <execution>
+		                <goals><goal>compress</goal></goals>
+		            </execution>
+		        </executions>        
+		        <configuration>
+		            <excludes>
+		                <exclude>**/*.min.js</exclude>
+		            </excludes>
+		            <linebreakpos>10000</linebreakpos>
+		            <suffix>.min</suffix>
+		            <jswarn>false</jswarn>
+		        </configuration>
+		    </plugin>
+		    <plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<configuration>
 					<source>1.5</source>
@@ -65,7 +84,7 @@
 		<dependency>
       		<groupId>org.springframework</groupId>
       		<artifactId>spring-test</artifactId>
-      		<version>2.5.1</version>
+      		<version>${spring.version}</version>
       		<scope>test</scope>
       		<exclusions>
       			<exclusion>
@@ -85,15 +104,15 @@
 		<!-- Spring and dependencies. -->
 		<dependency>
 			<groupId>org.springframework</groupId>
-			<artifactId>spring</artifactId>
-			<version>2.5.1</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
 			<artifactId>spring-webmvc-portlet</artifactId>
-			<version>2.5.1</version>
+			<version>${spring.version}</version>
 		</dependency>
-		
+	    <dependency>
+	        <groupId>org.springframework</groupId>
+	        <artifactId>spring-aop</artifactId>
+	        <version>${spring.version}</version>
+	    </dependency>
+	    
 		<!-- DOM4J dependencies -->
 		<dependency>
 	    	<groupId>dom4j</groupId>
@@ -145,7 +164,7 @@
         <dependency>
             <groupId>org.springmodules</groupId>
             <artifactId>spring-modules-cache</artifactId>
-            <version>0.8a</version>
+            <version>0.8</version>
             <exclusions>
                 <exclusion>
                     <groupId>commons-logging</groupId>
@@ -287,6 +306,27 @@
                 </exclusion>
             </exclusions>
         </dependency>
+
+	    <dependency>
+	        <groupId>org.jasig</groupId>
+	        <artifactId>AjaxPortletSupport</artifactId>
+	        <version>1.0.4</version>
+	        <scope>compile</scope> 
+	    </dependency>
+	    
+	    <dependency>
+	        <groupId>net.sf.json-lib</groupId>
+	        <artifactId>json-lib-ext-spring</artifactId>
+	        <version>1.0</version>
+	        <type>jar</type>
+	        <scope>compile</scope>
+	        <exclusions>
+	            <exclusion>
+	                <groupId>commons-logging</groupId>
+	                <artifactId>commons-logging</artifactId>
+	            </exclusion>
+	        </exclusions>
+	    </dependency>
 	    
 	    <!-- Jasig resource server -->
 	    <dependency>

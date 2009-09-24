@@ -5,14 +5,15 @@
 
 package org.jasig.portlet.weather.portlet;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 
 import org.jasig.portlet.weather.service.IWeatherService;
+import org.jasig.web.portlet.mvc.AbstractAjaxController;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.BindException;
-import org.springframework.web.portlet.mvc.SimpleFormController;
-import org.springframework.web.portlet.util.PortletUtils;
 
 /**
  * Handles deleting weather locations from portlet preferences.
@@ -20,22 +21,25 @@ import org.springframework.web.portlet.util.PortletUtils;
  * @author Dustin Schultz
  * @version $Id$
  */
-public class WeatherDeleteController extends SimpleFormController {
+public class WeatherDeleteController extends AbstractAjaxController {
 	
 	private IWeatherService weatherService = null;
-
-	@Override
-	protected void onSubmitAction(ActionRequest request,
-			ActionResponse response, Object command, BindException errors)
-			throws Exception {
-		weatherService.deleteWeatherLocation(request.getPreferences(), request.getParameter("key"));
-		//Don't do any rendering with this controller
-		PortletUtils.clearAllRenderParameters(response);
-	}
 
 	@Autowired
 	public void setWeatherService(IWeatherService weatherService) {
 		this.weatherService = weatherService;
+	}
+
+	@Override
+	protected Map<Object, Object> handleAjaxRequestInternal(ActionRequest request,
+			ActionResponse response) throws Exception {
+		Map<Object, Object> model = new HashMap<Object, Object>();
+
+		weatherService.deleteWeatherLocation(request.getPreferences(), 
+				request.getParameter("key"));
+		
+        model.put("status", "success");
+		return model;
 	}
 	
 }

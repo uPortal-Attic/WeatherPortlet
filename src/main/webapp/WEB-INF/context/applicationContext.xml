@@ -37,15 +37,13 @@
 	<bean id="parameterMappingInterceptor" class="org.springframework.web.portlet.handler.ParameterMappingInterceptor"/>
 	
 	<!-- ========================= PORTLET SPECIFIC DEFINITIONS ========================= -->
-	<!-- Default View Resolver -->
-	<bean id="viewResolver"
-		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-		<property name="cache" value="true" />
-		<property name="viewClass"
-			value="org.springframework.web.servlet.view.JstlView" />
-		<property name="prefix" value="/WEB-INF/jsp/" />
-		<property name="suffix" value=".jsp" />
+	
+	<bean id="modelPasser" class="org.jasig.web.util.DefaultModelPasser"/>
+
+	<bean id="sessionKeyGenerator" class="org.jasig.web.util.DefaultSessionKeyGenerator">
+		<property name="seed" value="0" />
 	</bean>
+	
 
 	<!-- Default ExceptionHandler 
 	<bean id="defaultExceptionHandlerTemplate" class="org.springframework.web.portlet.handler.SimpleMappingExceptionResolver">
@@ -60,6 +58,8 @@
 		</property>  
 	</bean>
 	-->
+
+	<bean id="requiredAnnotationBeanPostProcessor" class="org.springframework.beans.factory.annotation.RequiredAnnotationBeanPostProcessor" />
 	
 	<!-- ========================= DAO Defenitions ============================ -->
 	

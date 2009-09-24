@@ -7,17 +7,14 @@ package org.jasig.portlet.weather.portlet;
 
 import java.util.Map;
 
-import javax.portlet.ActionRequest;
-import javax.portlet.ActionResponse;
-import javax.portlet.PortletMode;
-import javax.portlet.PortletRequest;
+import javax.portlet.RenderRequest;
+import javax.portlet.RenderResponse;
 
 import org.jasig.portlet.weather.service.IWeatherService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.ModelMap;
-import org.springframework.validation.BindException;
-import org.springframework.web.portlet.mvc.SimpleFormController;
-import org.springframework.web.portlet.util.PortletUtils;
+import org.springframework.web.portlet.ModelAndView;
+import org.springframework.web.portlet.mvc.ParameterizableViewController;
 
 /**
  * This class handles navigation from the edit form.
@@ -25,32 +22,23 @@ import org.springframework.web.portlet.util.PortletUtils;
  * @author Dustin Schultz
  * @version $Id$
  */
-public class WeatherEditController extends SimpleFormController {
+public class WeatherEditController extends ParameterizableViewController {
 	
 	private IWeatherService weatherService = null;
 	
-	@Override
-	protected void processFormSubmission(ActionRequest request,
-			ActionResponse response, Object command, BindException errors)
-			throws Exception {
-		if (request.getParameter("doneSubmit") != null) {
-			PortletUtils.clearAllRenderParameters(response);
-			response.setPortletMode(PortletMode.VIEW);
-			return;
-		}
-		
-		super.processFormSubmission(request, response, command, errors);
-	}
-	
-	@SuppressWarnings("unchecked")
-	@Override
-	protected Map referenceData(PortletRequest request) throws Exception {
-		return new ModelMap("savedLocations", weatherService.getSavedLocationsMap(request.getPreferences()));
-	}
-
 	@Autowired
 	public void setWeatherService(IWeatherService weatherService) {
 		this.weatherService = weatherService;
 	}
 	
+	@Override
+	protected ModelAndView handleRenderRequestInternal(RenderRequest request,
+			RenderResponse response) throws Exception {
+		
+		Map<String,String[]> locations = weatherService.getSavedLocationsMap(request.getPreferences());
+		
+		ModelMap model = new ModelMap("savedLocations", locations);
+		return new ModelAndView(getViewName(), model);
+	}
+
 }

@@ -13,18 +13,6 @@
             <name>contextConfigLocation</name>
             <value>/WEB-INF/context/portlet/weather-portlet.xml</value>
         </init-param>
-        <init-param>
-        	<name>model:jQueryEnabled</name>
-        	<value>true</value>
-        </init-param>
-        <init-param>
-            <name>model:includeJQuery</name>
-            <value>true</value>
-        </init-param>
-        <init-param>
-        	<name>model:useInlineCSSTags</name>
-        	<value>true</value>
-        </init-param>
         <expiration-cache>0</expiration-cache>
         <supports>
             <mime-type>text/html</mime-type>
@@ -55,6 +43,14 @@
             <preference>
                 <name>metrics</name>
                 <value>false</value>
+                <value>true</value>
+            </preference>
+            <preference>
+                <name>includeJQuery</name>
+                <value>true</value>
+            </preference>
+            <preference>
+                <name>useInlineCSSTags</name>
                 <value>true</value>
             </preference>
         </portlet-preferences>   

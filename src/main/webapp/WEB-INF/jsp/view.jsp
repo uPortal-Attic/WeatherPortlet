@@ -1,7 +1,9 @@
 <%-- Author: Dustin Schultz | Version $Id$ --%>
 <%@ include file="/WEB-INF/jsp/include.jsp" %>
+<portlet:defineObjects/>
+
 <c:set var="context" value="${pageContext.request.contextPath}"/>
-<c:if test="${useInlineCSSTags}">
+<c:if test="${renderRequest.preferences.map['useInlineCSSTags'][0]}">
 	<link rel="stylesheet" href="<c:url value="/css/weather.css"/>" type="text/css" />
 </c:if>
 <div class="weatherportlet">

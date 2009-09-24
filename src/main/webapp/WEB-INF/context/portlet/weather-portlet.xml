@@ -4,51 +4,41 @@
 <beans>
 
 	<!-- Controllers -->
-	<bean id="weatherViewController" class="org.jasig.portlet.weather.portlet.WeatherViewController" autowire="byType"/>
+	<bean id="weatherViewController" 
+		class="org.jasig.portlet.weather.portlet.WeatherViewController" 
+		autowire="byType"/>
 	
-	<bean id="weatherEditController" class="org.jasig.portlet.weather.portlet.WeatherEditController" autowire="byType">
-		<property name="formView" value="edit"/>
-		<property name="commandName" value="weatherEditCommand"/>
-		<property name="commandClass" value="org.jasig.portlet.weather.portlet.WeatherEditCommand"/>
+	<bean id="weatherEditController" 
+		class="org.jasig.portlet.weather.portlet.WeatherEditController" 
+		autowire="byType">
+		<property name="viewName" value="edit"/>
 	</bean>
 	
-	<bean id="weatherAddController" class="org.jasig.portlet.weather.portlet.WeatherAddController" autowire="byType">
-		<property name="formView" value="edit"/>
-		<property name="commandName" value="weatherEditCommand"/>
-		<property name="commandClass" value="org.jasig.portlet.weather.portlet.WeatherEditCommand"/>
+	<bean id="weatherAddController" 
+		class="org.jasig.portlet.weather.portlet.WeatherAddController" 
+		autowire="byType">
+		<property name="sessionKeyGenerator" ref="sessionKeyGenerator" />
+		<property name="modelPasser" ref="modelPasser"/>
+		<property name="ajaxServletName" value="ajax/json"/>
 	</bean>
 	
-	<bean id="weatherDeleteController" class="org.jasig.portlet.weather.portlet.WeatherDeleteController" autowire="byType">
-		<property name="formView" value="edit"/>
-		<property name="commandName" value="weatherEditCommand"/>
-		<property name="commandClass" value="org.jasig.portlet.weather.portlet.WeatherEditCommand"/>
+	<bean id="weatherDeleteController" 
+		class="org.jasig.portlet.weather.portlet.WeatherDeleteController" 
+		autowire="byType">
+		<property name="sessionKeyGenerator" ref="sessionKeyGenerator" />
+		<property name="modelPasser" ref="modelPasser"/>
+		<property name="ajaxServletName" value="ajax/json"/>
 	</bean>
-	
-	<bean id="weatherSearchController" class="org.jasig.portlet.weather.portlet.WeatherSearchController" autowire="byType">
-		<property name="formView" value="edit"/>
-		<property name="commandName" value="weatherEditCommand"/>
-		<property name="commandClass" value="org.jasig.portlet.weather.portlet.WeatherEditCommand"/>
-	</bean>
-	
-	<!-- This interceptor adds initparams to the model so they are available to the JSP -->
-	<bean id="addInitParamsInterceptor" class="org.jasig.portlet.weather.portlet.interceptor.AddInitParamsInterceptor"/>
 	
 	<!-- Handler Mapping -->
 	<bean id="portletModeParameterHandlerMapping" class="org.springframework.web.portlet.handler.PortletModeParameterHandlerMapping">
         <property name="order" value="1"/>
-		<property name="interceptors">
-			<list>
-				<ref bean="parameterMappingInterceptor"/>
-				<ref bean="addInitParamsInterceptor"/>
-			</list>
-		</property>
 		<property name="portletModeParameterMap">
 			<map>
 				<entry key="edit">
 					<map>
 						<entry key="add" value-ref="weatherAddController"/>
 						<entry key="delete" value-ref="weatherDeleteController"/>
-						<entry key="search" value-ref="weatherSearchController"/>
 					</map>
 				</entry>
 			</map>
@@ -59,7 +49,7 @@
 		<property name="order" value="2"/>
 		<property name="interceptors">
 			<list>
-				<ref bean="addInitParamsInterceptor"/>
+				<ref bean="parameterMappingInterceptor"/>
 			</list>
 		</property>
 		<property name="portletModeMap">
