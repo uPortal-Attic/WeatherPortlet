@@ -5,14 +5,13 @@
 
 package org.jasig.portlet.weather.portlet;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 import javax.portlet.PortletPreferences;
-
-import net.sf.json.JSONObject;
 
 import org.jasig.portlet.weather.service.IWeatherService;
 import org.jasig.web.portlet.mvc.AbstractAjaxController;
@@ -49,6 +48,14 @@ public class WeatherAddController extends AbstractAjaxController {
 		// validate the submitted data
 		if (!StringUtils.hasText(location) || !StringUtils.hasLength(locationCode)) {
 	        model.put("status", "failure");
+			return model;
+		}
+		
+		// make sure this location isn't already in our list
+		String[] existing = prefs.getValues("locationCodes", null);
+		if (existing != null && Arrays.binarySearch(existing, locationCode) >= 0) {
+			model.put("status", "failure");
+			model.put("cause", "DUPLICATE_LOCATION");
 			return model;
 		}
 		

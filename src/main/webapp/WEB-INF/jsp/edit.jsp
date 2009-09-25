@@ -104,6 +104,11 @@
 	                    $.post('<portlet:actionURL><portlet:param name="action" value="add"/></portlet:actionURL>', 
 	                        data, 
 	                        function(json){
+	                            if (json.status != 'success') {
+		                            closeSearchForm();
+		                            return false;
+	                            }
+	                        
 	                            var row = $(document.createElement('tr'));
 	                            row.append(
 	    	                        $(document.createElement('td')).html(data.location)
