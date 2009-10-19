@@ -22,11 +22,6 @@
         <c:if test="${includeJQuery}">
             <script type="text/javascript" src="<rs:resourceURL value="/rs/jquery/1.3.2/jquery-1.3.2.min.js"/>"></script>
         </c:if>
-        <c:if test="${useInlineCSSTags}">
-	        <style type="text/css">
-	            @import url("${context}/css/sexy-combo.css");
-	        </style>
-        </c:if>
         <script>
 	        var ${n} = ${n} || {};
 	        ${n}.jQuery = ${ includeJQuery ? 'jQuery.noConflict(true)' : 'jQuery' };
@@ -74,18 +69,17 @@
                         var search = $('#${n}locationSearchText').val();
                         $.ajax( {
                             type: "GET",
-                            url: "${context}/FindCity",
+                            url: "${context}/ajax/findCity",
                             data: { location : search },
-                            dataType: "xml",
-                            success: function(xml) {
-                                locations = $(xml).find('location');
-                                if (locations.size() == 0) {
+                            dataType: "json",
+                            success: function(data) {
+                                var locations = data.locations;
+                                if (locations.length == 0) {
                                     $('.search-message').text('<spring:message code="edit.noresults.location"/>');
                                 } else {
 	                                var select = $('#${n}locationSelect').html("").get(0);
-	                                locations.each(function(i, location){
-	                                    location = $(location);
-	                                    select.options[i] = new Option(location.attr('city') + ', ' + location.attr('state'), location.attr('location'));
+	                                $.each(locations, function(i, location){
+	                                    select.options[i] = new Option(location.city + ', ' + location.stateOrCountry, location.locationCode);
 	                                });
 	                                $('.location-search').css('display', 'none');
 	                                $('.search-results').css('display', 'block');

@@ -7,22 +7,30 @@
 	   xsi:schemaLocation="
 			http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
 			http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-2.5.xsd
-			http://www.springmodules.org/schema/ehcache
-			http://www.springmodules.org/schema/cache/springmodules-ehcache.xsd">
+			http://www.springmodules.org/schema/ehcache http://www.springmodules.org/schema/cache/springmodules-ehcache.xsd">
 
 	<!-- Author: Dustin Schultz | Version: $Id$ -->
 	<!-- ========================= RESOURCE DEFINITIONS ========================= -->
 	<!-- Annotations Configuration -->
 	<context:annotation-config/>
-	
-	<!-- EHCache Configuration -->
-	<ehcache:config configLocation="classpath:ehcache.xml"/>
-	
-	<!-- EHCache Annotations Configuration -->
+    <context:component-scan base-package="org.jasig.portlet.weather"/>
+    <bean class="org.springframework.beans.factory.annotation.RequiredAnnotationBeanPostProcessor" />
+
+    <!-- Data Caching Configuration -->    
+    <bean id="cacheManager" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
+        <property name="cacheManagerName" value="WeatherPortlet.cacheManager" />
+        <property name="configLocation" value="classpath:/ehcache.xml" />
+    </bean>
+    
+    <bean id="cacheProvider" class="org.springmodules.cache.provider.ehcache.EhCacheFacade">
+        <property name="cacheManager" ref="cacheManager" />
+    </bean>
+    
 	<ehcache:annotations>
 		<ehcache:caching id="weatherDataCacheModel" cacheName="weatherDataCache"/>
 		<ehcache:caching id="weatherSearchCacheModel" cacheName="weatherSearchCache"/>
 	</ehcache:annotations>
+    
 	
 	<!-- messages.propreties Configuration -->
 	<bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
@@ -32,19 +40,11 @@
 			</list>
 		</property>										
 	</bean>
-	
-	<!-- This interceptor forwards the mapping request parameter from an ActionRequest to be used as a render parameter. -->
-	<bean id="parameterMappingInterceptor" class="org.springframework.web.portlet.handler.ParameterMappingInterceptor"/>
+    
+    <bean id="ajaxPortletSupportService" class="org.jasig.web.service.AjaxPortletSupportService"/>
 	
 	<!-- ========================= PORTLET SPECIFIC DEFINITIONS ========================= -->
 	
-	<bean id="modelPasser" class="org.jasig.web.util.DefaultModelPasser"/>
-
-	<bean id="sessionKeyGenerator" class="org.jasig.web.util.DefaultSessionKeyGenerator">
-		<property name="seed" value="0" />
-	</bean>
-	
-
 	<!-- Default ExceptionHandler 
 	<bean id="defaultExceptionHandlerTemplate" class="org.springframework.web.portlet.handler.SimpleMappingExceptionResolver">
     <property name="order" value="10"/>
@@ -58,31 +58,4 @@
 		</property>  
 	</bean>
 	-->
-
-	<bean id="requiredAnnotationBeanPostProcessor" class="org.springframework.beans.factory.annotation.RequiredAnnotationBeanPostProcessor" />
-	
-	<!-- ========================= DAO Defenitions ============================ -->
-	
-	<!-- Choose an implementation (DOM4J or Xstream), uncomment one and comment out the other. 
-		Also, don't forget to do the same in testContext.xml
-	-->
-	
-	<!-- DOM4J Impl 
-	<bean id="weatherDao" class="org.jasig.portlet.weather.dao.accuweather.dom4j.WeatherDaoImpl"
-		p:connectionTimeout="1000"
-		p:readTimeout="3000"
-		p:timesToRetry="5"
-	/>
-	-->
-	
-	<!-- Xstream Impl -->
-	<bean id="weatherDao" class="org.jasig.portlet.weather.dao.accuweather.xstream.WeatherDaoImpl"
-		p:connectionTimeout="1000"
-		p:readTimeout="3000"
-		p:timesToRetry="5"
-	/>
-	
-	<!-- ========================= SERVICE DEFENITIONS ========================= -->
-	<bean id="weatherService" class="org.jasig.portlet.weather.service.WeatherServiceImpl"/>
-
 </beans>

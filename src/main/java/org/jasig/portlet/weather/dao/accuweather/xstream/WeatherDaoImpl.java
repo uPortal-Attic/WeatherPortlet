@@ -7,13 +7,15 @@ package org.jasig.portlet.weather.dao.accuweather.xstream;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
-import java.net.URLEncoder;
 import java.util.Collection;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
+
 import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.HttpConnectionManager;
 import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.HttpMethodRetryHandler;
@@ -21,12 +23,18 @@ import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.MultiThreadedHttpConnectionManager;
 import org.apache.commons.httpclient.NoHttpResponseException;
 import org.apache.commons.httpclient.methods.GetMethod;
+import org.apache.commons.httpclient.params.HttpConnectionManagerParams;
 import org.apache.commons.httpclient.params.HttpMethodParams;
-import org.apache.log4j.Logger;
+import org.apache.commons.io.IOUtils;
+import org.jasig.portlet.weather.QuietUrlCodec;
 import org.jasig.portlet.weather.dao.IWeatherDao;
 import org.jasig.portlet.weather.dao.accuweather.constants.Constants;
 import org.jasig.portlet.weather.domain.Location;
 import org.jasig.portlet.weather.domain.Weather;
+import org.springframework.beans.factory.DisposableBean;
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.dao.DataRetrievalFailureException;
+import org.springframework.stereotype.Repository;
 
 import com.thoughtworks.xstream.XStream;
 
@@ -36,14 +44,12 @@ import com.thoughtworks.xstream.XStream;
  * @author Dustin Schultz
  * @version $Id$
  */
-public class WeatherDaoImpl implements IWeatherDao {
-	
-	private static final Logger logger = Logger.getLogger(WeatherDaoImpl.class);
+@Repository
+public class WeatherDaoImpl implements IWeatherDao, DisposableBean, InitializingBean {
 	
 	//Multi-threaded connection manager for exclusive access
-	private final MultiThreadedHttpConnectionManager connectionManager = 
-		new MultiThreadedHttpConnectionManager();
-	
+	private final MultiThreadedHttpConnectionManager connectionManager = new MultiThreadedHttpConnectionManager();
+    
 	//Define the HttpClient here and pass it so we only define one instance
 	private final HttpClient httpClient = new HttpClient(connectionManager);
 
@@ -55,20 +61,32 @@ public class WeatherDaoImpl implements IWeatherDao {
 	
 	//Default retry of 5 times
 	private int timesToRetry = 5;
+
+
+    public void setConnectionTimeout(int connectionTimeout) {
+        this.connectionTimeout = connectionTimeout;
+    }
+    
+    public void setReadTimeout(int readTimeout) {
+        this.readTimeout = readTimeout;
+    }
+
+    public void setTimesToRetry(int timesToRetry) {
+        this.timesToRetry = timesToRetry;
+    }
 	
-	public WeatherDaoImpl() {
-		init();
-	}
-	
-	private void init() {
-		httpClient.getHttpConnectionManager().getParams().setConnectionTimeout(connectionTimeout);
-		httpClient.getHttpConnectionManager().getParams().setSoTimeout(readTimeout);
+    /* (non-Javadoc)
+     * @see org.springframework.beans.factory.InitializingBean#afterPropertiesSet()
+     */
+    @PostConstruct
+    public void afterPropertiesSet() throws Exception {
+		final HttpConnectionManager httpConnectionManager = httpClient.getHttpConnectionManager();
+        final HttpConnectionManagerParams params = httpConnectionManager.getParams();
+        params.setConnectionTimeout(connectionTimeout);
+		params.setSoTimeout(readTimeout);
 		
-		HttpMethodRetryHandler retryhandler = new HttpMethodRetryHandler() {
-		    public boolean retryMethod(
-		        final HttpMethod method, 
-		        final IOException exception, 
-		        int executionCount) {
+		params.setParameter(HttpMethodParams.RETRY_HANDLER, new HttpMethodRetryHandler() {
+		    public boolean retryMethod(final HttpMethod method, final IOException exception, int executionCount) {
 		        if (executionCount >= timesToRetry) {
 		            // Do not retry if over max retry count
 		            return false;
@@ -93,122 +111,77 @@ public class WeatherDaoImpl implements IWeatherDao {
 		        // otherwise do not retry
 		        return false;
 		    }
-		};
-		
-		httpClient.getParams().setParameter(HttpMethodParams.RETRY_HANDLER, retryhandler);
+		});
 	}
+
+    /* (non-Javadoc)
+     * @see org.springframework.beans.factory.DisposableBean#destroy()
+     */
+    @PreDestroy
+    public void destroy() throws Exception {
+        this.connectionManager.shutdown();
+    }
 	
 	@SuppressWarnings("unchecked")
 	public Collection<Location> find(String location) {
-		String accuweatherUrl = null;
-		try {
-			accuweatherUrl = Constants.BASE_FIND_URL
-					+ URLEncoder.encode(location, Constants.URL_ENCODING);
-		} catch (UnsupportedEncodingException uee) {
-			uee.printStackTrace();
-			throw new RuntimeException("Unable to encode url with "
-					+ Constants.URL_ENCODING + " encoding");
-		}
-		HttpMethod getMethod = new GetMethod(accuweatherUrl);
-		InputStream inputStream = null;
-		XStream xstream = new XStream();
+		final String accuweatherUrl = Constants.BASE_FIND_URL + QuietUrlCodec.encode(location, Constants.URL_ENCODING);
+		
+		final XStream xstream = new XStream();
 		xstream.alias("adc_database", Collection.class);
-		xstream.registerConverter(new FinderConverter());
-		Collection<Location> locations = null;
-		try {
-			// Execute the method.
-			int statusCode = httpClient.executeMethod(getMethod);
-			if (statusCode != HttpStatus.SC_OK) {
-				logger.error("Method failed: " + getMethod.getStatusLine());
-				throw new RuntimeException("Unable to retrieve locations from feed, invalid status code");
-			}
-			// Read the response body
-			inputStream = getMethod.getResponseBodyAsStream();
-			if (logger.isDebugEnabled()) {
-				logger.debug("Retrieving location xml for " + location + " using Xstream");
-			}
-			locations = (Collection<Location>) xstream.fromXML(inputStream);
-		} catch (HttpException e) {
-			logger.error("Fatal protocol violation", e);
-			throw new RuntimeException("Unable to retrieve locations from feed, http protocol exception");
-		} catch (IOException e) {
-			logger.error("Fatal transport error", e);
-			throw new RuntimeException("Unable to retrieve locations from feed, IO exception");
-		} finally {
-			//try to close the inputstream
-			try {
-				if (inputStream != null){
-					inputStream.close();
-				}
-			} catch (IOException e) {
-				logger.warn("Unable to close input stream while retrieving locations");
-			}
-			//release the connection
-			getMethod.releaseConnection();
-		}
+        xstream.registerConverter(new FinderConverter());
+        
+        Collection<Location> locations = null;
+        try {
+            locations = (Collection<Location>)this.getAndDeserialize(accuweatherUrl, xstream);
+        }
+        catch (RuntimeException e) {
+            throw new DataRetrievalFailureException("find location failed for search '" + location + "'", e);
+        }
+        
 		return (locations != null && locations.size() > 0) ? locations : null;
 	}
 
 	public Weather getWeather(String locationCode, Boolean metric) {
-		String accuweatherUrl = null;
-		try {
-			accuweatherUrl = Constants.BASE_GET_URL + URLEncoder.encode(locationCode, Constants.URL_ENCODING)
-					+ "&metric=" + ((metric) ? "1" : "0");
-		} catch (UnsupportedEncodingException uee) {
-			uee.printStackTrace();
-			throw new RuntimeException("Unable to encode url with "
-					+ Constants.URL_ENCODING + " encoding");
-		}
-		HttpMethod getMethod = new GetMethod(accuweatherUrl);
-		InputStream inputStream = null;
-		XStream xstream = new XStream();
-		xstream.registerConverter(new WeatherConverter(locationCode));
-		xstream.alias("adc_database", Weather.class);
+		final String accuweatherUrl = Constants.BASE_GET_URL + QuietUrlCodec.encode(locationCode, Constants.URL_ENCODING) + "&metric=" + ((metric) ? "1" : "0");
+		
+        XStream xstream = new XStream();
+        xstream.registerConverter(new WeatherConverter(locationCode));
+        xstream.alias("adc_database", Weather.class);
+
 		Weather weather = null;
 		try {
-			// Execute the method.
-			int statusCode = httpClient.executeMethod(getMethod);
-			if (statusCode != HttpStatus.SC_OK) {
-				logger.error("Method failed: " + getMethod.getStatusLine());
-				throw new RuntimeException("Unable to retrieve weather from feed, invalid status code");
-			}
-			// Read the response body
-			inputStream = getMethod.getResponseBodyAsStream();
-			if (logger.isDebugEnabled()) {
-				logger.debug("Retrieving weather xml using Xstream for location " + locationCode + " with metric " + metric);
-			}
-			weather = (Weather) xstream.fromXML(inputStream);
-		} catch (HttpException e) {
-			logger.error("Fatal protocol violation", e);
-			throw new RuntimeException("Unable to retrieve weather from feed, http protocol exception");
-		} catch (IOException e) {
-			logger.error("Fatal transport error", e);
-			throw new RuntimeException("Unable to retrieve weather from feed, IO exception");
-		} finally {
-			//try to close the inputstream
-			try {
-				if (inputStream != null){
-					inputStream.close();
-				}
-			} catch (IOException e) {
-				logger.warn("Unable to close input stream while retrieving weather");
-			}
-			//release the connection
-			getMethod.releaseConnection();
-		}
-		return weather;
-	}
+		    weather = (Weather)this.getAndDeserialize(accuweatherUrl, xstream);
+        }
+        catch (RuntimeException e) {
+            throw new DataRetrievalFailureException("get weather failed for location '" + locationCode + "' and metric " + metric, e);
+        }
 
-	public void setConnectionTimeout(int connectionTimeout) {
-		this.connectionTimeout = connectionTimeout;
+        return weather;
 	}
 	
-	public void setReadTimeout(int readTimeout) {
-		this.readTimeout = readTimeout;
-	}
+	protected Object getAndDeserialize(String url, XStream deserializer) {
+	    HttpMethod getMethod = new GetMethod(url);
+        InputStream inputStream = null;
+        try {
+            // Execute the method.
+            int statusCode = httpClient.executeMethod(getMethod);
+            if (statusCode != HttpStatus.SC_OK) {
+                final String statusText = getMethod.getStatusText();
+                throw new DataRetrievalFailureException("get of '" + url + "' failed with status '" + statusCode + "' due to '" + statusText + "'");
+            }
 
-	public void setTimesToRetry(int timesToRetry) {
-		this.timesToRetry = timesToRetry;
+            // Read the response body
+            inputStream = getMethod.getResponseBodyAsStream();
+            return deserializer.fromXML(inputStream);
+        } catch (HttpException e) {
+            throw new RuntimeException("http protocol exception while getting data from weather service from: " + url, e);
+        } catch (IOException e) {
+            throw new RuntimeException("IO exception while getting data from weather service from: " + url, e);
+        } finally {
+            //try to close the inputstream
+            IOUtils.closeQuietly(inputStream);
+            //release the connection
+            getMethod.releaseConnection();
+        }	    
 	}
-	
 }

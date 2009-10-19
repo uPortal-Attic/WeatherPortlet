@@ -1,23 +1,25 @@
-<ehcache>
-    <defaultCache
-        maxElementsInMemory="100"
-        eternal="true"
-        overflowToDisk="false"
-        memoryStoreEvictionPolicy="LFU"/>
+<?xml version="1.0" encoding="UTF-8"?>
+<ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="http://ehcache.svn.sourceforge.net/viewvc/ehcache/tags/ehcache-core-1.6.2/core/src/main/config/ehcache.xsd">
+    
+    <diskStore path="java.io.tmpdir/WeatherPortlet" />
+
+    <defaultCache eternal="false" maxElementsInMemory="1000" overflowToDisk="false" diskPersistent="false" 
+        timeToIdleSeconds="0" timeToLiveSeconds="600" memoryStoreEvictionPolicy="LRU" />
 
 	<!-- 15 minute cache on weather data -->
     <cache name="weatherDataCache"
-        maxElementsInMemory="100"
+        maxElementsInMemory="10000"
         eternal="false"
         timeToLiveSeconds="900" 
         overflowToDisk="false"
-        memoryStoreEvictionPolicy="LFU"/>
+        memoryStoreEvictionPolicy="LRU"/>
         
-	<!-- 1 hour cache on weather searches -->
+	<!-- 6 hour cache on weather searches -->
     <cache name="weatherSearchCache"
-        maxElementsInMemory="250"
+        maxElementsInMemory="1000"
         eternal="false"
-        timeToLiveSeconds="3600" 
+        timeToLiveSeconds="21600" 
         overflowToDisk="false"
-        memoryStoreEvictionPolicy="LFU"/>
+        memoryStoreEvictionPolicy="LRU"/>
 </ehcache>

@@ -9,7 +9,7 @@
 
     <bean class="org.springframework.web.servlet.view.XmlViewResolver">
         <property name="order" value="0"/>
-        <property name="location" value="/WEB-INF/context/views.xml"/>
+        <property name="location" value="/WEB-INF/views.xml"/>
     </bean>
     
     <!-- Default View Resolver -->
@@ -17,8 +17,7 @@
         class="org.springframework.web.servlet.view.InternalResourceViewResolver">
         <property name="order" value="10"/>
         <property name="cache" value="true" />
-        <property name="viewClass"
-            value="org.springframework.web.servlet.view.JstlView" />
+        <property name="viewClass" value="org.springframework.web.servlet.view.JstlView" />
         <property name="prefix" value="/WEB-INF/jsp/" />
         <property name="suffix" value=".jsp" />
     </bean>

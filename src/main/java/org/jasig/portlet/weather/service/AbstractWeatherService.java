@@ -8,7 +8,6 @@ package org.jasig.portlet.weather.service;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -17,8 +16,6 @@ import javax.portlet.ReadOnlyException;
 import javax.portlet.ValidatorException;
 
 import org.apache.log4j.Logger;
-import org.jasig.portlet.weather.domain.Location;
-import org.jasig.portlet.weather.domain.Weather;
 import org.springframework.context.MessageSource;
 import org.springframework.context.MessageSourceAware;
 import org.springframework.context.support.MessageSourceAccessor;
@@ -34,10 +31,6 @@ public abstract class AbstractWeatherService implements IWeatherService, Message
 	
 	private MessageSourceAccessor messageSourceAccessor = null; //needed for resolving messages.properties values	
 	private static final Logger logger = Logger.getLogger(AbstractWeatherService.class);
-
-	public abstract Collection<Location> find(String location);
-	
-	public abstract Weather getWeather(String locationCode, Boolean metric);
 
 	public Map<String, String[]> getSavedLocationsMap(PortletPreferences prefs) {
 		String[] locationCodes = prefs.getValues("locationCodes", null);

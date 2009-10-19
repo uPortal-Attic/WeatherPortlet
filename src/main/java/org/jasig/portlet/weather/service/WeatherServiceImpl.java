@@ -7,10 +7,12 @@ package org.jasig.portlet.weather.service;
 
 import java.util.Collection;
 
+import org.apache.commons.lang.StringUtils;
 import org.jasig.portlet.weather.dao.IWeatherDao;
 import org.jasig.portlet.weather.domain.Location;
 import org.jasig.portlet.weather.domain.Weather;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
  * This service class completes the implementation of IWeatherService and makes
@@ -19,13 +21,13 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @author Dustin Schultz
  * @version $Id$
  */
+@Service
 public class WeatherServiceImpl extends AbstractWeatherService {
-
 	private IWeatherDao weatherDao = null; // Spring managed.
 
-	public Collection<Location> find(String location) {
+    public Collection<Location> find(String location) {
 		//no location is set, don't try to search for anything
-		if (location == null || location.length() == 0) {
+		if (StringUtils.isBlank(location)) {
 			return null;
 		}
 		return weatherDao.find(location);
@@ -33,7 +35,7 @@ public class WeatherServiceImpl extends AbstractWeatherService {
 
 	public Weather getWeather(String locationCode, Boolean metric) {
 		//no locationCode is set, don't try to retrieve anything
-		if (locationCode == null) {
+	    if (StringUtils.isBlank(locationCode)) {
 			return null;
 		}
 		return weatherDao.getWeather(locationCode, metric);

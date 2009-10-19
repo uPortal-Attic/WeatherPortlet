@@ -7,6 +7,7 @@ package org.jasig.portlet.weather.dao.accuweather.constants;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 
 /**
  * Constants interface to hold all constant information such as tag names,
@@ -25,12 +26,12 @@ public interface Constants {
 	
 	//formatting constants
 	@SuppressWarnings("serial")
-	public static final Collection<String> dateFormatterPatterns = new ArrayList<String>() {
+	public static final Collection<String> dateFormatterPatterns = Collections.unmodifiableList(new ArrayList<String>() {
 		{
 			add(new String("h:mm a")); //12 hour
 			add(new String("kk:mm")); //24 hour
 		}
-	};
+	});
 	
 	// xml root tags
 	public static final String UNITS_TAG = "units";

@@ -15,8 +15,9 @@ import javax.portlet.RenderResponse;
 import org.jasig.portlet.weather.domain.Weather;
 import org.jasig.portlet.weather.service.IWeatherService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.portlet.ModelAndView;
-import org.springframework.web.portlet.mvc.AbstractController;
 
 /**
  * This class handles retrieves information and displays the view page.
@@ -24,13 +25,17 @@ import org.springframework.web.portlet.mvc.AbstractController;
  * @author Dustin Schultz
  * @version $Id$
  */
-public class WeatherViewController extends AbstractController {
-
+@Controller
+public class WeatherViewController {
 	private IWeatherService weatherService = null; // Spring managed
 
-	@Override
-	protected ModelAndView handleRenderRequestInternal(RenderRequest request,
-			RenderResponse response) throws Exception {
+    @Autowired
+    public void setWeatherService(IWeatherService weatherService) {
+        this.weatherService = weatherService;
+    }
+
+    @RequestMapping("VIEW")
+	public ModelAndView handleRenderRequestInternal(RenderRequest request, RenderResponse response) {
 		PortletPreferences prefs = request.getPreferences();
 		String[] locationCodes = prefs.getValues("locationCodes", null);
 		String[] metrics = prefs.getValues("metrics", null);
@@ -41,12 +46,8 @@ public class WeatherViewController extends AbstractController {
 				weathers.add(weather);
 			}
 		}
+		
 		//show view.jsp with a model named 'weather' populated weather data
 		return new ModelAndView("view", "weathers", weathers);
-	}
-
-	@Autowired
-	public void setWeatherService(IWeatherService weatherService) {
-		this.weatherService = weatherService;
 	}
 }
