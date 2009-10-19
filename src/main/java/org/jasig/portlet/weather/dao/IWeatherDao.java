@@ -7,6 +7,7 @@ package org.jasig.portlet.weather.dao;
 
 import java.util.Collection;
 
+import org.jasig.portlet.weather.TemperatureUnit;
 import org.jasig.portlet.weather.domain.Location;
 import org.jasig.portlet.weather.domain.Weather;
 import org.springmodules.cache.annotations.Cacheable;
@@ -32,7 +33,7 @@ public interface IWeatherDao {
 	 *         forecast.
 	 */
 	@Cacheable(modelId="weatherDataCacheModel")
-	public Weather getWeather(String locationCode, Boolean metric);
+	public Weather getWeather(String locationCode, TemperatureUnit unit);
 
 	/**
 	 * @param location

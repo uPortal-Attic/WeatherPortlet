@@ -12,6 +12,7 @@ import static junit.framework.Assert.assertTrue;
 
 import java.util.Collection;
 
+import org.jasig.portlet.weather.TemperatureUnit;
 import org.jasig.portlet.weather.domain.Current;
 import org.jasig.portlet.weather.domain.Forecast;
 import org.jasig.portlet.weather.domain.Location;
@@ -54,8 +55,7 @@ public class WeatherImplTest {
 		weather = weatherService.getWeather(null, null);
 		assertNull("Invalid weather object", weather);
 
-		Boolean metric = false;
-		weather = weatherService.getWeather(CITY_CODE, metric);
+		weather = weatherService.getWeather(CITY_CODE, TemperatureUnit.F);
 		assertNotNull("Invalid weather object", weather);
 
 		// Test the values of the retrieved location

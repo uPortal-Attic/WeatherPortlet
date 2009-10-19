@@ -1,10 +1,12 @@
 package org.jasig.portlet.weather.service;
 
 import java.util.Collection;
-import java.util.Map;
+import java.util.List;
 
 import javax.portlet.PortletPreferences;
 
+import org.jasig.portlet.weather.DuplicateLocationException;
+import org.jasig.portlet.weather.TemperatureUnit;
 import org.jasig.portlet.weather.domain.Location;
 import org.jasig.portlet.weather.domain.Weather;
 
@@ -16,14 +18,18 @@ import org.jasig.portlet.weather.domain.Weather;
  */
 public interface IWeatherService {
 
-	public Weather getWeather(String locationCode, Boolean metric);
+	public Weather getWeather(String locationCode, TemperatureUnit unit);
 
 	public Collection<Location> find(String location);
 	
-	public Map<String, String[]> getSavedLocationsMap(PortletPreferences prefs);
-	
-	public void addWeatherLocation(PortletPreferences prefs, String locationCode, String location, String metric);
+	/**
+	 * @throws DuplicateLocationException If a location with the specified code already exists
+	 */
+	public void addWeatherLocation(PortletPreferences prefs, String locationCode, String location, TemperatureUnit unit);
 	
 	public void deleteWeatherLocation(PortletPreferences prefs, String locationCode);
 
+	public List<SavedLocation> getSavedLocations(PortletPreferences prefs);
+    
+	public void saveLocations(List<SavedLocation> savedLocations, PortletPreferences prefs);
 }

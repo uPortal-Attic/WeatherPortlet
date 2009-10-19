@@ -27,6 +27,7 @@ import org.apache.commons.httpclient.params.HttpConnectionManagerParams;
 import org.apache.commons.httpclient.params.HttpMethodParams;
 import org.apache.commons.io.IOUtils;
 import org.jasig.portlet.weather.QuietUrlCodec;
+import org.jasig.portlet.weather.TemperatureUnit;
 import org.jasig.portlet.weather.dao.IWeatherDao;
 import org.jasig.portlet.weather.dao.accuweather.constants.Constants;
 import org.jasig.portlet.weather.domain.Location;
@@ -141,8 +142,12 @@ public class WeatherDaoImpl implements IWeatherDao, DisposableBean, Initializing
 		return (locations != null && locations.size() > 0) ? locations : null;
 	}
 
-	public Weather getWeather(String locationCode, Boolean metric) {
-		final String accuweatherUrl = Constants.BASE_GET_URL + QuietUrlCodec.encode(locationCode, Constants.URL_ENCODING) + "&metric=" + ((metric) ? "1" : "0");
+	
+	/* (non-Javadoc)
+     * @see org.jasig.portlet.weather.dao.IWeatherDao#getWeather(java.lang.String, org.jasig.portlet.weather.TemperatureUnit)
+     */
+    public Weather getWeather(String locationCode, TemperatureUnit unit) {
+		final String accuweatherUrl = Constants.BASE_GET_URL + QuietUrlCodec.encode(locationCode, Constants.URL_ENCODING) + "&metric=" + (TemperatureUnit.C.equals(unit) ? "1" : "0");
 		
         XStream xstream = new XStream();
         xstream.registerConverter(new WeatherConverter(locationCode));
@@ -153,7 +158,7 @@ public class WeatherDaoImpl implements IWeatherDao, DisposableBean, Initializing
 		    weather = (Weather)this.getAndDeserialize(accuweatherUrl, xstream);
         }
         catch (RuntimeException e) {
-            throw new DataRetrievalFailureException("get weather failed for location '" + locationCode + "' and metric " + metric, e);
+            throw new DataRetrievalFailureException("get weather failed for location '" + locationCode + "' and unit " + unit, e);
         }
 
         return weather;

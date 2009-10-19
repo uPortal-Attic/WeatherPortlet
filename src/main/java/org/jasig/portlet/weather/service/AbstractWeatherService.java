@@ -7,18 +7,18 @@ package org.jasig.portlet.weather.service;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Iterator;
+import java.util.List;
 
 import javax.portlet.PortletPreferences;
 import javax.portlet.ReadOnlyException;
 import javax.portlet.ValidatorException;
 
 import org.apache.log4j.Logger;
-import org.springframework.context.MessageSource;
-import org.springframework.context.MessageSourceAware;
-import org.springframework.context.support.MessageSourceAccessor;
+import org.jasig.portlet.weather.DuplicateLocationException;
+import org.jasig.portlet.weather.TemperatureUnit;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.PermissionDeniedDataAccessException;
 
 /**
  * Provides partial implementation of service methods. Delegates remaining
@@ -27,107 +27,112 @@ import org.springframework.context.support.MessageSourceAccessor;
  * @author Dustin Schultz
  * @version $Id$
  */
-public abstract class AbstractWeatherService implements IWeatherService, MessageSourceAware {
-	
-	private MessageSourceAccessor messageSourceAccessor = null; //needed for resolving messages.properties values	
+public abstract class AbstractWeatherService implements IWeatherService {
+    private static final String METRICS = "metrics";
+    private static final String UNITS = "units";
+    private static final String LOCATIONS = "locations";
+    private static final String LOCATION_CODES = "locationCodes";
+
 	private static final Logger logger = Logger.getLogger(AbstractWeatherService.class);
+	
+    /* (non-Javadoc)
+     * @see org.jasig.portlet.weather.service.IWeatherService#getSavedLocations(javax.portlet.PortletPreferences)
+     */
+    public List<SavedLocation> getSavedLocations(PortletPreferences prefs) {
+        final String[] locationCodes = prefs.getValues(LOCATION_CODES, new String[0]);
+        final String[] locations = prefs.getValues(LOCATIONS, new String[0]);
+        
+        String[] units = prefs.getValues(UNITS,  null);
+        final String[] metrics = prefs.getValues(METRICS,  null);
+        //Handling for old metrics flag approach for storing temp units
+        if (metrics != null) {
+            units = new String[metrics.length];
+            
+            for (int index = 0; index < metrics.length; index++) {
+                if (Boolean.parseBoolean(metrics[index])) {
+                    units[index] = TemperatureUnit.C.toString();
+                }
+                else {
+                    units[index] = TemperatureUnit.F.toString();
+                }
+            }
+        }
+        
+        final List<SavedLocation> savedLocations = new ArrayList<SavedLocation>(locationCodes.length);
+        for (int locationIndex = 0; locationIndex < locationCodes.length; locationIndex++) {
+            if (locationCodes[locationIndex] == null) {
+                logger.warn("A null location was stored at index '" + locationIndex + "' this should be resolved when SavedLocations are next stored for this user");
+                continue;
+            }
+            
+            savedLocations.add(new SavedLocation(
+                    locationCodes[locationIndex],
+                    locationIndex < locations.length ? locations[locationIndex] : null,
+                    locationIndex < units.length ? TemperatureUnit.safeValueOf(units[locationIndex]) : TemperatureUnit.F
+            ));
+        }
+        
+        return savedLocations;
+    }
 
-	public Map<String, String[]> getSavedLocationsMap(PortletPreferences prefs) {
-		String[] locationCodes = prefs.getValues("locationCodes", null);
-		String[] locations = prefs.getValues("locations", null);
-		String[] metrics = prefs.getValues("metrics", null);
-		if (locationCodes != null && locations != null && metrics != null) {
-			Map<String, String[]> savedLocationsMap = new HashMap<String, String[]>();
-			int length = locationCodes.length;
-			for (int i = 0; i < length; i++) {
-				String[] locationAttrs = new String[2];
-				locationAttrs[0] = locations[i];
-				locationAttrs[1] = metrics[i].toLowerCase().equals("true") ? messageSourceAccessor.getMessage("edit.metric.option") : messageSourceAccessor.getMessage("edit.standard.option");
-				logger.debug(locationCodes[i] + " --> " + locationAttrs[0] + ", " + locationAttrs[1]);
-				savedLocationsMap.put(locationCodes[i], locationAttrs);
-			}
-			return savedLocationsMap;
-		}
-		return null;
-	}
-
-	public void addWeatherLocation(PortletPreferences prefs,
-			String locationCode, String location, String metric) {
-		logger.debug("Saving locationCode " + locationCode);
-		logger.debug("Saving location " + location);
-		logger.debug("Saving metric value of " + metric);
-		String[] locationCodes = prefs.getValues("locationCodes", new String[0]);
-		String[] locations = prefs.getValues("locations", new String[0]);
-		String[] metrics = prefs.getValues("metrics", new String[0]);
-		String[] newLocationCodes = addItemToArray(locationCodes, locationCode);
-		String[] newLocations = addItemToArray(locations, location);
-		String[] newMetrics = addItemToArray(metrics, metric);
-		try {
-			prefs.setValues("locationCodes", newLocationCodes);
-			prefs.setValues("locations", newLocations);
-			prefs.setValues("metrics", newMetrics);
-			prefs.store();
-		} catch (ReadOnlyException roe) {
-			roe.printStackTrace();
-		} catch (ValidatorException ve) {
-			ve.printStackTrace();
-		} catch (IOException ioe) {
-			ioe.printStackTrace();
-		}
+	/* (non-Javadoc)
+     * @see org.jasig.portlet.weather.service.IWeatherService#saveLocations(java.util.List, javax.portlet.PortletPreferences)
+     */
+    public void saveLocations(List<SavedLocation> savedLocations, PortletPreferences prefs) {
+        final List<String> locationCodes = new ArrayList<String>(savedLocations.size());
+        final List<String> locations = new ArrayList<String>(savedLocations.size());
+        final List<String> metrics = new ArrayList<String>(savedLocations.size());
+        
+        for (final SavedLocation savedLocation : savedLocations) {
+            locationCodes.add(savedLocation.code);
+            locations.add(savedLocation.name);
+            metrics.add(savedLocation.temperatureUnit.toString());
+        }
+        
+        try {
+            prefs.setValues(LOCATION_CODES, locationCodes.toArray(new String[locationCodes.size()]));
+            prefs.setValues(LOCATIONS, locations.toArray(new String[locations.size()]));
+            prefs.setValues(UNITS, metrics.toArray(new String[metrics.size()]));
+            prefs.reset(METRICS); //Clear value, handling legacy preferences structure
+            prefs.store();
+        } 
+        catch (ReadOnlyException roe) {
+            throw new PermissionDeniedDataAccessException("Failed to save preferences due to one being marked read-only. The portlet preferences locationCode, locations, and metrics must not be read only.", roe);
+        } 
+        catch (ValidatorException ve) {
+            throw new DataIntegrityViolationException("Validation of saved locations preferences failed", ve);
+        } 
+        catch (IOException ioe) {
+            throw new RuntimeException("Failed to store saved locations preferences due to IO error", ioe);
+        }
+    }
+    
+	/* (non-Javadoc)
+     * @see org.jasig.portlet.weather.service.IWeatherService#addWeatherLocation(javax.portlet.PortletPreferences, java.lang.String, java.lang.String, org.jasig.portlet.weather.TemperatureUnit)
+     */
+    public void addWeatherLocation(PortletPreferences prefs, String locationCode, String location, TemperatureUnit unit) {
+        final List<SavedLocation> savedLocations = new ArrayList<SavedLocation>(this.getSavedLocations(prefs));
+        
+        final SavedLocation newLocation = new SavedLocation(locationCode, location, unit);
+        if (savedLocations.contains(newLocation)) {
+            throw new DuplicateLocationException("A location already exists for code '" + locationCode + "'");
+        }
+        
+        savedLocations.add(newLocation);
+        this.saveLocations(savedLocations, prefs);
 	}
 	
-	public void deleteWeatherLocation(PortletPreferences prefs,
-			String locationCode) {
-		logger.debug("Deleting location referred to by locationCode " + locationCode);
-		String[] locationCodes = prefs.getValues("locationCodes", null);
-		String[] locations = prefs.getValues("locations", null);
-		String[] metrics = prefs.getValues("metrics", null);
-		int index = findIndex(locationCodes, locationCode);
-		String[] newLocationCodes = deleteItemFromArray(locationCodes, index);
-		String[] newLocations = deleteItemFromArray(locations, index);
-		String[] newMetrics = deleteItemFromArray(metrics, index);
-		try {
-			prefs.setValues("locationCodes", newLocationCodes);
-			prefs.setValues("locations", newLocations);
-			prefs.setValues("metrics", newMetrics);
-			prefs.store();
-		} catch (ReadOnlyException roe) {
-			roe.printStackTrace();
-		} catch (ValidatorException ve) {
-			ve.printStackTrace();
-		} catch (IOException ioe) {
-			ioe.printStackTrace();
-		}
-		
-	}
-
-	private String[] addItemToArray(String[] srcArray, String item) {
-		ArrayList<String> newSrcArray = new ArrayList<String>(Arrays.asList(srcArray));
-		newSrcArray.add(item);
-		return newSrcArray.toArray(new String[newSrcArray.size()]);
-	}
-	
-	private String[] deleteItemFromArray(String[] srcArray, Integer index) {
-		if (index == null) {
-			logger.debug("Index to remove was null, returning same srcArray");
-			return srcArray;
-		}
-		ArrayList<String> newSrcArray = new ArrayList<String>(Arrays.asList(srcArray));
-		newSrcArray.remove(index.intValue());
-		return (newSrcArray.size() > 0 ? newSrcArray.toArray(new String[newSrcArray.size()]) : null);
-	}
-	
-	private Integer findIndex(String[] locationCodes, String locationCode) {
-		for (int i = 0; i < locationCodes.length; i++) {
-			if (locationCodes[i].equals(locationCode)) {
-				logger.debug("Found locationCode " + locationCode + " at index " + i);
-				return i;
-			}
-		}
-		return null;
-	}
-
-	public void setMessageSource(MessageSource messageSource) {
-		this.messageSourceAccessor = new MessageSourceAccessor(messageSource);
+	public void deleteWeatherLocation(PortletPreferences prefs, String locationCode) {
+	    final List<SavedLocation> savedLocations = new ArrayList<SavedLocation>(this.getSavedLocations(prefs));
+	    
+	    for (final Iterator<SavedLocation> savedLocationItr = savedLocations.iterator(); savedLocationItr.hasNext();) {
+	        final SavedLocation savedLocation = savedLocationItr.next();
+	        if (savedLocation.code.equals(locationCode)) {
+	            savedLocationItr.remove();
+	            break;
+	        }
+	    }
+	    
+        this.saveLocations(savedLocations, prefs);
 	}
 }

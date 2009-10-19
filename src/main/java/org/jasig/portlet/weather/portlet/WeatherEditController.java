@@ -5,8 +5,8 @@
 
 package org.jasig.portlet.weather.portlet;
 
-import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.portlet.ActionRequest;
@@ -15,7 +15,10 @@ import javax.portlet.PortletPreferences;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 
+import org.jasig.portlet.weather.DuplicateLocationException;
+import org.jasig.portlet.weather.TemperatureUnit;
 import org.jasig.portlet.weather.service.IWeatherService;
+import org.jasig.portlet.weather.service.SavedLocation;
 import org.jasig.web.service.AjaxPortletSupport;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -49,9 +52,10 @@ public class WeatherEditController {
 
     @RequestMapping
 	public ModelAndView renderEditView(RenderRequest request, RenderResponse response) throws Exception {
-		Map<String,String[]> locations = weatherService.getSavedLocationsMap(request.getPreferences());
+        final PortletPreferences preferences = request.getPreferences();
+        final List<SavedLocation> savedLocations = this.weatherService.getSavedLocations(preferences);
 		
-		ModelMap model = new ModelMap("savedLocations", locations);
+		ModelMap model = new ModelMap("savedLocations", savedLocations);
 		return new ModelAndView("edit", model);
 	}
 
@@ -59,7 +63,7 @@ public class WeatherEditController {
     public void addCity(
             @RequestParam(value = "location", required = false) String location,
             @RequestParam(value = "locationCode", required = false) String locationCode,
-            @RequestParam(value = "metric", required = false) String metric,
+            @RequestParam(value = "unit", required = false) TemperatureUnit unit,
             ActionRequest request, ActionResponse response) throws Exception {
         PortletPreferences prefs = request.getPreferences();
         
@@ -73,28 +77,26 @@ public class WeatherEditController {
         }
         
         // make sure this location isn't already in our list
-        String[] existing = prefs.getValues("locationCodes", null);
-        if (existing != null && Arrays.binarySearch(existing, locationCode) >= 0) {
+        try {
+            this.weatherService.addWeatherLocation(prefs, locationCode, location, unit == null ? TemperatureUnit.F : unit);
+            model.put("status", "success");
+        }
+        catch (DuplicateLocationException dle) {
             model.put("status", "failure");
             model.put("cause", "DUPLICATE_LOCATION");
-            this.ajaxPortletSupport.redirectAjaxResponse("ajax/json", model, request, response);
-            return;
         }
         
-        // add the new location to the user's preferences
-        weatherService.addWeatherLocation(prefs, locationCode, location, metric);
-
-        model.put("status", "success");
         this.ajaxPortletSupport.redirectAjaxResponse("ajax/json", model, request, response);
     }
 	
-
-
 	@RequestMapping(params = {"action=delete"})
-    public void deleteCity(ActionRequest request, ActionResponse response) throws Exception {
+    public void deleteCity(
+            @RequestParam(value = "key") String locationCode,
+            ActionRequest request, ActionResponse response) throws Exception {
         Map<Object, Object> model = new HashMap<Object, Object>();
 
-        weatherService.deleteWeatherLocation(request.getPreferences(),  request.getParameter("key"));
+        final PortletPreferences prefs = request.getPreferences();
+        this.weatherService.deleteWeatherLocation(prefs, locationCode);
         
         model.put("status", "success");
         this.ajaxPortletSupport.redirectAjaxResponse("ajax/json", model, request, response);

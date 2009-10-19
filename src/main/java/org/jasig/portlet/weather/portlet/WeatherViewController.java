@@ -6,7 +6,7 @@
 package org.jasig.portlet.weather.portlet;
 
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.List;
 
 import javax.portlet.PortletPreferences;
 import javax.portlet.RenderRequest;
@@ -14,6 +14,7 @@ import javax.portlet.RenderResponse;
 
 import org.jasig.portlet.weather.domain.Weather;
 import org.jasig.portlet.weather.service.IWeatherService;
+import org.jasig.portlet.weather.service.SavedLocation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,19 +36,17 @@ public class WeatherViewController {
     }
 
     @RequestMapping("VIEW")
-	public ModelAndView handleRenderRequestInternal(RenderRequest request, RenderResponse response) {
-		PortletPreferences prefs = request.getPreferences();
-		String[] locationCodes = prefs.getValues("locationCodes", null);
-		String[] metrics = prefs.getValues("metrics", null);
-		Collection<Weather> weathers = new ArrayList<Weather>();
-		if (locationCodes != null && metrics != null) {
-			for (int i = 0; i < locationCodes.length && i < metrics.length; i++) {
-				Weather weather = weatherService.getWeather(locationCodes[i], new Boolean(metrics[i]));
-				weathers.add(weather);
-			}
-		}
+	public ModelAndView viewWeather(RenderRequest request, RenderResponse response) {
+        final PortletPreferences prefs = request.getPreferences();
+        final List<SavedLocation> savedLocations = this.weatherService.getSavedLocations(prefs);
+        
+        final List<Weather> weatherList = new ArrayList<Weather>();
+        for (final SavedLocation savedLocation : savedLocations) {
+            final Weather weather = this.weatherService.getWeather(savedLocation.code, savedLocation.temperatureUnit);
+            weatherList.add(weather);
+        }
 		
 		//show view.jsp with a model named 'weather' populated weather data
-		return new ModelAndView("view", "weathers", weathers);
+		return new ModelAndView("view", "weathers", weatherList);
 	}
 }

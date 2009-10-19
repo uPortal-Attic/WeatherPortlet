@@ -8,6 +8,7 @@ package org.jasig.portlet.weather.service;
 import java.util.Collection;
 
 import org.apache.commons.lang.StringUtils;
+import org.jasig.portlet.weather.TemperatureUnit;
 import org.jasig.portlet.weather.dao.IWeatherDao;
 import org.jasig.portlet.weather.domain.Location;
 import org.jasig.portlet.weather.domain.Weather;
@@ -33,12 +34,15 @@ public class WeatherServiceImpl extends AbstractWeatherService {
 		return weatherDao.find(location);
 	}
 
-	public Weather getWeather(String locationCode, Boolean metric) {
+	/* (non-Javadoc)
+     * @see org.jasig.portlet.weather.service.IWeatherService#getWeather(java.lang.String, org.jasig.portlet.weather.TemperatureUnit)
+     */
+    public Weather getWeather(String locationCode, TemperatureUnit unit) {
 		//no locationCode is set, don't try to retrieve anything
 	    if (StringUtils.isBlank(locationCode)) {
 			return null;
 		}
-		return weatherDao.getWeather(locationCode, metric);
+		return weatherDao.getWeather(locationCode, unit);
 	}
 	
 	@Autowired

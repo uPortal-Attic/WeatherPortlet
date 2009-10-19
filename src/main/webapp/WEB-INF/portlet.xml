@@ -43,9 +43,9 @@
             	<value>Paris, France (Ile-De-France)</value>
             </preference>
             <preference>
-                <name>metrics</name>
-                <value>false</value>
-                <value>true</value>
+                <name>units</name>
+                <value>F</value>
+                <value>C</value>
             </preference>
             <preference>
                 <name>includeJQuery</name>

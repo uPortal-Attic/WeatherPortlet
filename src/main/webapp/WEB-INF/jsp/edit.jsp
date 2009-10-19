@@ -93,7 +93,7 @@
 			            var data = {
 					        location: $(form.location).find(":selected").text(),
 					        locationCode: form.location.value,
-					        metric: form.metric.value
+					        unit: form.unit.value
 					    };
 	                    $.post('<portlet:actionURL><portlet:param name="action" value="add"/></portlet:actionURL>', 
 	                        data, 
@@ -107,7 +107,7 @@
 	                            row.append(
 	    	                        $(document.createElement('td')).html(data.location)
 	    	                    ).append(
-                                    $(document.createElement('td')).html(data.metric == 'true' ? 'Metric' : 'Standard')
+                                    $(document.createElement('td')).html(data.unit == 'C' ? 'Metric' : 'Standard')
                                 );
 
 	                            var link = $(document.createElement('a'))
@@ -155,9 +155,9 @@
             <select id="${n}locationSelect" name="location" class="portlet-form-input-field"></select>
             
             <p><label class="portlet-form-label"><spring:message code="edit.select.metric"/>:</label></p>
-            <select name="metric" id="${n}temperatureUnit" class="portlet-form-input-field">
-                <option value="false"><spring:message code="edit.standard.option"/></option>
-                <option value="true"><spring:message code="edit.metric.option"/></option>
+            <select name="unit" id="${n}temperatureUnit" class="portlet-form-input-field">
+                <option value="F"><spring:message code="edit.standard.option"/></option>
+                <option value="C"><spring:message code="edit.metric.option"/></option>
             </select>
             <br/><br/>
             <spring:message var="addLocation" code="edit.add.location.button"/>
@@ -171,7 +171,8 @@
         <h2>Edit Weather Locations</h2>
     
         <p><spring:message code="edit.saved.locations.title"/></p>
-            <table id="${n}savedLocationsTable">
+        <form id="${n}editLocationForm">
+        <table id="${n}savedLocationsTable">
             <thead>
 	            <tr>
 	                <th>Location</th>
@@ -186,14 +187,19 @@
                 <c:forEach var="savedLocation" items="${savedLocations}" varStatus="status">
                     <c:set var="shadeClass" value="${(status.count % 2 == 0) ? 'r2' : 'r1'}"/>
                     <tr class="${shadeClass}">
-                        <c:forEach var="locationAttr" items="${savedLocation.value}">
-                            <td>${locationAttr}</td>
-                        </c:forEach>
-                        <td class="delete"><a href="javascript:;" key="${savedLocation.key}" class="delete-location-link"><img width="${delImgWidth}" height="${delImgHeight}" src="${context}/${delImgSrc}"/></a></td>
+                        <td><spring:message htmlEscape="true" text="${savedLocation.name}" /></td>
+                        <td>
+                            <select name="unit_${savedLocation.code}" id="${n}temperatureUnit_${savedLocation.code}" class="portlet-form-input-field">
+                                <option value="F" ${savedLocation.temperatureUnit == 'F' ? 'selected="true"' : ''}><spring:message code="edit.standard.option"/></option>
+                                <option value="C" ${savedLocation.temperatureUnit == 'C' ? 'selected="true"' : ''}><spring:message code="edit.metric.option"/></option>
+                            </select>
+                        </td>
+                        <td class="delete"><a href="javascript:;" key="${savedLocation.code}" class="delete-location-link"><img width="${delImgWidth}" height="${delImgHeight}" src="${context}/${delImgSrc}"/></a></td>
                     </tr>
                 </c:forEach>
             </tbody>
         </table>
+        </form>
         <p><a class="add-location-link" href="javascript:;"><spring:message code="edit.add.location.button"/></a></p>
 	    
 	    <portlet:renderURL var="formDoneAction" portletMode="VIEW"/>
