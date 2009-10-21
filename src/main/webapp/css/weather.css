@@ -2,23 +2,58 @@
  * @author Parker Grimes
  * @version $Id$
  */
+ 
+ /** TODO CSS Namespace **/
+ 
+.jasigWeatherPortlet .fl-reorderer-movable-default {
+    /*background-color: #eee;*/
+}
+.jasigWeatherPortlet tr.movable.fl-reorderer-movable-selected{
+    outline-color: red;
+}
+.jasigWeatherPortlet tr.movable.fl-reorderer-movable-dragging {
+    outline-color: red;
+}
+.jasigWeatherPortlet tr.movable.fl-reorderer-movable-hover{
+    cursor: move;
+}
+.jasigWeatherPortlet .fl-reorderer-avatar {
+    opacity: 0.55;
+    width: 300px;
+    border: 0;
+    outline-color: red;
+}
+.jasigWeatherPortlet .fl-reorderer-dropMarker {
+    background-color : red !important;
+    height:2px !important;
+    padding:0 0 0 0 !important;
+    border-width: 0px !important;
+    list-style-type:none;
+    font-size:0px;
+    line-height:0px;
+    overflow:hidden;
+}
+.jasigWeatherPortlet .savedLocationsTable tr.movable td {
+    padding-top: 5px; padding-bottom: 5px;
+}
+ 
 
 /* JA-SIG Weather Portlet */
 
-.weather-logo {
-	float: right;
+.jasigWeatherPortlet .weather-logo {
+    float: right;
 }
-.provided-by {
-	font-size: 10px;
-	text-align: left;
-	clear: both;
-	color: #666;
+.jasigWeatherPortlet .provided-by {
+    font-size: 10px;
+    text-align: left;
+    clear: both;
+    color: #666;
 }
-.location {
+.jasigWeatherPortlet .location {
     font-weight: bold;
     padding-bottom: 5px;
 }
-.current {
+.jasigWeatherPortlet .current {
     text-align: left;
     float: left;
     padding-top: 5px;
@@ -26,10 +61,10 @@
     overflow: hidden;
     width: 120px;
 }
-.weather-location {
-	margin-top: 5px;
+.jasigWeatherPortlet .weather-location {
+    margin-top: 5px;
 }
-.forecast {
+.jasigWeatherPortlet .forecast {
     float: left;
     margin-bottom: 40px;
     padding-bottom: 15px;
@@ -38,58 +73,60 @@
     text-align: center;
     font-size: 10px;    
 }
-.conditions {
-	overflow: hidden;
-	height: 115px;
+.jasigWeatherPortlet .conditions {
+    overflow: hidden;
+    height: 115px;
 }
-.weatherportlet table {
-	margin: 5px 0;
-	border-collapse: collapse;
+.jasigWeatherPortlet table {
+    margin: 5px 0;
+    border-collapse: collapse;
 }
-.weatherportlet td, .weatherportlet th {
-	border:1px solid #ddd;
-	font-size:11px;
-	line-height:13px;
-	padding:5px;
-	vertical-align:top;
-	white-space:nowrap;
+.jasigWeatherPortlet td,
+.jasigWeatherPortlet th {
+    border:1px solid #ddd;
+    font-size:11px;
+    line-height:13px;
+    padding:5px;
+    vertical-align:top;
+    white-space:nowrap;
 }
-.weatherportlet th {
-	background-color: #ccc;
-	text-align: left;
+.jasigWeatherPortlet th {
+    background-color: #ccc;
+    text-align: left;
 }
-.weatherportlet input {
-	margin-right: 
-	8px;
+.jasigWeatherPortlet input {
+    margin-right: 
+    8px;
 }
-.r1 {
-	background-color: #fff;
+.jasigWeatherPortlet .r1 {
+    background-color: #fff;
 }
-.r2 {
-	background-color: #eee;
+.jasigWeatherPortlet .r2 {
+    background-color: #eee;
 }
-.locations {
-	margin-top: 25px;
-	margin-bottom: 5px;
+.jasigWeatherPortlet .locations {
+    margin-top: 25px;
+    margin-bottom: 5px;
 }
-.search-results {
-	margin-top: 25px;
-	margin-bottom: 5px;
+.jasigWeatherPortlet .search-results {
+    margin-top: 25px;
+    margin-bottom: 5px;
 }
-.locations p, .search-results p { 
-	font-weight: bold; 
-	font-size: 13px; 
-	padding: 5px 0;
+.jasigWeatherPortlet .locations p,
+.jasigWeatherPortlet .search-results p { 
+    font-weight: bold; 
+    font-size: 13px; 
+    padding: 5px 0;
 }
-.delete {
-	text-align: center;
+.jasigWeatherPortlet .delete {
+    text-align: center;
 }
-#searchForm p {
-	font-weight: bold; 
-	margin-bottom: 15px;
+.jasigWeatherPortlet #searchForm p {
+    font-weight: bold; 
+    margin-bottom: 15px;
 }
-.error {
-	color:#990000;
-	display:block;
-	font-weight:bold;
+.jasigWeatherPortlet .error {
+    color:#990000;
+    display:block;
+    font-weight:bold;
 }

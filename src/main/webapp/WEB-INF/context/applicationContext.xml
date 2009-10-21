@@ -27,9 +27,18 @@
     </bean>
     
 	<ehcache:annotations>
-		<ehcache:caching id="weatherDataCacheModel" cacheName="weatherDataCache"/>
+		<!-- <ehcache:caching id="weatherDataCacheModel" cacheName="weatherDataCache"/>  -->
 		<ehcache:caching id="weatherSearchCacheModel" cacheName="weatherSearchCache"/>
 	</ehcache:annotations>
+    
+    <bean id="weatherDataCache" class="org.springframework.cache.ehcache.EhCacheFactoryBean">
+        <property name="cacheManager" ref="cacheManager" />
+        <property name="cacheEntryFactory" ref="weatherDaoImpl" />
+    </bean>
+    
+    <bean id="weatherDaoImpl" class="org.jasig.portlet.weather.dao.accuweather.xstream.WeatherDaoImpl">
+        <property name="weatherDataCache" ref="weatherDataCache"/>
+    </bean>
     
 	
 	<!-- messages.propreties Configuration -->

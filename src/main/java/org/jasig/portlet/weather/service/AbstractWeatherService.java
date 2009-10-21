@@ -107,10 +107,10 @@ public abstract class AbstractWeatherService implements IWeatherService {
         }
     }
     
-	/* (non-Javadoc)
+    /* (non-Javadoc)
      * @see org.jasig.portlet.weather.service.IWeatherService#addWeatherLocation(javax.portlet.PortletPreferences, java.lang.String, java.lang.String, org.jasig.portlet.weather.TemperatureUnit)
      */
-    public void addWeatherLocation(PortletPreferences prefs, String locationCode, String location, TemperatureUnit unit) {
+    public SavedLocation addWeatherLocation(PortletPreferences prefs, String locationCode, String location, TemperatureUnit unit) {
         final List<SavedLocation> savedLocations = new ArrayList<SavedLocation>(this.getSavedLocations(prefs));
         
         final SavedLocation newLocation = new SavedLocation(locationCode, location, unit);
@@ -120,6 +120,8 @@ public abstract class AbstractWeatherService implements IWeatherService {
         
         savedLocations.add(newLocation);
         this.saveLocations(savedLocations, prefs);
+        
+        return newLocation;
 	}
 	
 	public void deleteWeatherLocation(PortletPreferences prefs, String locationCode) {

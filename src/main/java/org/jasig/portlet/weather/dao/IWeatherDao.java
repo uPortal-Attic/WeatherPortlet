@@ -32,7 +32,7 @@ public interface IWeatherDao {
 	 * @return A Weather object representing the current weather and an optional
 	 *         forecast.
 	 */
-	@Cacheable(modelId="weatherDataCacheModel")
+//	@Cacheable(modelId="weatherDataCacheModel")
 	public Weather getWeather(String locationCode, TemperatureUnit unit);
 
 	/**

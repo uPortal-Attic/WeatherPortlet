@@ -5,7 +5,9 @@
 
 package org.jasig.portlet.weather.portlet;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -78,8 +80,9 @@ public class WeatherEditController {
         
         // make sure this location isn't already in our list
         try {
-            this.weatherService.addWeatherLocation(prefs, locationCode, location, unit == null ? TemperatureUnit.F : unit);
+            final SavedLocation savedLocation = this.weatherService.addWeatherLocation(prefs, locationCode, location, unit == null ? TemperatureUnit.F : unit);
             model.put("status", "success");
+            model.put("location", savedLocation);
         }
         catch (DuplicateLocationException dle) {
             model.put("status", "failure");
@@ -89,9 +92,73 @@ public class WeatherEditController {
         this.ajaxPortletSupport.redirectAjaxResponse("ajax/json", model, request, response);
     }
 	
+	@RequestMapping(params = {"action=saveOrder"})
+    public void saveCityOrder(
+            @RequestParam(value = "locationCodes") String locationCodes[],
+            ActionRequest request, ActionResponse response) throws Exception {
+
+	    final Map<Object, Object> model = new HashMap<Object, Object>();
+        
+	    
+	    final PortletPreferences prefs = request.getPreferences();
+	    final List<SavedLocation> savedLocations = this.weatherService.getSavedLocations(prefs);
+	    
+	    if (savedLocations.size() != locationCodes.length) {
+	        model.put("status", "failure");
+	        model.put("message", "updated locations array is not the same size (" + locationCodes.length + ") as the saved locations array (" + savedLocations.size() + ")");
+            this.ajaxPortletSupport.redirectAjaxResponse("ajax/json", model, request, response);
+            return;
+	    }
+	    
+	    final Map<String, SavedLocation> locations = new LinkedHashMap<String, SavedLocation>();
+	    for (final SavedLocation savedLocation : savedLocations) {
+	        locations.put(savedLocation.code, savedLocation);
+	    }
+	    
+	    final List<SavedLocation> updatedLocations = new ArrayList<SavedLocation>(savedLocations.size());
+	    for (final String locationCode : locationCodes) {
+	        updatedLocations.add(locations.get(locationCode));
+	    }
+	    
+	    this.weatherService.saveLocations(updatedLocations, prefs);
+	    
+        model.put("status", "success");
+        this.ajaxPortletSupport.redirectAjaxResponse("ajax/json", model, request, response);
+	}
+	
+    @RequestMapping(params = {"action=updateUnits"})
+    public void updateCityUnits(
+            @RequestParam(value = "locationCode") String locationCode,
+            @RequestParam(value = "unit") TemperatureUnit unit,
+            ActionRequest request, ActionResponse response) throws Exception {
+        
+        final Map<Object, Object> model = new HashMap<Object, Object>();
+        
+        final PortletPreferences prefs = request.getPreferences();
+        final List<SavedLocation> savedLocations = this.weatherService.getSavedLocations(prefs);
+        
+        final List<SavedLocation> updatedLocations = new ArrayList<SavedLocation>(savedLocations.size());
+        for (final SavedLocation savedLocation : savedLocations) {
+            if (savedLocation.code.equals(locationCode)) {
+                updatedLocations.add(new SavedLocation(
+                        savedLocation.code, 
+                        savedLocation.name, 
+                        unit));
+            }
+            else {
+                updatedLocations.add(savedLocation);
+            }
+        }
+        
+        this.weatherService.saveLocations(updatedLocations, prefs);
+        
+        model.put("status", "success");
+        this.ajaxPortletSupport.redirectAjaxResponse("ajax/json", model, request, response);
+    }
+	
 	@RequestMapping(params = {"action=delete"})
     public void deleteCity(
-            @RequestParam(value = "key") String locationCode,
+            @RequestParam(value = "locationCode") String locationCode,
             ActionRequest request, ActionResponse response) throws Exception {
         Map<Object, Object> model = new HashMap<Object, Object>();
 

@@ -25,7 +25,7 @@ public interface IWeatherService {
 	/**
 	 * @throws DuplicateLocationException If a location with the specified code already exists
 	 */
-	public void addWeatherLocation(PortletPreferences prefs, String locationCode, String location, TemperatureUnit unit);
+	public SavedLocation addWeatherLocation(PortletPreferences prefs, String locationCode, String location, TemperatureUnit unit);
 	
 	public void deleteWeatherLocation(PortletPreferences prefs, String locationCode);
 
