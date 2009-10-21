@@ -11,9 +11,6 @@ import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.util.Collection;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
-
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpConnectionManager;
 import org.apache.commons.httpclient.HttpException;
@@ -79,7 +76,6 @@ public class WeatherDaoImpl implements IWeatherDao, DisposableBean, Initializing
     /* (non-Javadoc)
      * @see org.springframework.beans.factory.InitializingBean#afterPropertiesSet()
      */
-    @PostConstruct
     public void afterPropertiesSet() throws Exception {
 		final HttpConnectionManager httpConnectionManager = httpClient.getHttpConnectionManager();
         final HttpConnectionManagerParams params = httpConnectionManager.getParams();
@@ -118,7 +114,6 @@ public class WeatherDaoImpl implements IWeatherDao, DisposableBean, Initializing
     /* (non-Javadoc)
      * @see org.springframework.beans.factory.DisposableBean#destroy()
      */
-    @PreDestroy
     public void destroy() throws Exception {
         this.connectionManager.shutdown();
     }
