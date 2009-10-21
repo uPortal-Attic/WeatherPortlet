@@ -12,7 +12,7 @@
 		<c:if test="${fn:length(logo) > 0 && fn:length(provByLink) > 0}">
 			<div class="weather-logo">
 				<spring:message var="logoW" code="logo.img.width"/>
-				<spring:message var="logoH" code="logo.img.height"/>
+                <spring:message var="logoH" code="logo.img.height"/>
 				<a href="${provByLink}" target="_blank"><img width="${logoW}" height="${logoH}" src="${context}/${logo}"/></a>
 			</div>
 		</c:if>
@@ -91,6 +91,16 @@
 				</div>
 			</div>
 		</c:forEach>
+        <c:if test="${fn:length(errors) > 0}">
+            <div class="error">
+                <h4><spring:message code="view.errors.header"/></h4>
+                <ul>
+                    <c:forEach var="errorLocation" items="${errors}">
+                        <li><spring:message htmlEscape="true" text="${errorLocation.name}" /></li>
+                    </c:forEach>
+                </ul>
+            </div>
+        </c:if>
 		<spring:message var="providedBy" code="view.weather.providedBy"/>
 		<c:if test="${fn:length(providedBy) > 0}">
 			<div class="provided-by">
