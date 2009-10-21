@@ -44,6 +44,7 @@ var weatherPortlet = weatherPortlet || {};
         that.locate('searchResultsForm').ajaxForm({ 
             dataType:  'json', 
             beforeSubmit: function(formData, jqForm, options) {
+                //TODO that.locate
                 var location = $(jqForm).find("select[name='locationCode'] option:selected").text();
                 formData[formData.length] = { name: 'location', value: location};
             },
@@ -61,11 +62,13 @@ var weatherPortlet = weatherPortlet || {};
                 var lastRow = templateRow.siblings(':last');
                 lastRow.after(newRow);
                  
+                //TODO config class names
                 newRow.removeClass('template');
                 newRow.addClass('movable');
                  
                 that.locate('locationCode', newRow).val(data.location.code);
                  
+                //TODO that.locate
                 var unitSelect = newRow.find('select.select-units');
                 unitSelect.attr('name', unitSelect.attr('name') + data.location.code);
                 unitSelect.attr('id', unitSelect.attr('id') + data.location.code);
