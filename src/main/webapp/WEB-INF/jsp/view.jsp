@@ -99,14 +99,24 @@
                         <li><spring:message htmlEscape="true" text="${errorLocation.name}" /></li>
                     </c:forEach>
                 </ul>
+                <portlet:renderURL var="refreshUrl" />
+                <p><a href="${refreshUrl}"><spring:message code="view.errors.refresh"/></a></p>
             </div>
         </c:if>
-		<spring:message var="providedBy" code="view.weather.providedBy"/>
-		<c:if test="${fn:length(providedBy) > 0}">
-			<div class="provided-by">
-				${providedBy}
-			</div>
-		</c:if>
+        <div class="footer">
+    		<spring:message var="providedBy" code="view.weather.providedBy"/>
+    		<c:if test="${fn:length(providedBy) > 0}">
+    			<div class="provided-by">
+    				${providedBy}
+    			</div>
+    		</c:if>
+            <c:if test="${showEditLink}">
+                <div class="edit-link">
+                    <portlet:renderURL var="editUrl"  portletMode="EDIT" windowState="MAXIMIZED" />
+                    <a href="${editUrl}"><spring:message code="view.edit-link"/></a>
+                </div>
+            </c:if>
+        </div>
 	</c:otherwise>
 </c:choose>
 </div>

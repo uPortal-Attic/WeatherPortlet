@@ -20,19 +20,9 @@
     <script type="text/javascript" src="<rs:resourceURL value="/rs/jquery/1.3.2/jquery-1.3.2.min.js"/>"></script>
     <script type="text/javascript" src="<rs:resourceURL value="/rs/jqueryui/1.7.2/jquery-ui-1.7.2.min.js"/>"></script>
     <script type="text/javascript" src="<rs:resourceURL value="/rs/fluid/1.1.2/js/fluid-all-1.1.2.min.js"/>"></script>
-    <script type="text/javascript" src="${context}/js/jquery/form/2.28/jquery.form-2.28.min.js"></script>
+    <script type="text/javascript" src="<rs:resourceURL value="/rs/jquery/form/2.28/jquery.form-2.28.min.js"/>"></script>
     <script type="text/javascript" src="${context}/js/weather.min.js"></script>
-    <script>
-    if (!weatherPortlet.jQuery) {
-        weatherPortlet.jQuery = jQuery.noConflict(true);
-        weatherPortlet.fluid = fluid;
-    }
-    else {
-        jQuery.noConflict(true);
-    }
-    fluid = null;
-    
-    
+    <script type="text/javascript">
     weatherPortlet.jQuery(document).ready(function() {
         $ = weatherPortlet.jQuery;
         var cityReorderer, cityEditor;

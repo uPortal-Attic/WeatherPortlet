@@ -45,7 +45,7 @@
 }
 .jasigWeatherPortlet .provided-by {
     font-size: 10px;
-    text-align: left;
+    float: left;
     clear: both;
     color: #666;
 }
@@ -131,4 +131,7 @@
 }
 .jasigWeatherPortlet .error ul {
     margin-top: 0;
+}
+.jasigWeatherPortlet .footer {
+    text-align: right;
 }

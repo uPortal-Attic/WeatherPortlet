@@ -55,6 +55,10 @@
                 <name>useInlineCSSTags</name>
                 <value>true</value>
             </preference>
+            <preference>
+                <name>showEditLink</name>
+                <value>true</value>
+            </preference>
         </portlet-preferences>   
     </portlet>
 

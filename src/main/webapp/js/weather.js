@@ -1,6 +1,41 @@
 var weatherPortlet = weatherPortlet || {};
 
 (function ($, fluid) {
+    // Declare the component and its configuration
+    fluid.defaults("weatherPortlet.editCities", {
+        saveOrderUrl: null,
+        updateUnitUrl: null,
+        deleteLocationUrl: null,
+        noLocationsMessage: 'No Locations Found',
+        searchingMessage: 'Searching ...',
+        evenRow: 'r1',
+        oddRow: 'r2',
+        templateRowClass: 'template',
+        cityRowClass: 'movable',
+        selectors: {
+            locationRow: '.locations table tr.movable',
+            templateRow: '.locations table tr.template',
+            orderCell: 'td.handle',
+            locationCode: 'input[name=code]',
+            selectUnits: '.locations table tr.movable select.select-units',
+            deleteLocation: '.locations table tr.movable .delete-location-link',
+            addLocationLink: '.add-location-link',
+            locationSearch: '.location-search',
+            locationList: '.locations',
+            locationSearchForm: '.locate-search-form',
+            locationSearchMessage: '.search-message',
+            cancelSearchLink: '.weather-search-form-cancel',
+            searchResults: '.search-results',
+            searchResultsForm: '.search-results .select-location-form',
+            searchResultsOptions: '.search-results .select-location-form select[name="locationCode"]',
+            searchResultsSelectedOption: 'select[name="locationCode"] option:selected'
+        },
+        events: {
+            addCity: null,
+            deleteCity: null
+        }
+    });
+    
     var init = function (that) {
         that.refreshLocationRows();
         
@@ -39,13 +74,14 @@ var weatherPortlet = weatherPortlet || {};
             }
         }); 
         
-        that.locate('cancelSearchLink').click(function() { return cancelSearch(that); });
+        that.locate('cancelSearchLink').click(function() { 
+            return cancelSearch(that); 
+        });
         
         that.locate('searchResultsForm').ajaxForm({ 
             dataType:  'json', 
             beforeSubmit: function(formData, jqForm, options) {
-                //TODO that.locate
-                var location = $(jqForm).find("select[name='locationCode'] option:selected").text();
+                var location = that.locate('searchResultsSelectedOption', jqForm).text();
                 formData[formData.length] = { name: 'location', value: location};
             },
             success:   function(data) {
@@ -61,14 +97,12 @@ var weatherPortlet = weatherPortlet || {};
                  
                 var lastRow = templateRow.siblings(':last');
                 lastRow.after(newRow);
-                 
-                //TODO config class names
-                newRow.removeClass('template');
-                newRow.addClass('movable');
+                
+                newRow.removeClass(that.options.templateRowClass);
+                newRow.addClass(that.options.cityRowClass);
                  
                 that.locate('locationCode', newRow).val(data.location.code);
                  
-                //TODO that.locate
                 var unitSelect = newRow.find('select.select-units');
                 unitSelect.attr('name', unitSelect.attr('name') + data.location.code);
                 unitSelect.attr('id', unitSelect.attr('id') + data.location.code);
@@ -122,38 +156,6 @@ var weatherPortlet = weatherPortlet || {};
         return that;
     };
     
-    // defaults
-    fluid.defaults("weatherPortlet.editCities", {
-        saveOrderUrl: null,
-        updateUnitUrl: null,
-        deleteLocationUrl: null,
-        noLocationsMessage: 'No Locations Found',
-        searchingMessage: 'Searching ...',
-        evenRow: 'r1',
-        oddRow: 'r2',
-        selectors: {
-            locationRow: '.locations table tr.movable',
-            templateRow: '.locations table tr.template',
-            orderCell: 'td.handle',
-            locationCode: 'input[name=code]',
-            selectUnits: '.locations table tr.movable select.select-units',
-            deleteLocation: '.locations table tr.movable .delete-location-link',
-            addLocationLink: '.add-location-link',
-            locationSearch: '.location-search',
-            locationList: '.locations',
-            locationSearchForm: '.locate-search-form',
-            locationSearchMessage: '.search-message',
-            cancelSearchLink: '.weather-search-form-cancel',
-            searchResults: '.search-results',
-            searchResultsForm: '.search-results .select-location-form',
-            searchResultsOptions: '.search-results .select-location-form select[name="locationCode"]'
-        },
-        events: {
-            addCity: null,
-            deleteCity: null
-        }
-    });
-    
     var changeLocationUnits = function(that, event, target) {
         //TODO is there a fluidy way to do this?
         var row = target.parents('.locations table tr.movable');
@@ -192,7 +194,7 @@ var weatherPortlet = weatherPortlet || {};
             },
             "json"
         );
-    }
+    };
     
     var cancelSearch = function(that) {
         that.locate('locationSearch').hide();
@@ -205,5 +207,14 @@ var weatherPortlet = weatherPortlet || {};
         that.locate('locationSearchMessage').hide();
         
         return false;
-    }
+    };
 })(jQuery, fluid);
+
+if (!weatherPortlet.jQuery) {
+    weatherPortlet.jQuery = jQuery.noConflict(true);
+    weatherPortlet.fluid = fluid;
+}
+else {
+    jQuery.noConflict(true);
+}
+fluid = null;
