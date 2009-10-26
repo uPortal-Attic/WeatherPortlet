@@ -13,14 +13,14 @@
 	<packaging>war</packaging>
     
     <name>Weather Portlet</name>
-    <version>1.0.4</version>
+    <version>1.0.5-SNAPSHOT</version>
 	<description>Jasig Weather Portlet</description>
     <url>${jasig-site-base}/WeatherPortlet/${project.version}</url>
 
     <scm>
-        <connection>scm:svn:https://www.ja-sig.org/svn/sandbox/WeatherPortlet/tags/1.0.4</connection>
-        <developerConnection>scm:svn:https://www.ja-sig.org/svn/sandbox/WeatherPortlet/tags/1.0.4</developerConnection>
-        <url>http://developer.jasig.org/source/browse/jasigsvn/sandbox/WeatherPortlet/tags/1.0.4</url>
+        <connection>scm:svn:https://www.ja-sig.org/svn/sandbox/WeatherPortlet/trunk</connection>
+        <developerConnection>scm:svn:https://www.ja-sig.org/svn/sandbox/WeatherPortlet/trunk</developerConnection>
+        <url>http://developer.jasig.org/source/browse/jasigsvn/sandbox/WeatherPortlet/trunk</url>
     </scm>
     
     <distributionManagement>
