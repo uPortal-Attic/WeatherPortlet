@@ -143,7 +143,7 @@
         </form>
         <p><a class="add-location-link" href="javascript:;"><spring:message code="edit.add.location.button"/></a></p>
 	    
-	    <portlet:renderURL var="formDoneAction" portletMode="VIEW"/>
+	    <portlet:renderURL var="formDoneAction" portletMode="VIEW" windowState="NORMAL"/>
 	    <p><button onclick="window.location='${formDoneAction}'" class="portlet-form-button"><spring:message code="edit.done.button"/></button></p>
     </div>
 </div>
