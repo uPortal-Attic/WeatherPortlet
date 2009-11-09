@@ -59,6 +59,7 @@ public class WeatherDaoImpl implements IWeatherDao, DisposableBean, Initializing
 	private final HttpClient httpClient = new HttpClient(connectionManager);
 	
 	private Ehcache weatherDataCache;
+	private Ehcache weatherDataErrorCache;
 
 	//Default timeout of 5 seconds
 	private int connectionTimeout = 5000;
@@ -84,6 +85,10 @@ public class WeatherDaoImpl implements IWeatherDao, DisposableBean, Initializing
     
     public void setWeatherDataCache(Ehcache ehcache) {
         this.weatherDataCache = ehcache;
+    }
+
+    public void setWeatherDataErrorCache(Ehcache weatherDataErrorCache) {
+        this.weatherDataErrorCache = weatherDataErrorCache;
     }
 
     /* (non-Javadoc)
@@ -156,6 +161,11 @@ public class WeatherDaoImpl implements IWeatherDao, DisposableBean, Initializing
     @SuppressWarnings("unchecked")
     public Object createEntry(Object o) throws Exception {
         final Map<String, Object> key = (Map<String, Object>)o;
+        final Element errorElement = this.weatherDataErrorCache.get(key);
+        if (errorElement != null && !errorElement.isExpired()) {
+            throw (RuntimeException)errorElement.getValue();
+        }
+        
         final String locationCode = (String)key.get("locationCode");
         final TemperatureUnit unit = (TemperatureUnit)key.get("unit");
         
@@ -184,8 +194,15 @@ public class WeatherDaoImpl implements IWeatherDao, DisposableBean, Initializing
         key.put("locationCode", locationCode);
         key.put("unit", unit);
         
-        final Element element = this.weatherDataCache.get(key);
-        return (Weather)element.getValue();
+        try {
+            final Element element = this.weatherDataCache.get(key);
+            return (Weather)element.getValue();
+        }
+        catch (RuntimeException e) {
+            final Element element = new Element(key, e);
+            this.weatherDataErrorCache.put(element);
+            throw e;
+        }
 	}
 	
 	protected Object getAndDeserialize(String url, XStream deserializer) {
