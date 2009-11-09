@@ -14,7 +14,7 @@
 .jasigWeatherPortlet tr.movable.fl-reorderer-movable-dragging {
     outline-color: red;
 }
-.jasigWeatherPortlet tr.movable.fl-reorderer-movable-hover{
+.jasigWeatherPortlet tr.movable.fl-reorderer-movable-hover {
     cursor: move;
 }
 .jasigWeatherPortlet .fl-reorderer-avatar {
@@ -75,7 +75,7 @@
 }
 .jasigWeatherPortlet .conditions {
     overflow: hidden;
-    height: 115px;
+    height: 120px;
 }
 .jasigWeatherPortlet table {
     margin: 5px 0;
@@ -87,7 +87,6 @@
     font-size:11px;
     line-height:13px;
     padding:5px;
-    vertical-align:top;
     white-space:nowrap;
 }
 .jasigWeatherPortlet th {
