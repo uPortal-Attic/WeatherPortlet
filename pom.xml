@@ -13,14 +13,14 @@
 	<packaging>war</packaging>
     
     <name>Weather Portlet</name>
-    <version>1.0.5-SNAPSHOT</version>
+    <version>1.0.5</version>
 	<description>Jasig Weather Portlet</description>
     <url>${jasig-site-base}/WeatherPortlet/${project.version}</url>
 
     <scm>
-        <connection>scm:svn:https://www.ja-sig.org/svn/sandbox/WeatherPortlet/trunk</connection>
-        <developerConnection>scm:svn:https://www.ja-sig.org/svn/sandbox/WeatherPortlet/trunk</developerConnection>
-        <url>http://developer.jasig.org/source/browse/jasigsvn/sandbox/WeatherPortlet/trunk</url>
+        <connection>scm:svn:https://www.ja-sig.org/svn/sandbox/WeatherPortlet/tags/1.0.5</connection>
+        <developerConnection>scm:svn:https://www.ja-sig.org/svn/sandbox/WeatherPortlet/tags/1.0.5</developerConnection>
+        <url>http://developer.jasig.org/source/browse/jasigsvn/sandbox/WeatherPortlet/tags/1.0.5</url>
     </scm>
     
     <distributionManagement>
@@ -164,6 +164,17 @@
                 <groupId>net.sf.json-lib</groupId>
                 <artifactId>json-lib-ext-spring</artifactId>
                 <version>1.0.2</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.pluto</groupId>
+                <artifactId>pluto-taglib</artifactId>
+                <version>1.1.7</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>commons-logging</groupId>
+                        <artifactId>commons-logging-api</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
             <dependency>
                 <groupId>org.jasig</groupId>
@@ -476,6 +487,12 @@
 	        <groupId>org.jasig.resourceserver</groupId>
 	        <artifactId>resource-server-utils</artifactId>
 	        <scope>runtime</scope>
-	    </dependency>	    
+	    </dependency>	
+        
+        <dependency>
+            <groupId>org.apache.pluto</groupId>
+            <artifactId>pluto-taglib</artifactId>
+            <scope>provided</scope>
+        </dependency>    
 	</dependencies>
 </project>

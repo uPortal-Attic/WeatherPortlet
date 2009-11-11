@@ -13,7 +13,6 @@ import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-
 import net.sf.ehcache.Ehcache;
 import net.sf.ehcache.Element;
 import net.sf.ehcache.constructs.blocking.CacheEntryFactory;
@@ -59,6 +58,7 @@ public class WeatherDaoImpl implements IWeatherDao, DisposableBean, Initializing
 	private final HttpClient httpClient = new HttpClient(connectionManager);
 	
 	private Ehcache weatherDataCache;
+	private Ehcache weatherDataErrorCache;
 
 	//Default timeout of 5 seconds
 	private int connectionTimeout = 5000;
@@ -84,6 +84,10 @@ public class WeatherDaoImpl implements IWeatherDao, DisposableBean, Initializing
     
     public void setWeatherDataCache(Ehcache ehcache) {
         this.weatherDataCache = ehcache;
+    }
+
+    public void setWeatherDataErrorCache(Ehcache weatherDataErrorCache) {
+        this.weatherDataErrorCache = weatherDataErrorCache;
     }
 
     /* (non-Javadoc)
@@ -156,6 +160,8 @@ public class WeatherDaoImpl implements IWeatherDao, DisposableBean, Initializing
     @SuppressWarnings("unchecked")
     public Object createEntry(Object o) throws Exception {
         final Map<String, Object> key = (Map<String, Object>)o;
+        this.checkCachedException(key);
+        
         final String locationCode = (String)key.get("locationCode");
         final TemperatureUnit unit = (TemperatureUnit)key.get("unit");
         
@@ -170,7 +176,13 @@ public class WeatherDaoImpl implements IWeatherDao, DisposableBean, Initializing
             weather = (Weather)this.getAndDeserialize(accuweatherUrl, xstream);
         }
         catch (RuntimeException e) {
-            throw new DataRetrievalFailureException("get weather failed for location '" + locationCode + "' and unit " + unit, e);
+            final DataRetrievalFailureException drfe = new DataRetrievalFailureException("get weather failed for location '" + locationCode + "' and unit " + unit, e);
+            
+            //Cache the exception to avoid retrying a 'bad' data feed too frequently
+            final Element element = new Element(key, drfe);
+            this.weatherDataErrorCache.put(element);
+            
+            throw drfe;
         }
 
         return weather;
@@ -183,10 +195,18 @@ public class WeatherDaoImpl implements IWeatherDao, DisposableBean, Initializing
         final Map<String, Object> key = new LinkedHashMap<String, Object>();
         key.put("locationCode", locationCode);
         key.put("unit", unit);
+        this.checkCachedException(key);
         
         final Element element = this.weatherDataCache.get(key);
         return (Weather)element.getValue();
 	}
+
+    protected void checkCachedException(final Map<String, Object> key) {
+        final Element errorElement = this.weatherDataErrorCache.get(key);
+        if (errorElement != null && !errorElement.isExpired()) {
+            throw (RuntimeException)errorElement.getValue();
+        }
+    }
 	
 	protected Object getAndDeserialize(String url, XStream deserializer) {
 	    HttpMethod getMethod = new GetMethod(url);
