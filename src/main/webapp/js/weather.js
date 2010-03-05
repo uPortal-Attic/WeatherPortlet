@@ -96,6 +96,7 @@ var weatherPortlet = weatherPortlet || {};
                 var newRow = templateRow.clone();
                  
                 var lastRow = templateRow.siblings(':last');
+                if (lastRow.size() == 0) lastRow = templateRow;
                 lastRow.after(newRow);
                 
                 newRow.removeClass(that.options.templateRowClass);
