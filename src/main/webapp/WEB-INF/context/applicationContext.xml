@@ -48,6 +48,7 @@
     	<property name="key" value="YOURKEY"/>
         <property name="weatherDataCache" ref="weatherDataCache"/>
         <property name="weatherDataErrorCache" ref="weatherDataErrorCache"/>
+        <property name="imageMapping"><value>classpath:wwo-image-mapping.properties</value></property>
     </bean>
     
     <!--

@@ -32,7 +32,8 @@ public class WorldWeatherOnlineUnmarshallingTest {
     
     @Before
     public void setUp() {
-        dao = new WorldWeatherOnlineDaoImpl();        
+        dao = new WorldWeatherOnlineDaoImpl();
+        dao.setImageMapping(applicationContext.getResource("classpath:/wwo-image-mapping.properties"));
     }
     
     @Test
@@ -41,7 +42,10 @@ public class WorldWeatherOnlineUnmarshallingTest {
         Weather weather = dao.deserializeWeatherResult(is, TemperatureUnit.C);
         Assert.assertEquals(weather.getForecast().size(), 3);
         Assert.assertEquals(weather.getForecast().toArray(new Forecast[]{})[0].getDay(), "Thu");
+        Assert.assertEquals(weather.getForecast().toArray(new Forecast[]{})[0].getImgName(), "01");
+        Assert.assertEquals(weather.getForecast().toArray(new Forecast[]{})[0].getImgUrl(), null);
         Assert.assertEquals(weather.getCurrentWeather().getCondition(), "Light drizzle");
+        Assert.assertEquals(weather.getCurrentWeather().getImgName(), "12");
         Assert.assertEquals(weather.getCurrentWeather().getTemperature(), new Integer(7));
     }
 

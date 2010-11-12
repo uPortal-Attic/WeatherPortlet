@@ -12,6 +12,7 @@ import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -47,6 +48,7 @@ import org.jasig.portlet.weather.domain.Location;
 import org.jasig.portlet.weather.domain.Weather;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.core.io.Resource;
 import org.springframework.dao.DataRetrievalFailureException;
 
 public class WorldWeatherOnlineDaoImpl implements IWeatherDao, DisposableBean, InitializingBean, CacheEntryFactory {
@@ -57,6 +59,8 @@ public class WorldWeatherOnlineDaoImpl implements IWeatherDao, DisposableBean, I
     private static final String FIND_URL = "http://www.worldweatheronline.com/feed/search.ashx?key=@KEY@&query=@QUERY@&num_of_results=3&format=xml";
     private static final String WEATHER_URL = "http://www.worldweatheronline.com/feed/weather.ashx?key=@KEY@&num_of_days=3&format=xml&q=@LOCATION@";
     private String key = null;
+
+    private Properties imageMapping;
     
     //Multi-threaded connection manager for exclusive access
     private final MultiThreadedHttpConnectionManager connectionManager = new MultiThreadedHttpConnectionManager();
@@ -99,6 +103,19 @@ public class WorldWeatherOnlineDaoImpl implements IWeatherDao, DisposableBean, I
 
     public void setKey(String key) {
         this.key = key;
+    }
+    
+    public void setImageMapping(Resource imageMapping) {
+        this.imageMapping = new Properties();
+        InputStream is = null;
+        try {
+            is = imageMapping.getInputStream();
+            this.imageMapping.load(is);
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to load image mapping", e);
+        } finally {
+            IOUtils.closeQuietly(is);
+        }
     }
     
     /* (non-Javadoc)
@@ -296,7 +313,12 @@ public class WorldWeatherOnlineDaoImpl implements IWeatherDao, DisposableBean, I
         current.setHumidity(data.getCondition().getHumidity());
         current.setPressure(data.getCondition().getPressure());
         current.setWindDirection(data.getCondition().getWindDir());
-        current.setImgUrl(data.getCondition().getWeatherIconUrl());
+        
+        if (data.getCondition().getWeatherIconUrl() != null && data.getCondition().getWeatherIconUrl().contains("night")) {
+            current.setImgName(imageMapping.getProperty("image.night." + data.getCondition().getWeatherCode()));
+        } else {
+            current.setImgName(imageMapping.getProperty("image.day." + data.getCondition().getWeatherCode()));
+        }
         
         switch (unit) {
             case C:
@@ -322,8 +344,13 @@ public class WorldWeatherOnlineDaoImpl implements IWeatherDao, DisposableBean, I
         for (WeatherForecast f : data.getForecasts()) {
             Forecast forecast = new Forecast();
             forecast.setCondition(f.getDescription());
-            forecast.setImgUrl(f.getIconUrl());
-            
+
+            if (f.getIconUrl() != null && f.getIconUrl().contains("night")) {
+                forecast.setImgName(imageMapping.getProperty("image.night." + f.getWeatherCode()));
+            } else {
+                forecast.setImgName(imageMapping.getProperty("image.day." + f.getWeatherCode()));
+            }
+
             Date date = dateFormat.parse(f.getDate());
             forecast.setDay(dayFormat.format(date));
             
