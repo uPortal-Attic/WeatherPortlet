@@ -38,7 +38,8 @@
         <property name="cacheManager" ref="cacheManager" />
     </bean>
     
-    <bean id="weatherDaoImpl" class="org.jasig.portlet.weather.dao.accuweather.xstream.WeatherDaoImpl">
+    <bean id="weatherDaoImpl" class="org.jasig.portlet.weather.dao.worldwide.WorldWideWeatherDaoImpl">
+    	<property name="key" value="YOURKEY"/>
         <property name="weatherDataCache" ref="weatherDataCache"/>
         <property name="weatherDataErrorCache" ref="weatherDataErrorCache"/>
     </bean>
