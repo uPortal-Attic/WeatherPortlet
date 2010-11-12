@@ -23,6 +23,7 @@ public class Current implements Serializable {
 	private Double humidity = null;
 	private Double pressure = null;
 	private String imgName = null;
+	private String imgUrl = null;
 
 	public Integer getTemperature() {
 		return temperature;
@@ -79,5 +80,13 @@ public class Current implements Serializable {
 	public void setImgName(String imgName) {
 		this.imgName = imgName;
 	}
+
+    public String getImgUrl() {
+        return imgUrl;
+    }
+
+    public void setImgUrl(String imgUrl) {
+        this.imgUrl = imgUrl;
+    }
 
 }

@@ -38,7 +38,14 @@
 								<spring:message var="currImgPath" code="current.condition.img.path"/>
 								<spring:message var="currExt" code="current.condition.img.extension"/>
 								<spring:message code="view.currently"/><br/>
-								<img width="${currW}" height="${currH}" src="${context}/${currImgPath}/${current.imgName}${currExt}" alt="${current.condition}" title="${current.condition}"/><br/>
+                                <c:choose>
+                                    <c:when test="${ not empty current.imgUrl }">
+                                        <img src="${ current.imgUrl }"/><br/>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <img width="${currW}" height="${currH}" src="${context}/${currImgPath}/${current.imgName}${currExt}" alt="${current.condition}" title="${current.condition}"/><br/>
+                                    </c:otherwise>
+                                </c:choose>
 								${current.temperature}&#xB0; ${weather.temperatureUnit}
 							</c:when>
 							<c:otherwise>
@@ -82,7 +89,14 @@
 									<spring:message var="forecastH" code="forecast.condition.img.height"/>
 									<spring:message var="forecastImgPath" code="forecast.condition.img.path"/>
 									<spring:message var="forecastExt" code="forecast.condition.img.extension"/>
-									<img width="${forecastW}" height="${forecastH}" src="${context}/${forecastImgPath}/${forecast.imgName}${forecastExt}" alt="${forecast.condition}" title="${forecast.condition}"/><br/>
+                                    <c:choose>
+                                        <c:when test="${ not empty forecast.imgUrl }">
+                                            <img src="${ forecast.imgUrl }"/><br/>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <img width="${forecastW}" height="${forecastH}" src="${context}/${forecastImgPath}/${forecast.imgName}${forecastExt}" alt="${forecast.condition}" title="${forecast.condition}"/><br/>
+                                        </c:otherwise>
+                                    </c:choose>
 									${forecast.highTemperature}&#xB0; | ${forecast.lowTemperature}&#xB0;
 								</div>
 							</c:forEach>

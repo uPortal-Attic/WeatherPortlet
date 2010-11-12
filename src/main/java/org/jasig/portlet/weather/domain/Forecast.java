@@ -21,6 +21,7 @@ public class Forecast implements Serializable {
 	private Integer lowTemperature = null;
 	private String condition = null;
 	private String imgName = null;
+	private String imgUrl = null;
 
 	public String getDay() {
 		return day;
@@ -61,5 +62,13 @@ public class Forecast implements Serializable {
 	public void setImgName(String imgName) {
 		this.imgName = imgName;
 	}
+
+    public String getImgUrl() {
+        return imgUrl;
+    }
+
+    public void setImgUrl(String imgUrl) {
+        this.imgUrl = imgUrl;
+    }
 	
 }
