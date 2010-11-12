@@ -49,4 +49,12 @@ public class WeatherServiceImpl extends AbstractWeatherService {
 	public void setWeatherDao(IWeatherDao weatherDao) {
 		this.weatherDao = weatherDao;
 	}
+
+    public String getWeatherProviderLink() {
+        return this.weatherDao.getWeatherProviderLink();
+    }
+
+    public String getWeatherProviderName() {
+        return this.weatherDao.getWeatherProviderName();
+    }
 }

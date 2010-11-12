@@ -7,15 +7,6 @@
 		<p><spring:message code="view.location.notset"/></p>
 	</c:when>
 	<c:otherwise>
-		<spring:message var="logo" code="logo.img.full.path"/>
-		<spring:message var="provByLink" code="view.weather.providedBy.link"/>
-		<c:if test="${fn:length(logo) > 0 && fn:length(provByLink) > 0}">
-			<div class="weather-logo">
-				<spring:message var="logoW" code="logo.img.width"/>
-                <spring:message var="logoH" code="logo.img.height"/>
-				<a href="${provByLink}" target="_blank"><img width="${logoW}" height="${logoH}" src="${context}/${logo}"/></a>
-			</div>
-		</c:if>
 		<c:forEach var="weather" items="${weathers}">
 			<div class="weather-location">
 				<div class="location">
@@ -118,7 +109,8 @@
             </div>
         </c:if>
         <div class="footer">
-    		<spring:message var="providedBy" code="view.weather.providedBy"/>
+            <c:set var="serviceUrl"><a href="${ serviceUrl }">${ serviceName }</a></c:set>
+    		<spring:message var="providedBy" code="view.weather.providedBy" arguments="${ serviceUrl }" htmlEscape="false"/>
     		<c:if test="${fn:length(providedBy) > 0}">
     			<div class="provided-by">
     				${providedBy}

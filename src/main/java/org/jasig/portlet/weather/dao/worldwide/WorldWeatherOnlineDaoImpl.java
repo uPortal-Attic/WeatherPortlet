@@ -235,6 +235,14 @@ public class WorldWeatherOnlineDaoImpl implements IWeatherDao, DisposableBean, I
         return (Weather)element.getValue();
     }
 
+    public String getWeatherProviderName() {
+        return "World Weather Online";
+    }
+
+    public String getWeatherProviderLink() {
+        return "http://www.worldweatheronline.com/";
+    }
+
     protected void checkCachedException(final Map<String, Object> key) {
         final Element errorElement = this.weatherDataErrorCache.get(key);
         if (errorElement != null && !errorElement.isExpired()) {

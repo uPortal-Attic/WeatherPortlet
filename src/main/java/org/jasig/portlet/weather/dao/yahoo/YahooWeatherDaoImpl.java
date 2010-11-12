@@ -221,6 +221,14 @@ public class YahooWeatherDaoImpl implements IWeatherDao, DisposableBean, Initial
         return (Weather)element.getValue();
     }
 
+    public String getWeatherProviderName() {
+        return "Yahoo! Weather";
+    }
+
+    public String getWeatherProviderLink() {
+        return "http://weather.yahoo.com";
+    }
+
     protected void checkCachedException(final Map<String, Object> key) {
         final Element errorElement = this.weatherDataErrorCache.get(key);
         if (errorElement != null && !errorElement.isExpired()) {

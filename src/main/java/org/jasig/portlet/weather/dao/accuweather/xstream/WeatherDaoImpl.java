@@ -201,6 +201,14 @@ public class WeatherDaoImpl implements IWeatherDao, DisposableBean, Initializing
         return (Weather)element.getValue();
 	}
 
+    public String getWeatherProviderLink() {
+        return "http://www.accuweather.com/?partner=uport";
+    }
+
+    public String getWeatherProviderName() {
+        return "Accuweather.com";
+    }
+
     protected void checkCachedException(final Map<String, Object> key) {
         final Element errorElement = this.weatherDataErrorCache.get(key);
         if (errorElement != null && !errorElement.isExpired()) {

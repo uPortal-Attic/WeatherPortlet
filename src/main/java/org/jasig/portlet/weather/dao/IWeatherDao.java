@@ -43,5 +43,9 @@ public interface IWeatherDao {
 	 */
 	@Cacheable(modelId="weatherSearchCacheModel")
 	public Collection<Location> find(String location);
+	
+    public String getWeatherProviderName();
+
+    public String getWeatherProviderLink();
 
 }

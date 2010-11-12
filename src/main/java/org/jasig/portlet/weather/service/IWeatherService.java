@@ -32,4 +32,9 @@ public interface IWeatherService {
 	public List<SavedLocation> getSavedLocations(PortletPreferences prefs);
     
 	public void saveLocations(List<SavedLocation> savedLocations, PortletPreferences prefs);
+	
+	public String getWeatherProviderName();
+	
+	public String getWeatherProviderLink();
+	
 }

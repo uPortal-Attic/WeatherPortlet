@@ -62,7 +62,9 @@ public class WeatherViewController {
         final Map<String, Object> model = new LinkedHashMap<String, Object>();
         model.put("weathers", weatherList);
         model.put("errors", errorList);
-		
+		model.put("serviceName", this.weatherService.getWeatherProviderName());
+		model.put("serviceUrl", this.weatherService.getWeatherProviderLink());
+        
 		//show view.jsp with a model named 'weather' populated weather data
 		return new ModelAndView("view", model);
 	}
