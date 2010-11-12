@@ -23,16 +23,16 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "/testContext.xml")
-public class WorldWideWeatherUnmarshallingTest {
+public class WorldWeatherOnlineUnmarshallingTest {
 
     @Autowired(required = true)
     private ApplicationContext applicationContext;
 
-    private WorldWideWeatherDaoImpl dao;
+    private WorldWeatherOnlineDaoImpl dao;
     
     @Before
     public void setUp() {
-        dao = new WorldWideWeatherDaoImpl();        
+        dao = new WorldWeatherOnlineDaoImpl();        
     }
     
     @Test

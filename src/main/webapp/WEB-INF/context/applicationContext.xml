@@ -41,10 +41,10 @@
     </bean>
     
     <!--  
-        worldwideweather.com Weather DAO Implementation
+        worldweatheronline.com Weather DAO Implementation
     -->
     
-    <bean id="weatherDaoImpl" class="org.jasig.portlet.weather.dao.worldwide.WorldWideWeatherDaoImpl">
+    <bean id="weatherDaoImpl" class="org.jasig.portlet.weather.dao.worldwide.WorldWeatherOnlineDaoImpl">
     	<property name="key" value="YOURKEY"/>
         <property name="weatherDataCache" ref="weatherDataCache"/>
         <property name="weatherDataErrorCache" ref="weatherDataErrorCache"/>

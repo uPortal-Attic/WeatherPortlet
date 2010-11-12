@@ -49,7 +49,7 @@ import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.dao.DataRetrievalFailureException;
 
-public class WorldWideWeatherDaoImpl implements IWeatherDao, DisposableBean, InitializingBean, CacheEntryFactory {
+public class WorldWeatherOnlineDaoImpl implements IWeatherDao, DisposableBean, InitializingBean, CacheEntryFactory {
 
     private static final String DATE_PATTERN = "yyyy-MM-dd";
     private static final String DAY_PATTERN = "EEE";
@@ -169,6 +169,7 @@ public class WorldWideWeatherDaoImpl implements IWeatherDao, DisposableBean, Ini
                 location.setStateOrCountry(locationParts[1]);
             }
             weather.setLocation(location);
+            weather.setMoreInformationLink("http://www.worldweatheronline.com/weather.aspx?q=" + QuietUrlCodec.encode(locationCode, Constants.URL_ENCODING));
         }
         catch (RuntimeException e) {
             final DataRetrievalFailureException drfe = new DataRetrievalFailureException("get weather failed for location '" + locationCode + "' and unit " + unit, e);
