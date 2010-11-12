@@ -3,11 +3,13 @@
 	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	   xmlns:ehcache="http://www.springmodules.org/schema/ehcache"
 	   xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:lang="http://www.springframework.org/schema/lang"
 	   xmlns:p="http://www.springframework.org/schema/p"
 	   xsi:schemaLocation="
 			http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
 			http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-2.5.xsd
-			http://www.springmodules.org/schema/ehcache http://www.springmodules.org/schema/cache/springmodules-ehcache.xsd">
+			http://www.springmodules.org/schema/ehcache http://www.springmodules.org/schema/cache/springmodules-ehcache.xsd
+            http://www.springframework.org/schema/lang http://www.springframework.org/schema/lang/spring-lang-2.5.xsd">
 
 	<!-- Author: Dustin Schultz | Version: $Id$ -->
 	<!-- ========================= RESOURCE DEFINITIONS ========================= -->
@@ -38,12 +40,34 @@
         <property name="cacheManager" ref="cacheManager" />
     </bean>
     
+    <!--  
+        worldwideweather.com Weather DAO Implementation
+    -->
+    
     <bean id="weatherDaoImpl" class="org.jasig.portlet.weather.dao.worldwide.WorldWideWeatherDaoImpl">
     	<property name="key" value="YOURKEY"/>
         <property name="weatherDataCache" ref="weatherDataCache"/>
         <property name="weatherDataErrorCache" ref="weatherDataErrorCache"/>
     </bean>
     
+    <!--
+        Yahoo! Weather DAO Implementation
+    -->
+    
+    <!--bean id="weatherDaoImpl" class="org.jasig.portlet.weather.dao.yahoo.YahooWeatherDaoImpl">
+        <property name="key" value="YOURKEY"/>
+        <property name="weatherParsingService" ref="weatherParsingService"/>
+        <property name="locationParsingService" ref="locationParsingService"/>
+        <property name="weatherDataCache" ref="weatherDataCache"/>
+        <property name="weatherDataErrorCache" ref="weatherDataErrorCache"/>
+    </bean>
+    
+    <lang:groovy id="weatherParsingService"
+        script-source="classpath:org/jasig/portlet/weather/dao/yahoo/YahooWeatherParsingServiceImpl.groovy"/>
+
+    <lang:groovy id="locationParsingService"
+        script-source="classpath:org/jasig/portlet/weather/dao/yahoo/YahooLocationParsingServiceImpl.groovy"/-->
+            
 	
 	<!-- messages.propreties Configuration -->
 	<bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">

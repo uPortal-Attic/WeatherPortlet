@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<rss version="2.0" xmlns:yweather="http://xml.weather.yahoo.com/ns/rss/1.0"
+    xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#">
+    <channel>
+
+        <title>Yahoo! Weather - Sunnyvale, CA</title>
+        <link>http://us.rd.yahoo.com/dailynews/rss/weather/Sunnyvale__CA/*http://weather.yahoo.com/forecast/USCA1116_f.html</link>
+        <description>Yahoo! Weather for Sunnyvale, CA</description>
+        <language>en-us</language>
+        <lastBuildDate>Wed, 10 Nov 2010 8:56 am PST</lastBuildDate>
+        <ttl>60</ttl>
+
+        <yweather:location city="Sunnyvale" region="CA"
+            country="United States" />
+        <yweather:units temperature="F" distance="mi"
+            pressure="in" speed="mph" />
+        <yweather:wind chill="56" direction="290" speed="3" />
+        <yweather:atmosphere humidity="75"
+            visibility="10" pressure="30.11" rising="1" />
+        <yweather:astronomy sunrise="6:42 am" sunset="5:01 pm" />
+        <image>
+            <title>Yahoo! Weather</title>
+            <width>142</width>
+            <height>18</height>
+            <link>http://weather.yahoo.com</link>
+            <url>http://l.yimg.com/a/i/brand/purplelogo//uh/us/news-wea.gif</url>
+        </image>
+
+        <item>
+            <title>Conditions for Sunnyvale, CA at 8:56 am PST</title>
+            <geo:lat>37.37</geo:lat>
+            <geo:long>-122.04</geo:long>
+            <link>http://us.rd.yahoo.com/dailynews/rss/weather/Sunnyvale__CA/*http://weather.yahoo.com/forecast/USCA1116_f.html</link>
+            <pubDate>Wed, 10 Nov 2010 8:56 am PST</pubDate>
+            <yweather:condition text="Fair" code="34"
+                temp="56" date="Wed, 10 Nov 2010 8:56 am PST" />
+            <description><![CDATA[
+<img src="http://l.yimg.com/a/i/us/we/52/34.gif"/><br />
+<b>Current Conditions:</b><br />
+Fair, 56 F<BR />
+<BR /><b>Forecast:</b><BR />
+Wed - Partly Cloudy. High: 62 Low: 45<br />
+Thu - Sunny. High: 67 Low: 43<br />
+<br />
+<a href="http://us.rd.yahoo.com/dailynews/rss/weather/Sunnyvale__CA/*http://weather.yahoo.com/forecast/USCA1116_f.html">Full Forecast at Yahoo! Weather</a><BR/><BR/>
+(provided by <a href="http://www.weather.com" >The Weather Channel</a>)<br/>
+]]></description>
+            <yweather:forecast day="Wed" date="10 Nov 2010"
+                low="45" high="62" text="Partly Cloudy" code="30" />
+            <yweather:forecast day="Thu" date="11 Nov 2010"
+                low="43" high="67" text="Sunny" code="32" />
+            <guid isPermaLink="false">USCA1116_2010_11_10_8_56_PST</guid>
+
+        </item>
+    </channel>
+</rss>
+    <!--
+        api1.weather.sp2.yahoo.com compressed/chunked Wed Nov 10
+        09:54:59 PST 2010
+    -->
