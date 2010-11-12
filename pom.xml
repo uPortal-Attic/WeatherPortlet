@@ -2,9 +2,9 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<!-- Author: Dustin Schultz | Version: $Id$ -->
     <parent>
-        <groupId>org.jasig</groupId>
+        <groupId>org.jasig.parent</groupId>
         <artifactId>jasig-parent</artifactId>
-        <version>12</version>
+        <version>21</version>
     </parent>
 
 	<modelVersion>4.0.0</modelVersion>
@@ -18,9 +18,9 @@
     <url>${jasig-site-base}/WeatherPortlet/${project.version}</url>
 
     <scm>
-        <connection>scm:svn:https://www.ja-sig.org/svn/sandbox/WeatherPortlet/trunk</connection>
-        <developerConnection>scm:svn:https://www.ja-sig.org/svn/sandbox/WeatherPortlet/trunk</developerConnection>
-        <url>http://developer.jasig.org/source/browse/jasigsvn/sandbox/WeatherPortlet/trunk</url>
+        <connection>scm:svn:https://source.jasig.org/svn/portlets/WeatherPortlet/trunk</connection>
+        <developerConnection>scm:svn:https://source.jasig.org/svn/portlets/WeatherPortlet/trunk</developerConnection>
+        <url>http://developer.jasig.org/source/browse/jasigsvn/portlets/WeatherPortlet/trunk</url>
     </scm>
     
     <distributionManagement>
@@ -38,13 +38,6 @@
 	<properties>
          <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
-	<repositories>
-        <repository>
-            <id>jasig-m2</id>
-            <name>JASIG Maven2 Repository</name>
-            <url>http://developer.jasig.org/repo/content/repositories/m2</url>
-        </repository>
-	</repositories>
 	<build>
         <finalName>WeatherPortlet</finalName>
 		<plugins>
