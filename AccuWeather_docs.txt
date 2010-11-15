@@ -1,2 +1,0 @@
-Documentation for the AccuWeather service is available here:
-http://uport.accu-weather.com/widget/uport/readme.asp

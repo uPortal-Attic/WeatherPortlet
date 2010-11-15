@@ -4,7 +4,7 @@
     <parent>
         <groupId>org.jasig.parent</groupId>
         <artifactId>jasig-parent</artifactId>
-        <version>21</version>
+        <version>27</version>
     </parent>
 
 	<modelVersion>4.0.0</modelVersion>
@@ -26,7 +26,7 @@
     <distributionManagement>
         <site>
             <id>developer.jasig</id>
-            <url>${jasig-site-dist-base}/WeatherPortlet/${project.version}</url>
+            <url>${jasig-site-dist-base}/${project.artifactId}/${project.version}</url>
         </site>
     </distributionManagement>
     
@@ -37,6 +37,8 @@
     
 	<properties>
          <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+         <jaxbApiVersion>2.2.1</jaxbApiVersion>
+         <jaxbImplVersion>2.2.1.1</jaxbImplVersion>
 	</properties>
 	<build>
         <finalName>WeatherPortlet</finalName>
@@ -143,6 +145,11 @@
                 <groupId>javax.servlet</groupId>
                 <artifactId>servlet-api</artifactId>
                 <version>2.4</version>
+            </dependency>  
+            <dependency>
+                <groupId>javax.servlet.jsp</groupId>
+                <artifactId>jsp-api</artifactId>
+                <version>2.1</version>
             </dependency>
             <dependency>
                 <groupId>junit</groupId>
@@ -362,7 +369,7 @@
                 <groupId>taglibs</groupId>
                 <artifactId>standard</artifactId>
                 <version>1.1.2</version>
-            </dependency>   
+            </dependency> 
         </dependencies>
     </dependencyManagement>
     
@@ -452,6 +459,11 @@
 	        <groupId>javax.servlet</groupId>
 	        <artifactId>servlet-api</artifactId>
 	        <scope>provided</scope>
+        </dependency>  
+        <dependency>
+            <groupId>javax.servlet.jsp</groupId>
+            <artifactId>jsp-api</artifactId>
+            <scope>provided</scope>
         </dependency>
 	    <dependency>
             <groupId>taglibs</groupId>
@@ -509,4 +521,35 @@
             <artifactId>groovy-all</artifactId>
         </dependency>
 	</dependencies>
+    
+
+    <profiles>
+        <profile>
+            <id>ci-local-site</id>
+            <distributionManagement>
+                <site>
+                    <id>ci-local-site</id>
+                    <url>${jasig-site-ci-dist-base}${project-site-path}</url>
+                </site>
+            </distributionManagement>
+        </profile>
+        <profile>
+            <id>jaxb</id>
+            <activation>
+                <jdk>1.5</jdk>
+            </activation>
+            <dependencies>
+                <dependency>
+                    <groupId>javax.xml.bind</groupId>
+                    <artifactId>jaxb-api</artifactId>
+                    <version>${jaxbApiVersion}</version>
+                </dependency>
+                <dependency>
+                    <groupId>com.sun.xml.bind</groupId>
+                    <artifactId>jaxb-impl</artifactId>
+                    <version>${jaxbImplVersion}</version>
+                </dependency>
+            </dependencies>
+        </profile>
+    </profiles>
 </project>
