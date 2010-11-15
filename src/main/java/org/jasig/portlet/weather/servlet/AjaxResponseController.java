@@ -34,7 +34,7 @@ public class AjaxResponseController {
     
     @RequestMapping("/json")
     public ModelAndView renderAjaxResponse(HttpServletRequest request, HttpServletResponse response) throws ServletRequestBindingException, IOException {
-        final Map<Object, Object> model = this.ajaxPortletSupport.getAjaxModel(request, response);
+        final Map<String, ?> model = this.ajaxPortletSupport.getAjaxModel(request, response);
         return new ModelAndView("jsonView", model);
     }
 }

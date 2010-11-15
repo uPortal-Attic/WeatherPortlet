@@ -9,18 +9,12 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Properties;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
-
-import net.sf.ehcache.Ehcache;
-import net.sf.ehcache.Element;
-import net.sf.ehcache.constructs.blocking.CacheEntryFactory;
 
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpConnectionManager;
@@ -36,8 +30,8 @@ import org.apache.commons.httpclient.params.HttpMethodParams;
 import org.apache.commons.io.IOUtils;
 import org.jasig.portlet.weather.QuietUrlCodec;
 import org.jasig.portlet.weather.TemperatureUnit;
+import org.jasig.portlet.weather.dao.Constants;
 import org.jasig.portlet.weather.dao.IWeatherDao;
-import org.jasig.portlet.weather.dao.accuweather.constants.Constants;
 import org.jasig.portlet.weather.dao.worldwide.xml.LocationResult;
 import org.jasig.portlet.weather.dao.worldwide.xml.SearchData;
 import org.jasig.portlet.weather.dao.worldwide.xml.WeatherData;
@@ -51,7 +45,7 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.core.io.Resource;
 import org.springframework.dao.DataRetrievalFailureException;
 
-public class WorldWeatherOnlineDaoImpl implements IWeatherDao, DisposableBean, InitializingBean, CacheEntryFactory {
+public class WorldWeatherOnlineDaoImpl implements IWeatherDao, DisposableBean, InitializingBean {
 
     private static final String DATE_PATTERN = "yyyy-MM-dd";
     private static final String DAY_PATTERN = "EEE";
@@ -68,9 +62,6 @@ public class WorldWeatherOnlineDaoImpl implements IWeatherDao, DisposableBean, I
     //Define the HttpClient here and pass it so we only define one instance
     private final HttpClient httpClient = new HttpClient(connectionManager);
     
-    private Ehcache weatherDataCache;
-    private Ehcache weatherDataErrorCache;
-
     //Default timeout of 5 seconds
     private int connectionTimeout = 5000;
     
@@ -93,14 +84,6 @@ public class WorldWeatherOnlineDaoImpl implements IWeatherDao, DisposableBean, I
         this.timesToRetry = timesToRetry;
     }
     
-    public void setWeatherDataCache(Ehcache ehcache) {
-        this.weatherDataCache = ehcache;
-    }
-
-    public void setWeatherDataErrorCache(Ehcache weatherDataErrorCache) {
-        this.weatherDataErrorCache = weatherDataErrorCache;
-    }
-
     public void setKey(String key) {
         this.key = key;
     }
@@ -162,44 +145,6 @@ public class WorldWeatherOnlineDaoImpl implements IWeatherDao, DisposableBean, I
     public void destroy() throws Exception {
         this.connectionManager.shutdown();
     }
-    
-    /* (non-Javadoc)
-     * @see net.sf.ehcache.constructs.blocking.CacheEntryFactory#createEntry(java.lang.Object)
-     */
-    @SuppressWarnings("unchecked")
-    public Object createEntry(Object o) throws Exception {
-        final Map<String, Object> key = (Map<String, Object>)o;
-        this.checkCachedException(key);
-        
-        final String locationCode = (String)key.get("locationCode");
-        final TemperatureUnit unit = (TemperatureUnit)key.get("unit");
-        
-        final String worldwideweatherUrl = WEATHER_URL.replace("@KEY@", this.key).replace("@LOCATION@", QuietUrlCodec.encode(locationCode, Constants.URL_ENCODING));
-
-        Weather weather = null;
-        try {
-            weather = (Weather)this.getAndDeserialize(worldwideweatherUrl, unit);
-            String[] locationParts = locationCode.split(", ");
-            Location location = new Location();
-            location.setCity(locationParts[0]);
-            if (locationParts.length > 1){
-                location.setStateOrCountry(locationParts[1]);
-            }
-            weather.setLocation(location);
-            weather.setMoreInformationLink("http://www.worldweatheronline.com/weather.aspx?q=" + QuietUrlCodec.encode(locationCode, Constants.URL_ENCODING));
-        }
-        catch (RuntimeException e) {
-            final DataRetrievalFailureException drfe = new DataRetrievalFailureException("get weather failed for location '" + locationCode + "' and unit " + unit, e);
-            
-            //Cache the exception to avoid retrying a 'bad' data feed too frequently
-            final Element element = new Element(key, drfe);
-            this.weatherDataErrorCache.put(element);
-            
-            throw drfe;
-        }
-
-        return weather;
-    }
 
     /*
      * (non-Javadoc)
@@ -243,13 +188,19 @@ public class WorldWeatherOnlineDaoImpl implements IWeatherDao, DisposableBean, I
      * @see org.jasig.portlet.weather.dao.IWeatherDao#getWeather(java.lang.String, org.jasig.portlet.weather.TemperatureUnit)
      */
     public Weather getWeather(String locationCode, TemperatureUnit unit) {
-        final Map<String, Object> key = new LinkedHashMap<String, Object>();
-        key.put("locationCode", locationCode);
-        key.put("unit", unit);
-        this.checkCachedException(key);
-        
-        final Element element = this.weatherDataCache.get(key);
-        return (Weather)element.getValue();
+        final String worldwideweatherUrl = WEATHER_URL.replace("@KEY@", this.key).replace("@LOCATION@", QuietUrlCodec.encode(locationCode, Constants.URL_ENCODING));
+
+        Weather weather = (Weather)this.getAndDeserialize(worldwideweatherUrl, unit);
+        String[] locationParts = locationCode.split(", ");
+        Location location = new Location();
+        location.setCity(locationParts[0]);
+        if (locationParts.length > 1){
+            location.setStateOrCountry(locationParts[1]);
+        }
+        weather.setLocation(location);
+        weather.setMoreInformationLink("http://www.worldweatheronline.com/weather.aspx?q=" + QuietUrlCodec.encode(locationCode, Constants.URL_ENCODING));
+
+        return weather;
     }
 
     public String getWeatherProviderName() {
@@ -258,13 +209,6 @@ public class WorldWeatherOnlineDaoImpl implements IWeatherDao, DisposableBean, I
 
     public String getWeatherProviderLink() {
         return "http://www.worldweatheronline.com/";
-    }
-
-    protected void checkCachedException(final Map<String, Object> key) {
-        final Element errorElement = this.weatherDataErrorCache.get(key);
-        if (errorElement != null && !errorElement.isExpired()) {
-            throw (RuntimeException)errorElement.getValue();
-        }
     }
     
     protected Object getAndDeserialize(String url, TemperatureUnit unit) {

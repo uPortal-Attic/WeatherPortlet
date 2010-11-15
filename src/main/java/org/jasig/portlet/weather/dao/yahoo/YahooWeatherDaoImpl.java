@@ -5,13 +5,7 @@ import java.io.InputStream;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.util.Collection;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
-
-import net.sf.ehcache.Ehcache;
-import net.sf.ehcache.Element;
-import net.sf.ehcache.constructs.blocking.CacheEntryFactory;
 
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpConnectionManager;
@@ -27,15 +21,15 @@ import org.apache.commons.httpclient.params.HttpMethodParams;
 import org.apache.commons.io.IOUtils;
 import org.jasig.portlet.weather.QuietUrlCodec;
 import org.jasig.portlet.weather.TemperatureUnit;
+import org.jasig.portlet.weather.dao.Constants;
 import org.jasig.portlet.weather.dao.IWeatherDao;
-import org.jasig.portlet.weather.dao.accuweather.constants.Constants;
 import org.jasig.portlet.weather.domain.Location;
 import org.jasig.portlet.weather.domain.Weather;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.dao.DataRetrievalFailureException;
 
-public class YahooWeatherDaoImpl implements IWeatherDao, DisposableBean, InitializingBean, CacheEntryFactory {
+public class YahooWeatherDaoImpl implements IWeatherDao, DisposableBean, InitializingBean {
 
     private static final String FIND_URL = "http://where.yahooapis.com/v1/places.q(@QUERY@);count=10?appid=@KEY@";
     private static final String WEATHER_URL = "http://weather.yahooapis.com/forecastrss?w=@LOCATION@&u=@UNIT@";
@@ -64,9 +58,6 @@ public class YahooWeatherDaoImpl implements IWeatherDao, DisposableBean, Initial
     //Define the HttpClient here and pass it so we only define one instance
     private final HttpClient httpClient = new HttpClient(connectionManager);
     
-    private Ehcache weatherDataCache;
-    private Ehcache weatherDataErrorCache;
-
     //Default timeout of 5 seconds
     private int connectionTimeout = 5000;
     
@@ -89,14 +80,6 @@ public class YahooWeatherDaoImpl implements IWeatherDao, DisposableBean, Initial
         this.timesToRetry = timesToRetry;
     }
     
-    public void setWeatherDataCache(Ehcache ehcache) {
-        this.weatherDataCache = ehcache;
-    }
-
-    public void setWeatherDataErrorCache(Ehcache weatherDataErrorCache) {
-        this.weatherDataErrorCache = weatherDataErrorCache;
-    }
-
     /* (non-Javadoc)
      * @see org.springframework.beans.factory.InitializingBean#afterPropertiesSet()
      */
@@ -141,36 +124,6 @@ public class YahooWeatherDaoImpl implements IWeatherDao, DisposableBean, Initial
     public void destroy() throws Exception {
         this.connectionManager.shutdown();
     }
-    
-    /* (non-Javadoc)
-     * @see net.sf.ehcache.constructs.blocking.CacheEntryFactory#createEntry(java.lang.Object)
-     */
-    @SuppressWarnings("unchecked")
-    public Object createEntry(Object o) throws Exception {
-        final Map<String, Object> key = (Map<String, Object>)o;
-        this.checkCachedException(key);
-        
-        final String locationCode = (String)key.get("locationCode");
-        final TemperatureUnit unit = (TemperatureUnit)key.get("unit");
-        
-        final String yahooweatherUrl = WEATHER_URL.replace("@LOCATION@", QuietUrlCodec.encode(locationCode, Constants.URL_ENCODING)).replace("@UNIT", (TemperatureUnit.C.equals(unit) ? "c" : "f"));
-
-        Weather weather = null;
-        try {
-            weather = (Weather)this.getAndDeserialize(yahooweatherUrl);
-        }
-        catch (RuntimeException e) {
-            final DataRetrievalFailureException drfe = new DataRetrievalFailureException("get weather failed for location '" + locationCode + "' and unit " + unit, e);
-            
-            //Cache the exception to avoid retrying a 'bad' data feed too frequently
-            final Element element = new Element(key, drfe);
-            this.weatherDataErrorCache.put(element);
-            
-            throw drfe;
-        }
-
-        return weather;
-    }
 
     /*
      * (non-Javadoc)
@@ -212,13 +165,9 @@ public class YahooWeatherDaoImpl implements IWeatherDao, DisposableBean, Initial
      * @see org.jasig.portlet.weather.dao.IWeatherDao#getWeather(java.lang.String, org.jasig.portlet.weather.TemperatureUnit)
      */
     public Weather getWeather(String locationCode, TemperatureUnit unit) {
-        final Map<String, Object> key = new LinkedHashMap<String, Object>();
-        key.put("locationCode", locationCode);
-        key.put("unit", unit);
-        this.checkCachedException(key);
-        
-        final Element element = this.weatherDataCache.get(key);
-        return (Weather)element.getValue();
+        final String yahooweatherUrl = WEATHER_URL.replace("@LOCATION@", QuietUrlCodec.encode(locationCode, Constants.URL_ENCODING)).replace("@UNIT", (TemperatureUnit.C.equals(unit) ? "c" : "f"));
+
+        return (Weather)this.getAndDeserialize(yahooweatherUrl);
     }
 
     public String getWeatherProviderName() {
@@ -227,13 +176,6 @@ public class YahooWeatherDaoImpl implements IWeatherDao, DisposableBean, Initial
 
     public String getWeatherProviderLink() {
         return "http://weather.yahoo.com";
-    }
-
-    protected void checkCachedException(final Map<String, Object> key) {
-        final Element errorElement = this.weatherDataErrorCache.get(key);
-        if (errorElement != null && !errorElement.isExpired()) {
-            throw (RuntimeException)errorElement.getValue();
-        }
     }
     
     protected Object getAndDeserialize(String url) {

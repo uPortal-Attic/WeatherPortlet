@@ -6,7 +6,6 @@
 package org.jasig.portlet.weather.portlet;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -69,7 +68,7 @@ public class WeatherEditController {
             ActionRequest request, ActionResponse response) throws Exception {
         PortletPreferences prefs = request.getPreferences();
         
-        Map<Object, Object> model = new HashMap<Object, Object>();
+        Map<String, Object> model = new LinkedHashMap<String, Object>();
         
         // validate the submitted data
         if (!StringUtils.hasText(location) || !StringUtils.hasLength(locationCode)) {
@@ -97,7 +96,7 @@ public class WeatherEditController {
             @RequestParam(value = "locationCodes") String locationCodes[],
             ActionRequest request, ActionResponse response) throws Exception {
 
-	    final Map<Object, Object> model = new HashMap<Object, Object>();
+	    Map<String, Object> model = new LinkedHashMap<String, Object>();
         
 	    
 	    final PortletPreferences prefs = request.getPreferences();
@@ -132,7 +131,7 @@ public class WeatherEditController {
             @RequestParam(value = "unit") TemperatureUnit unit,
             ActionRequest request, ActionResponse response) throws Exception {
         
-        final Map<Object, Object> model = new HashMap<Object, Object>();
+        Map<String, Object> model = new LinkedHashMap<String, Object>();
         
         final PortletPreferences prefs = request.getPreferences();
         final List<SavedLocation> savedLocations = this.weatherService.getSavedLocations(prefs);
@@ -160,7 +159,7 @@ public class WeatherEditController {
     public void deleteCity(
             @RequestParam(value = "locationCode") String locationCode,
             ActionRequest request, ActionResponse response) throws Exception {
-        Map<Object, Object> model = new HashMap<Object, Object>();
+	    Map<String, Object> model = new LinkedHashMap<String, Object>();
 
         final PortletPreferences prefs = request.getPreferences();
         this.weatherService.deleteWeatherLocation(prefs, locationCode);

@@ -10,7 +10,8 @@ import java.util.Collection;
 import org.jasig.portlet.weather.TemperatureUnit;
 import org.jasig.portlet.weather.domain.Location;
 import org.jasig.portlet.weather.domain.Weather;
-import org.springmodules.cache.annotations.Cacheable;
+
+import com.googlecode.ehcache.annotations.Cacheable;
 
 /**
  * Weather data access interface. Implement this interface to retrieve weather
@@ -32,7 +33,10 @@ public interface IWeatherDao {
 	 * @return A Weather object representing the current weather and an optional
 	 *         forecast.
 	 */
-//	@Cacheable(modelId="weatherDataCacheModel")
+	@Cacheable(
+	        cacheName="weatherDataCache", 
+	        exceptionCacheName="weatherDataErrorCache", 
+	        selfPopulating=true)
 	public Weather getWeather(String locationCode, TemperatureUnit unit);
 
 	/**
@@ -41,7 +45,10 @@ public interface IWeatherDao {
 	 * @return A collection of locations representing the possible location or
 	 *         an empty or null collection representing location not found.
 	 */
-	@Cacheable(modelId="weatherSearchCacheModel")
+	@Cacheable(
+	        cacheName="weatherSearchCache", 
+            exceptionCacheName="weatherSearchErrorCache", 
+            selfPopulating=true)
 	public Collection<Location> find(String location);
 	
     public String getWeatherProviderName();

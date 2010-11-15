@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:noNamespaceSchemaLocation="http://ehcache.svn.sourceforge.net/viewvc/ehcache/tags/ehcache-core-1.6.2/core/src/main/config/ehcache.xsd">
+    xsi:noNamespaceSchemaLocation="http://ehcache.org/ehcache.xsd" updateCheck="false">
     
     <diskStore path="java.io.tmpdir/WeatherPortlet" />
 
@@ -15,11 +15,11 @@
         overflowToDisk="false"
         memoryStoreEvictionPolicy="LRU"/>
         
-    <!-- 30 second cache on weather data retrieval errors -->
+    <!-- 1 minute cache on weather data retrieval errors -->
     <cache name="weatherDataErrorCache"
         maxElementsInMemory="10000"
         eternal="false"
-        timeToLiveSeconds="30" 
+        timeToLiveSeconds="60" 
         overflowToDisk="false"
         memoryStoreEvictionPolicy="LRU"/>
         
@@ -28,6 +28,14 @@
         maxElementsInMemory="1000"
         eternal="false"
         timeToLiveSeconds="21600" 
+        overflowToDisk="false"
+        memoryStoreEvictionPolicy="LRU"/>
+        
+    <!-- 1 minute cache on weather search errors -->
+    <cache name="weatherSearchErrorCache"
+        maxElementsInMemory="10000"
+        eternal="false"
+        timeToLiveSeconds="60" 
         overflowToDisk="false"
         memoryStoreEvictionPolicy="LRU"/>
 </ehcache>
