@@ -18,8 +18,8 @@
     <url>${jasig-site-base}/WeatherPortlet/${project.version}</url>
 
     <scm>
-        <connection>scm:svn:https://source.jasig.org/svn/portlets/WeatherPortlet/trunk</connection>
-        <developerConnection>scm:svn:https://source.jasig.org/svn/portlets/WeatherPortlet/trunk</developerConnection>
+        <connection>scm:svn:https://source.jasig.org/portlets/WeatherPortlet/trunk</connection>
+        <developerConnection>scm:svn:https://source.jasig.org/portlets/WeatherPortlet/trunk</developerConnection>
         <url>http://developer.jasig.org/source/browse/jasigsvn/portlets/WeatherPortlet/trunk</url>
     </scm>
     
