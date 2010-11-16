@@ -28,19 +28,19 @@
     <defaultCache eternal="false" maxElementsInMemory="1000" overflowToDisk="false" diskPersistent="false" 
         timeToIdleSeconds="0" timeToLiveSeconds="600" memoryStoreEvictionPolicy="LRU" />
 
-	<!-- 15 minute cache on weather data -->
+	<!-- 90 minute cache on weather data -->
     <cache name="weatherDataCache"
         maxElementsInMemory="10000"
         eternal="false"
-        timeToLiveSeconds="900" 
+        timeToLiveSeconds="5400" 
         overflowToDisk="false"
         memoryStoreEvictionPolicy="LRU"/>
         
-    <!-- 1 minute cache on weather data retrieval errors -->
+    <!-- 15 minute cache on weather data retrieval errors -->
     <cache name="weatherDataErrorCache"
         maxElementsInMemory="10000"
         eternal="false"
-        timeToLiveSeconds="60" 
+        timeToLiveSeconds="900" 
         overflowToDisk="false"
         memoryStoreEvictionPolicy="LRU"/>
         
@@ -52,11 +52,11 @@
         overflowToDisk="false"
         memoryStoreEvictionPolicy="LRU"/>
         
-    <!-- 1 minute cache on weather search errors -->
+    <!-- 15 minute cache on weather search errors -->
     <cache name="weatherSearchErrorCache"
         maxElementsInMemory="10000"
         eternal="false"
-        timeToLiveSeconds="60" 
+        timeToLiveSeconds="900" 
         overflowToDisk="false"
         memoryStoreEvictionPolicy="LRU"/>
 </ehcache>
