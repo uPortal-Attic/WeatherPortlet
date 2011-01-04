@@ -56,7 +56,7 @@
 								<spring:message code="view.currently"/><br/>
                                 <c:choose>
                                     <c:when test="${ not empty current.imgUrl }">
-                                        <img src="${ current.imgUrl }"/><br/>
+                                        <img src="${ current.imgUrl }" alt="${current.condition}" title="${current.condition}"/><br/>
                                     </c:when>
                                     <c:otherwise>
                                         <img width="${currW}" height="${currH}" src="${context}/${currImgPath}/${current.imgName}${currExt}" alt="${current.condition}" title="${current.condition}"/><br/>
@@ -107,7 +107,7 @@
 									<spring:message var="forecastExt" code="forecast.condition.img.extension"/>
                                     <c:choose>
                                         <c:when test="${ not empty forecast.imgUrl }">
-                                            <img src="${ forecast.imgUrl }"/><br/>
+                                            <img src="${ forecast.imgUrl }" alt="${forecast.condition}" title="${forecast.condition}"/><br/>
                                         </c:when>
                                         <c:otherwise>
                                             <img width="${forecastW}" height="${forecastH}" src="${context}/${forecastImgPath}/${forecast.imgName}${forecastExt}" alt="${forecast.condition}" title="${forecast.condition}"/><br/>
