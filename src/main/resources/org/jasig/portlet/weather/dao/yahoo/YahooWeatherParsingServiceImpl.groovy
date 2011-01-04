@@ -58,7 +58,7 @@ class YahooWeatherParsingServiceImpl implements IYahooWeatherParsingService {
         def list = new ArrayList()
         for (f in rss.channel.item.forecast) {
             def forecast = new Forecast()
-            forecast.setDay(forecast.getDay())
+            forecast.setDay(f.@day.toString())
             forecast.setHighTemperature(f.@high.toInteger())
             forecast.setLowTemperature(f.@low.toInteger())
             forecast.setCondition(f.@text.toString())
