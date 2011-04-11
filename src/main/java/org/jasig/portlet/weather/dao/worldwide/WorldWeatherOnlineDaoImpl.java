@@ -64,13 +64,18 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.core.io.Resource;
 import org.springframework.dao.DataRetrievalFailureException;
 
+/* ****
+Note that requests to World Weather Online's web services go to free.worldweatheronline.com,
+but links to their pages go to their www.worldweatheronline.com site.
+**** */
+
 public class WorldWeatherOnlineDaoImpl implements IWeatherDao, DisposableBean, InitializingBean {
 
     private static final String DATE_PATTERN = "yyyy-MM-dd";
     private static final String DAY_PATTERN = "EEE";
     
-    private static final String FIND_URL = "http://www.worldweatheronline.com/feed/search.ashx?key=@KEY@&query=@QUERY@&num_of_results=3&format=xml";
-    private static final String WEATHER_URL = "http://www.worldweatheronline.com/feed/weather.ashx?key=@KEY@&num_of_days=3&format=xml&q=@LOCATION@";
+    private static final String FIND_URL = "http://free.worldweatheronline.com/feed/search.ashx?key=@KEY@&query=@QUERY@&num_of_results=3&format=xml";
+    private static final String WEATHER_URL = "http://free.worldweatheronline.com/feed/weather.ashx?key=@KEY@&num_of_days=3&format=xml&q=@LOCATION@";
     private String key = null;
 
     private Properties imageMapping;
