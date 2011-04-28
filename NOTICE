@@ -20,7 +20,7 @@ This project includes:
   ant-launcher under Apache License, Version 2.0
   AOP alliance under Public Domain
   Apache Log4j under The Apache Software License, Version 2.0
-  Commons Codec under The Apache Software License, Version 2.0
+  Commons Codec under Apache License, Version 2.0
   Commons Collections under Apache License, Version 2.0
   Commons IO under The Apache Software License, Version 2.0
   Commons Lang under The Apache Software License, Version 2.0
@@ -31,7 +31,6 @@ This project includes:
   Ehcache Spring Annotations under Apache 2
   ezmorph under The Apache Software License, Version 2.0
   Groovy under Apache License, Version 2.0
-  groovy-engine under BSD License
   HttpClient under Apache License
   JLine under BSD
   json-lib under The Apache Software License, Version 2.0
