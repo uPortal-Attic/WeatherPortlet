@@ -78,6 +78,9 @@ public class WeatherViewController {
         model.put("errors", errorList);
 		model.put("serviceName", this.weatherService.getWeatherProviderName());
 		model.put("serviceUrl", this.weatherService.getWeatherProviderLink());
+
+        // indicate if the current user is a guest (unauthenticated) user
+        model.put( "isGuest", request.getRemoteUser() == null || request.getRemoteUser().equalsIgnoreCase( "guest" ) );
         
 		//show view.jsp with a model named 'weather' populated weather data
 		return new ModelAndView("view", model);

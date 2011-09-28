@@ -141,7 +141,7 @@
     				${providedBy}
     			</div>
     		</c:if>
-            <c:if test="${showEditLink}">
+            <c:if test="${showEditLink == true && isGuest == false}">
                 <div class="edit-link">
                     <portlet:renderURL var="editUrl"  portletMode="EDIT" windowState="MAXIMIZED" />
                     <a href="${editUrl}"><spring:message code="view.edit-link"/></a>
