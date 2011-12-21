@@ -32,4 +32,8 @@
     <context:annotation-config/>
     <context:component-scan base-package="org.jasig.portlet.weather.portlet"/>
 
+    <bean class="org.springframework.web.portlet.mvc.annotation.DefaultAnnotationHandlerMapping">
+        <property name="interceptors"><bean class="org.jasig.portlet.weather.portlet.interceptor.MinimizedStateHandlerInterceptor"/></property>
+    </bean>
+
 </beans>
