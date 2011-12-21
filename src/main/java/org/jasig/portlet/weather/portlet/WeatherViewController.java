@@ -54,6 +54,13 @@ public class WeatherViewController {
     public void setWeatherService(IWeatherService weatherService) {
         this.weatherService = weatherService;
     }
+    
+    private IViewSelector viewSelector;
+    
+    @Autowired
+    public void setViewSelector(IViewSelector viewSelector) {
+        this.viewSelector = viewSelector;
+    }
 
     @RequestMapping("VIEW")
 	public ModelAndView viewWeather(RenderRequest request, RenderResponse response) {
@@ -82,7 +89,10 @@ public class WeatherViewController {
         // indicate if the current user is a guest (unauthenticated) user
         model.put( "isGuest", request.getRemoteUser() == null || request.getRemoteUser().equalsIgnoreCase( "guest" ) );
         
+        String extension = viewSelector.getViewNameExtension(request);
+        String viewName = "view".concat(extension);
+        
 		//show view.jsp with a model named 'weather' populated weather data
-		return new ModelAndView("view", model);
+		return new ModelAndView(viewName, model);
 	}
 }
