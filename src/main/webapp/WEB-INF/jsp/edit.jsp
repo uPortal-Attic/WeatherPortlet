@@ -88,7 +88,7 @@
 	        <p><label class="portlet-form-label"><spring:message code="edit.enter.location"/>:</label></p>
 	        <input name="location" class="portlet-form-input-field"/>
 	        <spring:message var="search" code="edit.search.button"/>
-	        <input type="submit" name="submit" value="submit" class="portlet-form-button"/>
+	        <input type="submit" name="submit" value="${search}" class="portlet-form-button"/>
             <button class="portlet-form-button weather-search-form-cancel"><spring:message code="edit.cancel.search.button"/></button>
         </form>
         <p class="search-message" style="display:none"><spring:message code="edit.search.loading"/></p>
