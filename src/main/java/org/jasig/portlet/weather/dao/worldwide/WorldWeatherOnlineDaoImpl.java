@@ -324,8 +324,8 @@ public class WorldWeatherOnlineDaoImpl implements IWeatherDao, DisposableBean, I
             
             switch (unit) {
                 case C:
-                    forecast.setHighTemperature(f.getTempMaxF());
-                    forecast.setLowTemperature(f.getTempMinF());
+                    forecast.setHighTemperature(f.getTempMaxC());
+                    forecast.setLowTemperature(f.getTempMinC());
                     break;
                 default:
                     forecast.setHighTemperature(f.getTempMaxF());
