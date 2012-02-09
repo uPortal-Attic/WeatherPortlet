@@ -116,17 +116,17 @@
     </div>
     <div class="locations">
     
-        <h2>Edit Weather Locations</h2>
+        <h2><spring:message code="edit.locations.title"/></h2>
     
         <p><spring:message code="edit.saved.locations.title"/></p>
         <form id="${n}editLocationForm">
         <table id="${n}savedLocationsTable">
             <thead>
 	            <tr>
-                    <th>Order</th>
-	                <th>Location</th>
-	                <th>Measurement</th>
-	                <th>Delete</th>
+                    <th><spring:message code="edit.saved.locations.column.order"/></th>
+                    <th><spring:message code="edit.saved.locations.column.location"/></th>
+                    <th><spring:message code="edit.saved.locations.column.measurement"/></th>
+                    <th><spring:message code="edit.saved.locations.column.delete"/></th>
 	            </tr>
             </thead>
             <tbody>
