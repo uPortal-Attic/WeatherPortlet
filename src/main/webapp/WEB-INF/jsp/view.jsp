@@ -27,7 +27,7 @@
 	<c:when test="${empty weathers}">
 		<p><spring:message code="view.location.notset"/></p>
         <div class="edit-link">
-            <portlet:renderURL var="editUrl"  portletMode="EDIT" windowState="MAXIMIZED" />
+            <portlet:renderURL var="editUrl"  portletMode="EDIT" />
             <a href="${editUrl}"><spring:message code="view.edit-link"/></a>
         </div>
 	</c:when>
