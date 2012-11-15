@@ -43,6 +43,8 @@ var weatherPortlet = weatherPortlet || {};
             locationList: '.locations',
             locationSearchForm: '.locate-search-form',
             locationSearchMessage: '.search-message',
+            locationSearchError: '#location-search-error',
+            locationSearchErrorMessage: '#location-search-error .error-text',
             cancelSearchLink: '.weather-search-form-cancel',
             searchResults: '.search-results',
             searchResultsForm: '.search-results .select-location-form',
@@ -54,25 +56,25 @@ var weatherPortlet = weatherPortlet || {};
             deleteCity: null
         }
     });
-    
+
     var init = function (that) {
         that.refreshLocationRows();
-        
+
         that.locate('selectUnits').change(function(event) {
             changeLocationUnits(that, event, $(this));
         });
-        
+
         that.locate('deleteLocation').click(function(event) {
             deleteLocation(that, event, $(this));
         });
-        
+
         that.locate('addLocationLink').click(function() {
             that.locate('locationList').hide();
             that.locate('locationSearch').show();
         });
-        
-        that.locate('locationSearchForm').ajaxForm({ 
-            dataType:  'json', 
+
+        that.locate('locationSearchForm').ajaxForm({
+            dataType:  'json',
             beforeSubmit: function() {
                 that.locate('locationSearchMessage').show();
             },
@@ -86,19 +88,24 @@ var weatherPortlet = weatherPortlet || {};
                     $.each(locations, function(i, location){
                         select.options[i] = new Option(location.city + ', ' + location.stateOrCountry, location.locationCode);
                     });
-                    
+
                     that.locate('locationSearch').hide();
                     that.locate('searchResults').show();
                 }
+                var error = data.error;
+                if(error.length > 0) {
+                	that.locate('locationSearchErrorMessage').text(error);
+                	that.locate('locationSearchError').show();
+                }
             }
-        }); 
-        
-        that.locate('cancelSearchLink').click(function() { 
-            return cancelSearch(that); 
         });
-        
-        that.locate('searchResultsForm').ajaxForm({ 
-            dataType:  'json', 
+
+        that.locate('cancelSearchLink').click(function() {
+            return cancelSearch(that);
+        });
+
+        that.locate('searchResultsForm').ajaxForm({
+            dataType:  'json',
             beforeSubmit: function(formData, jqForm, options) {
                 var location = that.locate('searchResultsSelectedOption', jqForm).text();
                 formData[formData.length] = { name: 'location', value: location};
@@ -108,43 +115,43 @@ var weatherPortlet = weatherPortlet || {};
                     //TODO display error message about adding location
                     return;
                 }
-                
+
                 cancelSearch(that);
-        
+
                 var templateRow = that.locate('templateRow');
                 var newRow = templateRow.clone();
-                 
+
                 var lastRow = templateRow.siblings(':last');
                 if (lastRow.size() == 0) lastRow = templateRow;
                 lastRow.after(newRow);
-                
+
                 newRow.removeClass(that.options.templateRowClass);
                 newRow.addClass(that.options.cityRowClass);
-                 
+
                 that.locate('locationCode', newRow).val(data.location.code);
-                 
+
                 var unitSelect = newRow.find('select.select-units');
                 unitSelect.attr('name', unitSelect.attr('name') + data.location.code);
                 unitSelect.attr('id', unitSelect.attr('id') + data.location.code);
                 unitSelect.find('option[value="' + data.location.temperatureUnit + '"]').attr('selected', 'selected');
-                
+
                 newRow.find('.location-name').text(data.location.name);
-                 
+
                 newRow.show();
-                 
+
                 that.events.addCity.fire();
             }
         });
     };
-    
+
     weatherPortlet.editCities = function (container, options) {
         var that = fluid.initView("weatherPortlet.editCities", container, options);
-        
+
         that.refreshLocationRows = function () {
             that.locate('locationRow').each(function (i, row) {
                 //Update location order numbering
                 that.locate('orderCell', row).html((i + 1) + ".");
-                
+
                 //Update zebra striping
                 if (i % 2 == 0) {
                     $(row).removeClass(that.options.oddRow).addClass(that.options.evenRow);
@@ -153,40 +160,40 @@ var weatherPortlet = weatherPortlet || {};
                 }
             });
         };
-        
+
         that.saveOrder = function (item, requestedPosition, movables) {
             var locationCodes = new Array();
             $.each(movables, function(i, row) {
                 locationCodes[i] = that.locate('locationCode', row).val();
             });
-        
+
             $.post(
-                that.options.saveOrderUrl, 
+                that.options.saveOrderUrl,
                 { "locationCodes" : locationCodes },
                 function (data) {
                     //TODO handle success or failure
                 },
                 "json"
             );
-            
+
         };
-        
+
         init(that);
-        
+
         return that;
     };
-    
+
     var changeLocationUnits = function(that, event, target) {
         //TODO is there a fluidy way to do this?
         var row = target.parents('.locations table tr.movable');
         var locationCode = that.locate('locationCode', row).val();
         var unit =  target.val();
-        
+
         $.post(
-            that.options.updateUnitUrl, 
-            { 
+            that.options.updateUnitUrl,
+            {
                 'locationCode' : locationCode,
-                'unit' : unit 
+                'unit' : unit
             },
             function (data) {
                 //TODO handle success or failure
@@ -194,14 +201,14 @@ var weatherPortlet = weatherPortlet || {};
             "json"
         );
     };
-    
+
     var deleteLocation = function(that, event, target) {
         //TODO is there a fluidy way to do this?
         var row = target.parents('.locations table tr.movable');
         var locationCode = that.locate('locationCode', row).val();
-        
+
         $.post(
-            that.options.deleteLocationUrl, 
+            that.options.deleteLocationUrl,
             { 'locationCode' : locationCode },
             function (data) {
                 if (data.status == 'success') {
@@ -215,17 +222,17 @@ var weatherPortlet = weatherPortlet || {};
             "json"
         );
     };
-    
+
     var cancelSearch = function(that) {
         that.locate('locationSearch').hide();
         that.locate('searchResults').hide();
-        
+
         that.locate('locationList').show();
-        
+
         that.locate('locationSearchForm').clearForm();
         that.locate('locationSearchMessage').text(that.options.searchingMessage);
         that.locate('locationSearchMessage').hide();
-        
+
         return false;
     };
 })(jQuery, fluid);
