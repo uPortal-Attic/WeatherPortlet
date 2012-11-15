@@ -54,35 +54,35 @@ public class YahooWeatherDaoImpl implements IWeatherDao, DisposableBean, Initial
     private static final String WEATHER_URL = "http://weather.yahooapis.com/forecastrss?w=@LOCATION@&u=@UNIT@";
 
     private IYahooWeatherParsingService weatherParsingService;
-    
+
     public void setWeatherParsingService(IYahooWeatherParsingService parser) {
         this.weatherParsingService = parser;
     }
-    
+
     private IYahooLocationParsingService locationParsingService;
-    
+
     public void setLocationParsingService(IYahooLocationParsingService parser) {
         this.locationParsingService = parser;
     }
-    
+
     private String key;
-    
+
     public void setKey(String key) {
         this.key = key;
     }
 
     //Multi-threaded connection manager for exclusive access
     private final MultiThreadedHttpConnectionManager connectionManager = new MultiThreadedHttpConnectionManager();
-    
+
     //Define the HttpClient here and pass it so we only define one instance
     private final HttpClient httpClient = new HttpClient(connectionManager);
-    
+
     //Default timeout of 5 seconds
     private int connectionTimeout = 5000;
-    
+
     //Default timeout of 5 seconds
     private int readTimeout = 5000;
-    
+
     //Default retry of 5 times
     private int timesToRetry = 5;
 
@@ -90,7 +90,7 @@ public class YahooWeatherDaoImpl implements IWeatherDao, DisposableBean, Initial
     public void setConnectionTimeout(int connectionTimeout) {
         this.connectionTimeout = connectionTimeout;
     }
-    
+
     public void setReadTimeout(int readTimeout) {
         this.readTimeout = readTimeout;
     }
@@ -98,7 +98,7 @@ public class YahooWeatherDaoImpl implements IWeatherDao, DisposableBean, Initial
     public void setTimesToRetry(int timesToRetry) {
         this.timesToRetry = timesToRetry;
     }
-    
+
     /* (non-Javadoc)
      * @see org.springframework.beans.factory.InitializingBean#afterPropertiesSet()
      */
@@ -107,7 +107,7 @@ public class YahooWeatherDaoImpl implements IWeatherDao, DisposableBean, Initial
         final HttpConnectionManagerParams params = httpConnectionManager.getParams();
         params.setConnectionTimeout(connectionTimeout);
         params.setSoTimeout(readTimeout);
-        
+
         params.setParameter(HttpMethodParams.RETRY_HANDLER, new HttpMethodRetryHandler() {
             public boolean retryMethod(final HttpMethod method, final IOException exception, int executionCount) {
                 if (executionCount >= timesToRetry) {
@@ -150,7 +150,7 @@ public class YahooWeatherDaoImpl implements IWeatherDao, DisposableBean, Initial
      */
     public Collection<Location> find(String location) {
         final String url = FIND_URL.replace("@KEY@", key).replace("@QUERY@", QuietUrlCodec.encode(location, Constants.URL_ENCODING));
-        
+
         HttpMethod getMethod = new GetMethod(url);
         InputStream inputStream = null;
         try {
@@ -163,11 +163,11 @@ public class YahooWeatherDaoImpl implements IWeatherDao, DisposableBean, Initial
 
             // Read the response body
             inputStream = getMethod.getResponseBodyAsStream();
-            
+
             List<Location> locations = locationParsingService.parseLocations(inputStream);
- 
+
             return locations;
-            
+
         } catch (HttpException e) {
             throw new RuntimeException("http protocol exception while getting data from weather service from: " + url, e);
         } catch (IOException e) {
@@ -177,14 +177,14 @@ public class YahooWeatherDaoImpl implements IWeatherDao, DisposableBean, Initial
             IOUtils.closeQuietly(inputStream);
             //release the connection
             getMethod.releaseConnection();
-        }       
+        }
     }
 
     /* (non-Javadoc)
      * @see org.jasig.portlet.weather.dao.IWeatherDao#getWeather(java.lang.String, org.jasig.portlet.weather.TemperatureUnit)
      */
     public Weather getWeather(String locationCode, TemperatureUnit unit) {
-        final String yahooweatherUrl = WEATHER_URL.replace("@LOCATION@", QuietUrlCodec.encode(locationCode, Constants.URL_ENCODING)).replace("@UNIT", (TemperatureUnit.C.equals(unit) ? "c" : "f"));
+        final String yahooweatherUrl = WEATHER_URL.replace("@LOCATION@", QuietUrlCodec.encode(locationCode, Constants.URL_ENCODING)).replace("@UNIT@", (TemperatureUnit.C.equals(unit) ? "c" : "f"));
 
         return (Weather)this.getAndDeserialize(yahooweatherUrl);
     }
@@ -196,7 +196,7 @@ public class YahooWeatherDaoImpl implements IWeatherDao, DisposableBean, Initial
     public String getWeatherProviderLink() {
         return "http://weather.yahoo.com";
     }
-    
+
     protected Object getAndDeserialize(String url) {
         HttpMethod getMethod = new GetMethod(url);
         InputStream inputStream = null;
@@ -220,7 +220,7 @@ public class YahooWeatherDaoImpl implements IWeatherDao, DisposableBean, Initial
             IOUtils.closeQuietly(inputStream);
             //release the connection
             getMethod.releaseConnection();
-        }       
+        }
     }
 
 }
