@@ -47,7 +47,7 @@
     weatherPortlet.jQuery(document).ready(function() {
         $ = weatherPortlet.jQuery;
         var cityReorderer, cityEditor;
-        
+
         var cityEditorOpts = {
             saveOrderUrl : '${saveOrderUrl}',
             updateUnitUrl : '${updateUnitsUrl}',
@@ -64,9 +64,9 @@
                 }
             }
         };
-        
+
         cityEditor = weatherPortlet.editCities("#${n}jasigWeatherPortlet", cityEditorOpts);
-        
+
         var reordererOpts = {
             selectors: {
                 movables: ".movable",
@@ -77,11 +77,11 @@
                 afterMove : cityEditor.saveOrder
             }
         };
-        
+
         cityReorderer = weatherPortlet.fluid.reorderList("#${n}savedLocationsTable", reordererOpts);
     });
     </script>
-        
+
     <div class="location-search" style="display:none">
         <h2><spring:message code="edit.add.location.button"/></h2>
         <form id="${n}locationSearchForm" class="locate-search-form" action="${context}/ajax/findCity">
@@ -93,6 +93,9 @@
         </form>
         <p class="search-message" style="display:none"><spring:message code="edit.search.loading"/></p>
     </div>
+    <div id="location-search-error" class="error-message portlet-msg-error portlet-msg error" role="alert" style="display: none;">
+        <p class="error-text"></p>
+    </div>
     <div class="search-results" style="display:none">
         <h2><spring:message code="edit.add.location.button"/></h2>
         <portlet:actionURL var="selectLocationUrl">
@@ -101,7 +104,7 @@
         <form id="${n}addLocationForm" class="select-location-form" action="${selectLocationUrl}" method="post">
             <p><label class="portlet-form-label"><spring:message code="edit.multiple.locations"/>:</label></p>
             <select name="locationCode" class="portlet-form-input-field"></select>
-            
+
             <p><label class="portlet-form-label"><spring:message code="edit.select.metric"/>:</label></p>
             <select name="unit" class="portlet-form-input-field">
                 <option value="F"><spring:message code="edit.standard.option"/></option>
@@ -115,9 +118,9 @@
         </form>
     </div>
     <div class="locations">
-    
+
         <h2><spring:message code="edit.locations.title"/></h2>
-    
+
         <p><spring:message code="edit.saved.locations.title"/></p>
         <form id="${n}editLocationForm">
         <table id="${n}savedLocationsTable">
@@ -163,7 +166,7 @@
         </table>
         </form>
         <p><a class="add-location-link" href="javascript:;"><spring:message code="edit.add.location.button"/></a></p>
-	    
+
 	    <portlet:renderURL var="formDoneAction" portletMode="VIEW" windowState="NORMAL"/>
 	    <p><button onclick="window.location='${formDoneAction}'" class="portlet-form-button"><spring:message code="edit.done.button"/></button></p>
     </div>

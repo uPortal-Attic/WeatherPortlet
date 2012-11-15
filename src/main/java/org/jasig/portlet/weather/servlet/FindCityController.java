@@ -19,16 +19,21 @@
 
 package org.jasig.portlet.weather.servlet;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.jasig.portlet.weather.InvalidConfigurationException;
 import org.jasig.portlet.weather.domain.Location;
 import org.jasig.portlet.weather.service.IWeatherService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.dao.DataRetrievalFailureException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -36,21 +41,38 @@ import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class FindCityController {
+    private static final String ERR_GENERAL_KEY = "exception.generalError.title";
+
     private IWeatherService weatherService;
 
     @Autowired
     public void setWeatherService(IWeatherService weatherService) {
         this.weatherService = weatherService;
     }
-    
+
+    private MessageSource messageSource;
+
+    @Autowired
+    public void setMessageSource(MessageSource messageSource) {
+        this.messageSource = messageSource;
+    }
+
     @RequestMapping("/findCity")
 	public ModelAndView findCity(
 	        @RequestParam("location") String location,
 	        HttpServletRequest request, HttpServletResponse response) {
-        
-        final Collection<Location> locations = this.weatherService.find(location);
-        
+
         final Map<Object, Object> model = new LinkedHashMap<Object, Object>();
+        final Collection<Location> locations = new ArrayList<Location>();
+
+        try {
+        	locations.addAll(this.weatherService.find(location));
+        } catch (InvalidConfigurationException invalidConfigurationException) {
+            model.put("error",invalidConfigurationException.getMessage());
+        } catch (DataRetrievalFailureException dataRetrievalFailed) {
+            model.put("error",messageSource.getMessage(ERR_GENERAL_KEY,null,"An unexpected error occurred.",Locale.getDefault()));
+        }
+
         model.put("locations", locations);
         return new ModelAndView("jsonView", model);
 	}

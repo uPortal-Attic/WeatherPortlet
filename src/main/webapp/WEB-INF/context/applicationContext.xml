@@ -36,54 +36,57 @@
     <context:component-scan base-package="org.jasig.portlet.weather"/>
     <bean class="org.springframework.beans.factory.annotation.RequiredAnnotationBeanPostProcessor" />
 
-    <!-- Data Caching Configuration -->    
+    <!-- Data Caching Configuration -->
     <bean id="cacheManager" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
         <property name="cacheManagerName" value="WeatherPortlet.cacheManager" />
         <property name="configLocation" value="classpath:/ehcache.xml" />
     </bean>
-    
+
     <ehcache-spring:annotation-driven cache-manager="cacheManager" default-cache-key-generator="stringCacheKeyGenerator"/>
     <bean id="stringCacheKeyGenerator" class="com.googlecode.ehcache.annotations.key.StringCacheKeyGenerator" />
-    
-    <!--  
+
+    <!--
         worldweatheronline.com Weather DAO Implementation
     -->
-    
+
+    <!--
     <bean id="weatherDaoImpl" class="org.jasig.portlet.weather.dao.worldwide.WorldWeatherOnlineDaoImpl">
     	<property name="key" value="YOURKEY"/>
         <property name="imageMapping"><value>classpath:wwo-image-mapping.properties</value></property>
     </bean>
-    
+    -->
+
     <!--
         Yahoo! Weather DAO Implementation
     -->
-    
-    <!--bean id="weatherDaoImpl" class="org.jasig.portlet.weather.dao.yahoo.YahooWeatherDaoImpl">
-        <property name="key" value="YOURKEY"/>
+
+    <bean id="weatherDaoImpl" class="org.jasig.portlet.weather.dao.yahoo.YahooWeatherDaoImpl">
+        <property name="key" value=""/> <!--  ENTER YOUR KEY HERE -->
         <property name="weatherParsingService" ref="weatherParsingService"/>
         <property name="locationParsingService" ref="locationParsingService"/>
+        <property name="messageSource" ref="messageSource"/>
     </bean>
-    
+
     <lang:groovy id="weatherParsingService"
         script-source="classpath:org/jasig/portlet/weather/dao/yahoo/YahooWeatherParsingServiceImpl.groovy"/>
 
     <lang:groovy id="locationParsingService"
-        script-source="classpath:org/jasig/portlet/weather/dao/yahoo/YahooLocationParsingServiceImpl.groovy"/-->
-            
-	
+        script-source="classpath:org/jasig/portlet/weather/dao/yahoo/YahooLocationParsingServiceImpl.groovy"/>
+
+
 	<!-- messages.propreties Configuration -->
 	<bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
 		<property name="basenames">
 			<list>
 				<value>messages</value>
 			</list>
-		</property>										
+		</property>
 	</bean>
-    
+
     <bean id="ajaxPortletSupportService" class="org.jasig.web.service.AjaxPortletSupportService"/>
-	
+
 	<!-- ========================= PORTLET SPECIFIC DEFINITIONS ========================= -->
-	
+
 	<!-- Default ExceptionHandler -->
 	<bean id="defaultExceptionHandlerTemplate" class="org.springframework.web.portlet.handler.SimpleMappingExceptionResolver">
     <property name="order" value="10"/>
@@ -94,6 +97,6 @@
 				<prop key="javax.portlet.UnavailableException">unavailable</prop>
 				<prop key="java.lang.RuntimeException">error</prop>
 			</props>
-		</property>  
+		</property>
 	</bean>
 </beans>
