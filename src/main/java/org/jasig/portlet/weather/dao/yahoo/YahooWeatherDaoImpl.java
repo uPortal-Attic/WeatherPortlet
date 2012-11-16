@@ -25,6 +25,7 @@ import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.util.Collection;
 import java.util.List;
+import java.util.Locale;
 
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpConnectionManager;
@@ -38,6 +39,7 @@ import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.params.HttpConnectionManagerParams;
 import org.apache.commons.httpclient.params.HttpMethodParams;
 import org.apache.commons.io.IOUtils;
+import org.jasig.portlet.weather.InvalidConfigurationException;
 import org.jasig.portlet.weather.QuietUrlCodec;
 import org.jasig.portlet.weather.TemperatureUnit;
 import org.jasig.portlet.weather.dao.Constants;
@@ -46,12 +48,17 @@ import org.jasig.portlet.weather.domain.Location;
 import org.jasig.portlet.weather.domain.Weather;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.context.MessageSource;
+import org.springframework.context.MessageSourceResolvable;
+import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.dao.DataRetrievalFailureException;
 
 public class YahooWeatherDaoImpl implements IWeatherDao, DisposableBean, InitializingBean {
 
     private static final String FIND_URL = "http://where.yahooapis.com/v1/places.q(@QUERY@);count=10?appid=@KEY@";
     private static final String WEATHER_URL = "http://weather.yahooapis.com/forecastrss?w=@LOCATION@&u=@UNIT@";
+    private static final String ERR_API_MISSING_KEY = "exception.missing.APIKey";
+    private static final String ERR_GENERAL_KEY = "exception.generalError.title";
 
     private IYahooWeatherParsingService weatherParsingService;
 
@@ -69,6 +76,12 @@ public class YahooWeatherDaoImpl implements IWeatherDao, DisposableBean, Initial
 
     public void setKey(String key) {
         this.key = key;
+    }
+
+    private MessageSource messageSource;
+
+    public void setMessageSource(MessageSource messageSource) {
+        this.messageSource = messageSource;
     }
 
     //Multi-threaded connection manager for exclusive access
@@ -149,6 +162,11 @@ public class YahooWeatherDaoImpl implements IWeatherDao, DisposableBean, Initial
      * @see org.jasig.portlet.weather.dao.IWeatherDao#find(java.lang.String)
      */
     public Collection<Location> find(String location) {
+        if((key == null) || (key.length() == 0)) {
+            MessageSourceResolvable resolvable = new DefaultMessageSourceResolvable(new String[]{ERR_API_MISSING_KEY,ERR_GENERAL_KEY});
+            throw new InvalidConfigurationException(messageSource.getMessage(resolvable, Locale.getDefault()));
+        }
+
         final String url = FIND_URL.replace("@KEY@", key).replace("@QUERY@", QuietUrlCodec.encode(location, Constants.URL_ENCODING));
 
         HttpMethod getMethod = new GetMethod(url);
