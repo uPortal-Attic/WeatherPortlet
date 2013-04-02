@@ -1,0 +1,61 @@
+.jasigWeatherPortlet .location {
+    padding-bottom: 1em !important;
+}
+
+img#firstimage
+{
+    top: 30% !important;
+    left: 1.5em !important;
+}
+
+img#image
+{
+    top: 20% !important;
+    left: 1.5em !important;
+}
+
+div#texty
+{
+	position: absolute !important;
+    top: 1em !important;
+}
+
+
+
+div#content
+{
+	margin:10px;
+}
+
+div#extras
+{
+	font-size:16px;
+}
+
+.button
+{
+    margin: 0;
+    padding: .6em 20px .5em 20px;
+    border-width: 1px;
+    border-style: solid;
+    font-family: sans-serif;
+    font-weight: bold;
+    font-size: 12px;
+    text-align: center;
+    text-decoration: none;
+    text-transform: capitalize;
+    cursor: pointer;
+    -moz-border-radius: .6em;
+    -webkit-border-radius: .6em;
+    border-radius: .6em;
+    -moz-box-shadow: 0 1px 3px rgba(0,0,0,0.5);
+    -webkit-box-shadow: 0 1px 3px rgba(0,0,0,0.5);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.5);
+    border-color: #B69C58;
+    background: steelBlue;
+    color: white!important;
+    background-image: -moz-linear-gradient(top,#b69c58,#8d7944);
+    background-image: -webkit-gradient(linear,left top,left bottom,color-stop(0,#b69c58),color-stop(1,#8d7944));
+    background-image: linear-gradient(top,#b69c58,#8d7944);
+}
+
