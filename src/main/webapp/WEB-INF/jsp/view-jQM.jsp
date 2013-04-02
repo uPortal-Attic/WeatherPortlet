@@ -22,53 +22,62 @@
 <%-- Author: Dustin Schultz | Version $Id$ --%>
 <%@ include file="/WEB-INF/jsp/include.jsp" %>
 
+<rs:aggregatedResources path="/resources.xml"/>
+
+
 <div id="${n}jasigWeatherPortlet" class="jasigWeatherPortlet">
 <c:choose>
     <c:when test="${empty weathers}">
         <p><spring:message code="view.location.notset"/></p>
-        <div class="edit-link">
+        <br>
+	<div class="edit-link">
             <portlet:renderURL var="editUrl"  portletMode="EDIT" />
             <a href="${editUrl}"><spring:message code="view.edit-link"/></a>
-        </div>
+    </div>
     </c:when>
     <c:otherwise>
         <c:forEach var="weather" items="${weathers}">
-            <div class="weather-location">
+            <div class="weather-location" id="content">
                 <div class="location">
-                    <c:choose>
+		    <c:choose>
                         <c:when test="${not empty weather.moreInformationLink}">
-                            <a href="${weather.moreInformationLink}" target="_blank" title="${weather.moreInformationLink}">${weather.location.city}, ${weather.location.stateOrCountry}</a>
+                            <a href="${weather.moreInformationLink}" target="_blank" class="button" style="margin-top:10px" title="${weather.moreInformationLink}">${weather.location.city}, ${weather.location.stateOrCountry}</a>
                         </c:when>
                         <c:otherwise>
                             ${weather.location.city}, ${weather.location.stateOrCountry}
                         </c:otherwise>
                     </c:choose>
                 </div>
-                <div class="conditions">
+
+                <ul data-role="listview" class="up-portal-nav ui-listview">
+                    <li data-corners="false" data-shadow="false" data-iconshadow="true" data-wrapperels="div" data-theme="c" class="ui-btn ui-btn-up-c" style="display: list-item">
                     <c:set var="current" value="${weather.currentWeather}"/>
-                    <div class="current">
-                        <c:choose>
-                            <c:when test="${not empty current.temperature && not empty current.condition}">
-                                <spring:message var="currW" code="current.condition.img.width"/>
-                                <spring:message var="currH" code="current.condition.img.height"/>
-                                <spring:message var="currImgPath" code="current.condition.img.path"/>
-                                <spring:message var="currExt" code="current.condition.img.extension"/>
-                                <spring:message code="view.currently"/><br/>
-                                <c:choose>
-                                    <c:when test="${ not empty current.imgUrl }">
-                                        <img src="${ current.imgUrl }" alt="${current.condition}" title="${current.condition}"/><br/>
-                                    </c:when>
-                                    <c:otherwise>
-                                        <img width="${currW}" height="${currH}" src="${context}/${currImgPath}/${current.imgName}${currExt}" alt="${current.condition}" title="${current.condition}"/><br/>
-                                    </c:otherwise>
-                                </c:choose>
+                    <c:choose>
+                        <c:when test="${not empty current.temperature && not empty current.condition}">
+			                <spring:message var="currW" code="current.condition.img.width"/>
+                            <spring:message var="currH" code="current.condition.img.height"/>
+                            <spring:message var="currImgPath" code="current.condition.img.path"/>
+                            <spring:message var="currExt" code="current.condition.img.extension"/>
+                            <spring:message code="view.currently"/><br/>
+				            <c:choose>
+                                <c:when test="${ not empty current.imgUrl }">
+                                    <img src="${ current.imgUrl }" class="portlet-icon ui-li-thumb" id="firstimage" alt="${current.condition}" title="${current.condition}"/><br/>
+                                </c:when>
+                                <c:otherwise>
+                                    <img width="${currW}" class="portlet-icon ui-li-thumb" id="firstimage" height="${currH}" src="${context}/${currImgPath}/${current.imgName}${currExt}" alt="${current.condition}" title="${current.condition}"/><br/>
+                                </c:otherwise>
+                            </c:choose>
+                            <div class="ui-btn-text ">
+				            <h3 class="ui-li-heading">
                                 ${current.temperature}&#xB0; ${weather.temperatureUnit}
-                            </c:when>
-                            <c:otherwise>
-                                <spring:message code="view.current.weather.unavailable"/>
-                            </c:otherwise>
-                        </c:choose>
-                        <br/>
+				            </h3>
+			            </c:when>
+                        <c:otherwise>
+                            <spring:message code="view.current.weather.unavailable"/>
+                        </c:otherwise>
+                    </c:choose>
+                    <br>
+			        <p class="ui-li-desc" id="extras">
                         <c:choose>
                             <c:when test="${not empty current.windDirection && not empty current.windSpeed}">
                                 <spring:message code="view.wind"/>: ${current.windDirection} <spring:message code="view.at"/> ${current.windSpeed} ${weather.windUnit}
@@ -95,32 +104,47 @@
                                 <spring:message code="view.pressure"/>: <spring:message code="view.unavailable"/>
                             </c:otherwise>
                         </c:choose>
-                    </div>
-                    <c:if test="${not empty weather.forecast}">
-                        <div class="fullforecast">
-                            <c:forEach var="forecast" items="${weather.forecast}">
-                                <div class="forecast">
-                                    ${forecast.day}<br/>
-                                    <spring:message var="forecastW" code="forecast.condition.img.width"/>
-                                    <spring:message var="forecastH" code="forecast.condition.img.height"/>
-                                    <spring:message var="forecastImgPath" code="forecast.condition.img.path"/>
-                                    <spring:message var="forecastExt" code="forecast.condition.img.extension"/>
-                                    <c:choose>
-                                        <c:when test="${ not empty forecast.imgUrl }">
-                                            <img src="${ forecast.imgUrl }" alt="${forecast.condition}" title="${forecast.condition}"/><br/>
-                                        </c:when>
-                                        <c:otherwise>
-                                            <img width="${forecastW}" height="${forecastH}" src="${context}/${forecastImgPath}/${forecast.imgName}${forecastExt}" alt="${forecast.condition}" title="${forecast.condition}"/><br/>
-                                        </c:otherwise>
-                                    </c:choose>
-                                    ${forecast.highTemperature}&#xB0; | ${forecast.lowTemperature}&#xB0;
-                                </div>
-                            </c:forEach>
-                        </div>
-                    </c:if>
+                
+                    </p>
+                            </div>
+            </li>
+		    <c:if test="${not empty weather.forecast}">
+            <c:set var="counter" value="0"/>
+            <c:forEach var="forecast" items="${weather.forecast}">
+                <c:choose>
+                    <c:when test="${counter > 0}">
+                        <li data-corners="false" data-shadow="false" data-wrapperels="div" data-theme="c" class="ui-btn ui-li ui-li-has-thumb ui-btn-up-c" style="display:list-item; border-top:none;">
+                    </c:when>
+                    <c:otherwise>
+                        <li data-corners="false" data-shadow="false" data-wrapperels="div" data-theme="c" class="ui-btn ui-li ui-li-has-thumb ui-btn-up-c" style="display:list-item">
+                    </c:otherwise>
+                </c:choose>
+                <c:set var="counter" value="${counter+1}"/>
+                    <spring:message var="forecastW" code="forecast.condition.img.width"/>
+                    <spring:message var="forecastH" code="forecast.condition.img.height"/>
+                    <spring:message var="forecastImgPath" code="forecast.condition.img.path"/>
+                    <spring:message var="forecastExt" code="forecast.condition.img.extension"/>
+                    <c:choose>
+                        <c:when test="${ not empty forecast.imgUrl }">
+                            <img src="${ forecast.imgUrl }" class="portlet-icon ui-li-thumb" id="image" alt="${forecast.condition}" title="${forecast.condition}"/><br/>
+                        </c:when>
+                        <c:otherwise>
+                            <img width="${forecastW}" class="portlet-icon ui-li-thumb" id="image" height="${forecastH}" src="${context}/${forecastImgPath}/${forecast.imgName}${forecastExt}" alt="${forecast.condition}" title="${forecast.condition}"/><br/>
+                        </c:otherwise>
+                    </c:choose>
+                <div class="ui-btn-text" id="texty">
+                    <h3 class="ui-li-heading">
+                        ${forecast.day}<br/>
+                    </h3>    
+                    <p class="ui-li-desc">
+				        ${forecast.highTemperature}&#xB0; | ${forecast.lowTemperature}&#xB0;
+                    </p>
                 </div>
-            </div>
-        </c:forEach>
+                </li>
+				</c:forEach>
+            </c:if>
+            </ul>
+            </c:forEach>
         <c:if test="${fn:length(errors) > 0}">
             <div class="error">
                 <h4><spring:message code="view.errors.header"/></h4>
@@ -136,8 +160,9 @@
         <div class="footer">
             <c:set var="serviceUrl"><a href="${ serviceUrl }">${ serviceName }</a></c:set>
             <spring:message var="providedBy" code="view.weather.providedBy" arguments="${ serviceUrl }" htmlEscape="false"/>
+            <br>
             <c:if test="${fn:length(providedBy) > 0}">
-                <div class="provided-by">
+                <div class="provided-by" id="provide">
                     ${providedBy}
                 </div>
             </c:if>
