@@ -19,30 +19,7 @@
 
 package org.jasig.portlet.weather.dao.worldwide;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.SocketException;
-import java.net.SocketTimeoutException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
-import java.util.Properties;
-
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Unmarshaller;
-
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.HttpConnectionManager;
-import org.apache.commons.httpclient.HttpException;
-import org.apache.commons.httpclient.HttpMethod;
-import org.apache.commons.httpclient.HttpMethodRetryHandler;
-import org.apache.commons.httpclient.HttpStatus;
-import org.apache.commons.httpclient.MultiThreadedHttpConnectionManager;
-import org.apache.commons.httpclient.NoHttpResponseException;
+import org.apache.commons.httpclient.*;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.params.HttpConnectionManagerParams;
 import org.apache.commons.httpclient.params.HttpMethodParams;
@@ -63,6 +40,16 @@ import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.core.io.Resource;
 import org.springframework.dao.DataRetrievalFailureException;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Unmarshaller;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.SocketException;
+import java.net.SocketTimeoutException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /* ****
 Note that requests to World Weather Online's web services go to free.worldweatheronline.com,
@@ -176,7 +163,7 @@ public class WorldWeatherOnlineDaoImpl implements IWeatherDao, DisposableBean, I
      */
     public Collection<Location> find(String location) {
         final String url = FIND_URL.replace("@KEY@", key).replace("@QUERY@", QuietUrlCodec.encode(location, Constants.URL_ENCODING));
-        
+
         HttpMethod getMethod = new GetMethod(url);
         InputStream inputStream = null;
         try {
@@ -355,8 +342,8 @@ public class WorldWeatherOnlineDaoImpl implements IWeatherDao, DisposableBean, I
             
             StringBuffer code = new StringBuffer();
             code.append(l.getCity());
-            if (l.getRegion() != null) {
-                code.append(", ").append(l.getRegion());
+            if (l.getRegion() != null && !l.getRegion().contains(", ")) {
+				code.append(", ").append(l.getRegion());
             }
             if (l.getCountry() != null) {
                 code.append(", ").append(l.getCountry());
