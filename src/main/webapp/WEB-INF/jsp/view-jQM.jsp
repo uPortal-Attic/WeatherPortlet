@@ -34,7 +34,7 @@
                 <div class="location">
 		    <c:choose>
                         <c:when test="${not empty weather.moreInformationLink}">
-                            <a href="${weather.moreInformationLink}" target="_blank" class="button" style="margin-top:10px" title="${weather.moreInformationLink}">${weather.location.city}, ${weather.location.stateOrCountry}</a>
+                            <a href="${weather.moreInformationLink}" target="_blank" data-inline="true" data-role="button" data-theme="b" title="${weather.moreInformationLink}">${weather.location.city}, ${weather.location.stateOrCountry}</a>
                         </c:when>
                         <c:otherwise>
                             ${weather.location.city}, ${weather.location.stateOrCountry}
@@ -60,7 +60,7 @@
                                     <img width="${currW}" class="portlet-icon ui-li-thumb" id="firstimage" height="${currH}" src="${context}/${currImgPath}/${current.imgName}${currExt}" alt="${current.condition}" title="${current.condition}"/><br/>
                                 </c:otherwise>
                             </c:choose>
-                            <div class="ui-btn-text ">
+                                <!-- div class="ui-btn-text "-->
 				            <h3 class="ui-li-heading">
                                 ${current.temperature}&#xB0; ${weather.temperatureUnit}
 				            </h3>
@@ -99,7 +99,7 @@
                         </c:choose>
                 
                     </p>
-                            </div>
+                    <!-- /div-->
             </li>
 		    <c:if test="${not empty weather.forecast}">
             <c:set var="counter" value="0"/>

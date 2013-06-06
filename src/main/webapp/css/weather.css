@@ -66,6 +66,7 @@
     float: left;
     clear: both;
     color: #666;
+    padding-top: 0.4em;
 }
 .jasigWeatherPortlet .location {
     font-weight: bold;
@@ -78,7 +79,7 @@
     padding-top: 5px;
     font-size: 10px;
     overflow: hidden;
-    width: 120px;
+    width: 140px;
 }
 .jasigWeatherPortlet .weather-location {
     margin-top: 5px;
@@ -89,7 +90,7 @@
     margin-bottom: 40px;
     padding-bottom: 15px;
     padding-top: 5px;
-    padding-right: 0px;
+    padding-right: 5px;
     text-align: center;
     font-size: 10px;    
 }
