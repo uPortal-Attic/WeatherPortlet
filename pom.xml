@@ -4,7 +4,7 @@
     <parent>
         <groupId>org.jasig.parent</groupId>
         <artifactId>jasig-parent</artifactId>
-        <version>33</version>
+        <version>34</version>
     </parent>
 
 	<modelVersion>4.0.0</modelVersion>
@@ -44,9 +44,9 @@
         <finalName>WeatherPortlet</finalName>
 		<plugins>
 		    <plugin>
-		        <groupId>net.sf.alchim</groupId>
+                <groupId>net.alchim31.maven</groupId>
 		        <artifactId>yuicompressor-maven-plugin</artifactId>
-		        <version>0.7.1</version>
+                <version>1.3.2</version>
 		        <executions>
 		            <execution>
 		                <goals><goal>compress</goal></goals>
@@ -55,17 +55,18 @@
 		        <configuration>
 		            <excludes>
 		                <exclude>**/*.min.js</exclude>
+                        <exclude>**/*.min.css</exclude>
 		            </excludes>
 		            <linebreakpos>10000</linebreakpos>
 		            <suffix>.min</suffix>
-		            <jswarn>false</jswarn>
+                    <encoding>UTF-8</encoding>
 		        </configuration>
 		    </plugin>
 		    <plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<configuration>
-					<source>1.5</source>
-					<target>1.5</target>
+					<source>1.6</source>
+					<target>1.6</target>
 				</configuration>
 			</plugin>
             <plugin>
@@ -79,7 +80,7 @@
                                 <include>rs/fluid/1.4.0/</include>
                                 <include>rs/jquery/1.9.1/</include>
                                 <include>rs/jquery/form/2.28/</include>
-                                <include>rs/jqueryui/1.8/</include>
+                                <include>rs/jqueryui/1.8.13/</include>
                             </includes>
                         </overlay>
                     </overlays>
@@ -189,8 +190,12 @@
             <dependency>
                 <groupId>org.jasig.resourceserver</groupId>
                 <artifactId>resource-server-utils</artifactId>
-                <version>1.0.28</version>
+                <version>1.0.29</version>
                 <exclusions>
+                    <exclusion>
+                        <groupId>org.slf4j</groupId>
+                        <artifactId>jcl-over-slf4j</artifactId>
+                    </exclusion>
                     <exclusion>
                         <groupId>net.sf.ehcache</groupId>
                         <artifactId>ehcache</artifactId>
@@ -200,6 +205,16 @@
                         <artifactId>ehcache-web</artifactId>
                     </exclusion>
                 </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>org.slfl4j</groupId>
+                <artifactId>slf4j-api</artifactId>
+                <version>1.6.1</version>
+            </dependency>
+            <dependency>
+                <groupId>org.slfl4j</groupId>
+                <artifactId>slf4j-jcl</artifactId>
+                <version>1.6.1</version>
             </dependency>
             <dependency>
                 <groupId>org.springframework</groupId>
@@ -248,7 +263,7 @@
         <dependency>
             <groupId>org.jasig.resourceserver</groupId>
             <artifactId>resource-server-content</artifactId>
-            <version>1.0.28</version>
+            <version>1.0.29</version>
             <type>war</type>
         </dependency>
     
