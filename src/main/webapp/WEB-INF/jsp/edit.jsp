@@ -83,7 +83,7 @@
     </script>
 
     <div class="location-search" style="display:none">
-        <h2><spring:message code="edit.add.location.button"/></h2>
+        <h3><spring:message code="edit.add.location.button"/></h3>
         <form id="${n}locationSearchForm" class="locate-search-form" action="${context}/ajax/findCity">
 	        <p><label class="portlet-form-label"><spring:message code="edit.enter.location"/>:</label></p>
 	        <input name="location" class="portlet-form-input-field"/>
@@ -97,7 +97,7 @@
         <p class="error-text"></p>
     </div>
     <div class="search-results" style="display:none">
-        <h2><spring:message code="edit.add.location.button"/></h2>
+        <h3><spring:message code="edit.add.location.button"/></h3>
         <portlet:actionURL var="selectLocationUrl">
             <portlet:param name="action" value="add"/>
         </portlet:actionURL>
@@ -119,7 +119,7 @@
     </div>
     <div class="locations">
 
-        <h2><spring:message code="edit.locations.title"/></h2>
+        <h3><spring:message code="edit.locations.title"/></h3>
 
         <p><spring:message code="edit.saved.locations.title"/></p>
         <form id="${n}editLocationForm">
