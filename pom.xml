@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-	<!-- Author: Dustin Schultz | Version: $Id$ -->
+    <!-- Author: Dustin Schultz | Version: $Id$ -->
     <parent>
         <groupId>org.jasig.parent</groupId>
         <artifactId>jasig-parent</artifactId>
-        <version>33</version>
+        <version>34</version>
     </parent>
 
-	<modelVersion>4.0.0</modelVersion>
-	<groupId>org.jasig.portlet</groupId>
-	<artifactId>WeatherPortlet</artifactId>
-	<packaging>war</packaging>
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.jasig.portlet</groupId>
+    <artifactId>WeatherPortlet</artifactId>
+    <packaging>war</packaging>
     
     <name>Weather Portlet</name>
     <version>1.0.10-SNAPSHOT</version>
-	<description>Jasig Weather Portlet</description>
+    <description>Jasig Weather Portlet</description>
     <url>${jasig-site-base}/WeatherPortlet/${project.version}</url>
 
     <scm>
@@ -35,39 +35,41 @@
         <system>${jasig-issues-system}</system>
     </issueManagement>
     
-	<properties>
+    <properties>
          <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
          <jaxbApiVersion>2.2.1</jaxbApiVersion>
          <jaxbImplVersion>2.2.1.1</jaxbImplVersion>
-	</properties>
-	<build>
+         <slf4j.version>1.7.5</slf4j.version>
+         <logback.version>1.0.12</logback.version>
+    </properties>
+    <build>
         <finalName>WeatherPortlet</finalName>
-		<plugins>
-		    <plugin>
-		        <groupId>net.sf.alchim</groupId>
-		        <artifactId>yuicompressor-maven-plugin</artifactId>
-		        <version>0.7.1</version>
-		        <executions>
-		            <execution>
-		                <goals><goal>compress</goal></goals>
-		            </execution>
-		        </executions>        
-		        <configuration>
-		            <excludes>
-		                <exclude>**/*.min.js</exclude>
-		            </excludes>
-		            <linebreakpos>10000</linebreakpos>
-		            <suffix>.min</suffix>
-		            <jswarn>false</jswarn>
-		        </configuration>
-		    </plugin>
-		    <plugin>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<configuration>
-					<source>1.5</source>
-					<target>1.5</target>
-				</configuration>
-			</plugin>
+        <plugins>
+            <plugin>
+                <groupId>net.sf.alchim</groupId>
+                <artifactId>yuicompressor-maven-plugin</artifactId>
+                <version>0.7.1</version>
+                <executions>
+                    <execution>
+                        <goals><goal>compress</goal></goals>
+                    </execution>
+                </executions>        
+                <configuration>
+                    <excludes>
+                        <exclude>**/*.min.js</exclude>
+                    </excludes>
+                    <linebreakpos>10000</linebreakpos>
+                    <suffix>.min</suffix>
+                    <jswarn>false</jswarn>
+                </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.5</source>
+                    <target>1.5</target>
+                </configuration>
+            </plugin>
             <plugin>
                 <artifactId>maven-war-plugin</artifactId>
                 <configuration>
@@ -85,8 +87,8 @@
                     </overlays>
                 </configuration>
             </plugin>
-		</plugins>
-	</build>
+        </plugins>
+    </build>
     
     <dependencyManagement>
         <dependencies>
@@ -156,9 +158,14 @@
                 <version>4.8.2</version>
             </dependency>
             <dependency>
-                <groupId>log4j</groupId>
-                <artifactId>log4j</artifactId>
-                <version>1.2.16</version>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-api</artifactId>
+                <version>${slf4j.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>ch.qos.logback</groupId>
+                <artifactId>logback-classic</artifactId>
+                <version>${logback.version}</version>
             </dependency>
             <dependency>
                 <groupId>net.sf.json-lib</groupId>
@@ -244,7 +251,7 @@
         </dependencies>
     </dependencyManagement>
     
-	<dependencies>
+    <dependencies>
         <dependency>
             <groupId>org.jasig.resourceserver</groupId>
             <artifactId>resource-server-content</artifactId>
@@ -252,34 +259,37 @@
             <type>war</type>
         </dependency>
     
-    
-		<!-- Unit test dependencies. -->
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-      		<groupId>org.springframework</groupId>
-      		<artifactId>spring-test</artifactId>
-      		<scope>test</scope>
-    	</dependency>
-		
-        <!-- Log4j dependencies -->
-		<dependency>
-			<groupId>log4j</groupId>
-			<artifactId>log4j</artifactId>
-		</dependency>
-		
-		<!-- Spring and dependencies. -->
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-webmvc-portlet</artifactId>
-		</dependency>
-	    <dependency>
-	        <groupId>org.springframework</groupId>
-	        <artifactId>spring-aop</artifactId>
-	    </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${slf4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>${logback.version}</version>
+        </dependency>
+        <!-- Unit test dependencies. -->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+              <groupId>org.springframework</groupId>
+              <artifactId>spring-test</artifactId>
+              <scope>test</scope>
+        </dependency>
+
+        <!-- Spring and dependencies. -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-webmvc-portlet</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-aop</artifactId>
+        </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-beans</artifactId>
@@ -296,47 +306,47 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-tx</artifactId>
         </dependency>
-	    
-		<!-- DOM4J dependencies -->
-		<dependency>
-	    	<groupId>dom4j</groupId>
-	      	<artifactId>dom4j</artifactId>
-    	</dependency>
-    	
-    	<!-- Xstream dependencies -->
-    	<dependency>
-			<groupId>com.thoughtworks.xstream</groupId>
-		    <artifactId>xstream</artifactId>
-    	</dependency>
-    	
-    	<!-- HTTPClient -->
-    	<dependency>
-			<groupId>commons-httpclient</groupId>
-			<artifactId>commons-httpclient</artifactId>
-		</dependency>
-    	
-    	<!-- Required dependencies -->
-		<dependency>
-			<groupId>javax.portlet</groupId>
-			<artifactId>portlet-api</artifactId>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
+        
+        <!-- DOM4J dependencies -->
+        <dependency>
+            <groupId>dom4j</groupId>
+              <artifactId>dom4j</artifactId>
+        </dependency>
+        
+        <!-- Xstream dependencies -->
+        <dependency>
+            <groupId>com.thoughtworks.xstream</groupId>
+            <artifactId>xstream</artifactId>
+        </dependency>
+        
+        <!-- HTTPClient -->
+        <dependency>
+            <groupId>commons-httpclient</groupId>
+            <artifactId>commons-httpclient</artifactId>
+        </dependency>
+        
+        <!-- Required dependencies -->
+        <dependency>
+            <groupId>javax.portlet</groupId>
+            <artifactId>portlet-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>jstl</artifactId>
             <scope>runtime</scope>
         </dependency>
-	    <dependency>
-	        <groupId>javax.servlet</groupId>
-	        <artifactId>servlet-api</artifactId>
-	        <scope>provided</scope>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>servlet-api</artifactId>
+            <scope>provided</scope>
         </dependency>  
         <dependency>
             <groupId>javax.servlet.jsp</groupId>
             <artifactId>jsp-api</artifactId>
             <scope>provided</scope>
         </dependency>
-	    <dependency>
+        <dependency>
             <groupId>taglibs</groupId>
             <artifactId>standard</artifactId>
             <scope>runtime</scope>
@@ -347,27 +357,27 @@
             <artifactId>ehcache-spring-annotations</artifactId>
         </dependency>
 
-	    <dependency>
-	        <groupId>org.jasig</groupId>
-	        <artifactId>AjaxPortletSupport</artifactId>
-	    </dependency>
+        <dependency>
+            <groupId>org.jasig</groupId>
+            <artifactId>AjaxPortletSupport</artifactId>
+        </dependency>
         
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
         </dependency>
-	    
-	    <dependency>
-	        <groupId>net.sf.json-lib</groupId>
-	        <artifactId>json-lib-ext-spring</artifactId>
-	    </dependency>
-	    
-	    <!-- Jasig resource server -->
-	    <dependency>
-	        <groupId>org.jasig.resourceserver</groupId>
-	        <artifactId>resource-server-utils</artifactId>
-	        <scope>runtime</scope>
-	    </dependency>	
+        
+        <dependency>
+            <groupId>net.sf.json-lib</groupId>
+            <artifactId>json-lib-ext-spring</artifactId>
+        </dependency>
+        
+        <!-- Jasig resource server -->
+        <dependency>
+            <groupId>org.jasig.resourceserver</groupId>
+            <artifactId>resource-server-utils</artifactId>
+            <scope>runtime</scope>
+        </dependency>    
         
         <dependency>
             <groupId>org.apache.pluto</groupId>
@@ -378,8 +388,7 @@
             <groupId>org.codehaus.groovy</groupId>
             <artifactId>groovy-all</artifactId>
         </dependency>
-	</dependencies>
-    
+    </dependencies>
 
     <profiles>
         <profile>

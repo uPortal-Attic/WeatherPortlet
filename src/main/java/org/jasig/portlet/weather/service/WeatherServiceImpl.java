@@ -28,7 +28,8 @@ import org.jasig.portlet.weather.domain.Location;
 import org.jasig.portlet.weather.domain.Weather;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 /**
  * This service class completes the implementation of IWeatherService and makes
  * calls to IWeatherDao to retrieve weather information and find locations.
@@ -38,6 +39,9 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class WeatherServiceImpl extends AbstractWeatherService {
+	
+	private final Logger logger = LoggerFactory.getLogger(getClass());
+	
 	private IWeatherDao weatherDao = null; // Spring managed.
 
     public Collection<Location> find(String location) {
