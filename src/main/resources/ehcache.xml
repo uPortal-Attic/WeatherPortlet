@@ -35,15 +35,7 @@
         timeToLiveSeconds="5400" 
         overflowToDisk="false"
         memoryStoreEvictionPolicy="LRU"/>
-        
-    <!-- 15 minute cache on weather data retrieval errors -->
-    <cache name="weatherDataErrorCache"
-        maxElementsInMemory="10000"
-        eternal="false"
-        timeToLiveSeconds="900" 
-        overflowToDisk="false"
-        memoryStoreEvictionPolicy="LRU"/>
-        
+
 	<!-- 6 hour cache on weather searches -->
     <cache name="weatherSearchCache"
         maxElementsInMemory="1000"
@@ -51,12 +43,5 @@
         timeToLiveSeconds="21600" 
         overflowToDisk="false"
         memoryStoreEvictionPolicy="LRU"/>
-        
-    <!-- 15 minute cache on weather search errors -->
-    <cache name="weatherSearchErrorCache"
-        maxElementsInMemory="10000"
-        eternal="false"
-        timeToLiveSeconds="900" 
-        overflowToDisk="false"
-        memoryStoreEvictionPolicy="LRU"/>
+
 </ehcache>
