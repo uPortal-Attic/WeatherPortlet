@@ -38,13 +38,14 @@
 
     <!-- Data Caching Configuration -->
     <bean id="cacheManager" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
-        <property name="cacheManagerName" value="WeatherPortlet.cacheManager" />
         <property name="configLocation" value="classpath:/ehcache.xml" />
     </bean>
 
-    <ehcache-spring:annotation-driven cache-manager="cacheManager" default-cache-key-generator="stringCacheKeyGenerator"/>
-    <bean id="stringCacheKeyGenerator" class="com.googlecode.ehcache.annotations.key.StringCacheKeyGenerator" />
+    <bean id="weatherDataCache" class="org.springframework.cache.ehcache.EhCacheFactoryBean"
+        p:cacheManager-ref="cacheManager" p:cacheName="weatherDataCache" />
 
+    <bean id="weatherSearchCache" class="org.springframework.cache.ehcache.EhCacheFactoryBean"
+        p:cacheManager-ref="cacheManager" p:cacheName="weatherSearchCache" /> 
     <!--
         worldweatheronline.com Weather DAO Implementation
     -->

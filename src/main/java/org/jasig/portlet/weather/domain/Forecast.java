@@ -21,6 +21,9 @@ package org.jasig.portlet.weather.domain;
 
 import java.io.Serializable;
 
+import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang.builder.ToStringStyle;
+
 /**
  * This class models forecasted weather.
  * 
@@ -29,53 +32,53 @@ import java.io.Serializable;
  */
 public class Forecast implements Serializable {
 
-	private static final long serialVersionUID = 7114826846843647795L;
-	private String day = null;
-	private Integer highTemperature = null;
-	private Integer lowTemperature = null;
-	private String condition = null;
-	private String imgName = null;
-	private String imgUrl = null;
+    private static final long serialVersionUID = 7114826846843647795L;
+    private String day = null;
+    private Integer highTemperature = null;
+    private Integer lowTemperature = null;
+    private String condition = null;
+    private String imgName = null;
+    private String imgUrl = null;
 
-	public String getDay() {
-		return day;
-	}
+    public String getDay() {
+        return day;
+    }
 
-	public void setDay(String day) {
-		this.day = day;
-	}
+    public void setDay(String day) {
+        this.day = day;
+    }
 
-	public Integer getHighTemperature() {
-		return highTemperature;
-	}
+    public Integer getHighTemperature() {
+        return highTemperature;
+    }
 
-	public void setHighTemperature(Integer highTemperature) {
-		this.highTemperature = highTemperature;
-	}
+    public void setHighTemperature(Integer highTemperature) {
+        this.highTemperature = highTemperature;
+    }
 
-	public Integer getLowTemperature() {
-		return lowTemperature;
-	}
+    public Integer getLowTemperature() {
+        return lowTemperature;
+    }
 
-	public void setLowTemperature(Integer lowTemperature) {
-		this.lowTemperature = lowTemperature;
-	}
+    public void setLowTemperature(Integer lowTemperature) {
+        this.lowTemperature = lowTemperature;
+    }
 
-	public String getCondition() {
-		return condition;
-	}
+    public String getCondition() {
+        return condition;
+    }
 
-	public void setCondition(String condition) {
-		this.condition = condition;
-	}
+    public void setCondition(String condition) {
+        this.condition = condition;
+    }
 
-	public String getImgName() {
-		return imgName;
-	}
+    public String getImgName() {
+        return imgName;
+    }
 
-	public void setImgName(String imgName) {
-		this.imgName = imgName;
-	}
+    public void setImgName(String imgName) {
+        this.imgName = imgName;
+    }
 
     public String getImgUrl() {
         return imgUrl;
@@ -84,5 +87,8 @@ public class Forecast implements Serializable {
     public void setImgUrl(String imgUrl) {
         this.imgUrl = imgUrl;
     }
-	
+    
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE);
+    }
 }

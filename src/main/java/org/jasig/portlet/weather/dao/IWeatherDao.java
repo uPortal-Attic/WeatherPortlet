@@ -47,10 +47,6 @@ public interface IWeatherDao {
 	 * @return A Weather object representing the current weather and an optional
 	 *         forecast.
 	 */
-	@Cacheable(
-	        cacheName="weatherDataCache", 
-	        exceptionCacheName="weatherDataErrorCache", 
-	        selfPopulating=true)
 	public Weather getWeather(String locationCode, TemperatureUnit unit);
 
 	/**
@@ -59,10 +55,6 @@ public interface IWeatherDao {
 	 * @return A collection of locations representing the possible location or
 	 *         an empty or null collection representing location not found.
 	 */
-	@Cacheable(
-	        cacheName="weatherSearchCache", 
-            exceptionCacheName="weatherSearchErrorCache", 
-            selfPopulating=true)
 	public Collection<Location> find(String location);
 	
     public String getWeatherProviderName();
