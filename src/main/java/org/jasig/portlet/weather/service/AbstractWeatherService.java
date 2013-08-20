@@ -28,7 +28,8 @@ import javax.portlet.PortletPreferences;
 import javax.portlet.ReadOnlyException;
 import javax.portlet.ValidatorException;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.jasig.portlet.weather.DuplicateLocationException;
 import org.jasig.portlet.weather.TemperatureUnit;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -47,8 +48,8 @@ public abstract class AbstractWeatherService implements IWeatherService {
     private static final String LOCATIONS = "locations";
     private static final String LOCATION_CODES = "locationCodes";
 
-	private static final Logger logger = Logger.getLogger(AbstractWeatherService.class);
-	
+    private final Logger logger = LoggerFactory.getLogger(getClass());
+
     /* (non-Javadoc)
      * @see org.jasig.portlet.weather.service.IWeatherService#getSavedLocations(javax.portlet.PortletPreferences)
      */
@@ -75,7 +76,7 @@ public abstract class AbstractWeatherService implements IWeatherService {
         final List<SavedLocation> savedLocations = new ArrayList<SavedLocation>(locationCodes.length);
         for (int locationIndex = 0; locationIndex < locationCodes.length; locationIndex++) {
             if (locationCodes[locationIndex] == null) {
-                logger.warn("A null location was stored at index '" + locationIndex + "' this should be resolved when SavedLocations are next stored for this user");
+                logger.warn("A null location was stored at index '{}' this should be resolved when SavedLocations are next stored for this user", locationIndex);
                 continue;
             }
             
@@ -89,7 +90,7 @@ public abstract class AbstractWeatherService implements IWeatherService {
         return savedLocations;
     }
 
-	/* (non-Javadoc)
+    /* (non-Javadoc)
      * @see org.jasig.portlet.weather.service.IWeatherService#saveLocations(java.util.List, javax.portlet.PortletPreferences)
      */
     public void saveLocations(List<SavedLocation> savedLocations, PortletPreferences prefs) {
@@ -136,19 +137,19 @@ public abstract class AbstractWeatherService implements IWeatherService {
         this.saveLocations(savedLocations, prefs);
         
         return newLocation;
-	}
-	
-	public void deleteWeatherLocation(PortletPreferences prefs, String locationCode) {
-	    final List<SavedLocation> savedLocations = new ArrayList<SavedLocation>(this.getSavedLocations(prefs));
-	    
-	    for (final Iterator<SavedLocation> savedLocationItr = savedLocations.iterator(); savedLocationItr.hasNext();) {
-	        final SavedLocation savedLocation = savedLocationItr.next();
-	        if (savedLocation.code.equals(locationCode)) {
-	            savedLocationItr.remove();
-	            break;
-	        }
-	    }
-	    
+    }
+    
+    public void deleteWeatherLocation(PortletPreferences prefs, String locationCode) {
+        final List<SavedLocation> savedLocations = new ArrayList<SavedLocation>(this.getSavedLocations(prefs));
+        
+        for (final Iterator<SavedLocation> savedLocationItr = savedLocations.iterator(); savedLocationItr.hasNext();) {
+            final SavedLocation savedLocation = savedLocationItr.next();
+            if (savedLocation.code.equals(locationCode)) {
+                savedLocationItr.remove();
+                break;
+            }
+        }
+        
         this.saveLocations(savedLocations, prefs);
-	}
+    }
 }
