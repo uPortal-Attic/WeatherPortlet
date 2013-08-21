@@ -26,6 +26,8 @@ import org.jasig.portlet.weather.TemperatureUnit;
 import org.jasig.portlet.weather.dao.IWeatherDao;
 import org.jasig.portlet.weather.domain.Location;
 import org.jasig.portlet.weather.domain.Weather;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -33,8 +35,6 @@ import javax.annotation.Resource;
 
 import net.sf.ehcache.Cache;
 import net.sf.ehcache.Element;
-
-import org.apache.log4j.Logger;
 
 /**
  * This service class completes the implementation of IWeatherService and makes
@@ -45,8 +45,8 @@ import org.apache.log4j.Logger;
  */
 @Service
 public class WeatherServiceImpl extends AbstractWeatherService {
-    
-    private final Logger logger = Logger.getLogger(getClass());
+
+    private final Logger logger = LoggerFactory.getLogger(getClass());
     
     private static final String ADDING_LOCATIONS_TO_CACHE_KEY = "Adding locations-to cache key: %s";
     private static final String RETRIEVING_LOCATIONS_FROM_CACHE_KEY = "Retrieving locations-from cache key: %s";

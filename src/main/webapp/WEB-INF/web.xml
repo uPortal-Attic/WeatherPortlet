@@ -27,11 +27,11 @@
     <!-- Author: Dustin Schultz | Version: $Id$ -->
     <!--
 	  - Key of the system property that should specify the root directory of this
-	  - web app. Applied by WebAppRootListener or Log4jConfigListener.
+	  - web app. Applied by WebAppRootListener.
 	  -->
     <context-param>
         <param-name>webAppRootKey</param-name>
-        <param-value>WeatherPortlet.root</param-value>
+        <param-value>WeatherPortlet.webapp.root</param-value>
     </context-param>
     <!--
 	  - Location of the XML file that defines the root application context.
@@ -41,16 +41,13 @@
         <param-name>contextConfigLocation</param-name>
         <param-value>/WEB-INF/context/*.xml,/WEB-INF/context/overlay/*.xml</param-value>
     </context-param>
-    <!--
-	  - Location of the Log4J config file, for initialization and refresh checks.
-	  - Applied by Log4jConfigListener.
-	  -->
-    <context-param>
-        <param-name>log4jConfigLocation</param-name>
-        <param-value>/WEB-INF/log4j.properties</param-value>
-    </context-param>
+
     <listener>
-        <listener-class>org.springframework.web.util.Log4jConfigListener</listener-class>
+        <listener-class>org.springframework.web.util.WebAppRootListener</listener-class>
+    </listener>
+    <!-- Needed to remove JMX registration and allow for classloader GC -->
+    <listener>
+        <listener-class>ch.qos.logback.classic.selector.servlet.ContextDetachingSCL</listener-class>
     </listener>
     <listener>
         <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
