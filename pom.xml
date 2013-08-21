@@ -4,7 +4,7 @@
     <parent>
         <groupId>org.jasig.parent</groupId>
         <artifactId>jasig-parent</artifactId>
-        <version>34</version>
+        <version>35</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
@@ -36,11 +36,11 @@
     </issueManagement>
     
     <properties>
-         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-         <jaxbApiVersion>2.2.1</jaxbApiVersion>
-         <jaxbImplVersion>2.2.1.1</jaxbImplVersion>
-         <slf4j.version>1.7.5</slf4j.version>
-         <logback.version>1.0.12</logback.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <jaxbApiVersion>2.2.1</jaxbApiVersion>
+        <jaxbImplVersion>2.2.1.1</jaxbImplVersion>
+        <logbackVersion>1.0.13</logbackVersion>
+        <slf4jVersion>1.7.5</slf4jVersion>
     </properties>
     <build>
         <finalName>WeatherPortlet</finalName>
@@ -158,16 +158,6 @@
                 <version>4.8.2</version>
             </dependency>
             <dependency>
-                <groupId>org.slf4j</groupId>
-                <artifactId>slf4j-api</artifactId>
-                <version>${slf4j.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>ch.qos.logback</groupId>
-                <artifactId>logback-classic</artifactId>
-                <version>${logback.version}</version>
-            </dependency>
-            <dependency>
                 <groupId>net.sf.json-lib</groupId>
                 <artifactId>json-lib-ext-spring</artifactId>
                 <version>1.0.2</version>
@@ -176,12 +166,6 @@
                 <groupId>org.apache.pluto</groupId>
                 <artifactId>pluto-taglib</artifactId>
                 <version>1.1.7</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>commons-logging</groupId>
-                        <artifactId>commons-logging-api</artifactId>
-                    </exclusion>
-                </exclusions>
             </dependency>
             <dependency>
                 <groupId>org.codehaus.groovy</groupId>
@@ -247,7 +231,48 @@
                 <groupId>taglibs</groupId>
                 <artifactId>standard</artifactId>
                 <version>1.1.2</version>
-            </dependency> 
+            </dependency>
+
+            <!-- For sl4j/logback logging, see https://wiki.jasig.org/display/PLT/Logging+Best+Practices -->
+            <dependency>
+                <groupId>commons-logging</groupId>
+                <artifactId>commons-logging</artifactId>
+                <version>1.1.2</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>log4j</groupId>
+                <artifactId>log4j</artifactId>
+                <version>1.2.17</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-api</artifactId>
+                <version>${slf4jVersion}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>jul-to-slf4j</artifactId>
+                <version>${slf4jVersion}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>log4j-over-slf4j</artifactId>
+                <version>${slf4jVersion}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>jcl-over-slf4j</artifactId>
+                <version>${slf4jVersion}</version>
+            </dependency>
+            <dependency>
+                <groupId>ch.qos.logback</groupId>
+                <artifactId>logback-classic</artifactId>
+                <version>${logbackVersion}</version>
+                <scope>runtime</scope>
+            </dependency>
+            <!-- End of logging section -->
         </dependencies>
     </dependencyManagement>
     
@@ -258,17 +283,7 @@
             <version>1.0.28</version>
             <type>war</type>
         </dependency>
-    
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <version>${slf4j.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-classic</artifactId>
-            <version>${logback.version}</version>
-        </dependency>
+
         <!-- Unit test dependencies. -->
         <dependency>
             <groupId>junit</groupId>
@@ -388,6 +403,30 @@
             <groupId>org.codehaus.groovy</groupId>
             <artifactId>groovy-all</artifactId>
         </dependency>
+
+        <!-- Logging section -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>jul-to-slf4j</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>log4j-over-slf4j</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>jcl-over-slf4j</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        <!-- End of logging section -->
     </dependencies>
 
     <profiles>

@@ -48,10 +48,10 @@ public class WeatherServiceImpl extends AbstractWeatherService {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
     
-    private static final String ADDING_LOCATIONS_TO_CACHE_KEY = "Adding locations-to cache key: %s";
-    private static final String RETRIEVING_LOCATIONS_FROM_CACHE_KEY = "Retrieving locations-from cache key: %s";
-    private static final String ADDING_WEATHER_TO_CACHE_KEY = "Adding Weather-to cache key: %s";
-    private static final String RETRIEVING_WEATHER_FROM_CACHE_KEY = "Retrieving Weather-from cache, key: %s";
+    private static final String ADDING_LOCATIONS_TO_CACHE_KEY = "Adding locations-to cache key: {}\n{}";
+    private static final String RETRIEVING_LOCATIONS_FROM_CACHE_KEY = "Retrieving locations-from cache key: {}\n{}";
+    private static final String ADDING_WEATHER_TO_CACHE_KEY = "Adding Weather-to cache key: {}\n{}";
+    private static final String RETRIEVING_WEATHER_FROM_CACHE_KEY = "Retrieving Weather-from cache, key: {}\n{}";
     private static final String WEATHER_KEY_TEMPLATE = "%s_%s";
     private IWeatherDao weatherDao = null; // Spring managed.
 
@@ -113,8 +113,7 @@ public class WeatherServiceImpl extends AbstractWeatherService {
 
     private void logDebugInformation(String message, String value, Element cachedElement) {
         if (logger.isDebugEnabled()) {
-            logger.debug(String.format(message, value));
-            logger.debug(cachedElement.getValue().toString());
+            logger.debug(message, value, cachedElement.getValue().toString());
         }
     }
 

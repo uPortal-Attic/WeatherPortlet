@@ -45,7 +45,7 @@
   <!-- 
    | Specify a local property that sets up the logging directory
    +-->
-  <property scope="local" name="LOG_DIR" value="${catalina.base}/logs" />
+  <property scope="local" name="LOG_DIR" value="${WeatherPortlet.webapp.root}/../../logs/${CONTEXT_NAME}" />
 
   <!--
    | Setup a file based logger that rolls
@@ -89,7 +89,7 @@
   <!-- 
    | Turn up logging for portlet specific package
    +-->
-  <!-- 
+    <!--
   <logger name="org.jasig.portlet.weather" additivity="false" level="DEBUG">
     <appender-ref ref="LOG" />
   </logger>
