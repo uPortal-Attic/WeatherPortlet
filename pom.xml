@@ -18,11 +18,11 @@
     <url>${jasig-site-base}/WeatherPortlet/${project.version}</url>
 
     <scm>
-        <connection>scm:svn:https://source.jasig.org/portlets/WeatherPortlet/trunk</connection>
-        <developerConnection>scm:svn:https://source.jasig.org/portlets/WeatherPortlet/trunk</developerConnection>
-        <url>http://developer.jasig.org/source/browse/jasigsvn/portlets/WeatherPortlet/trunk</url>
+        <connection>scm:git:git@github.com:Jasig/WeatherPortlet.git</connection>
+        <developerConnection>scm:git:git@github.com:Jasig/WeatherPortlet.git</developerConnection>
+        <url>scm:git:git@github.com:Jasig/WeatherPortlet.git</url>
     </scm>
-    
+
     <distributionManagement>
         <site>
             <id>developer.jasig</id>
