@@ -24,13 +24,6 @@
       <tag>HEAD</tag>
   </scm>
 
-    <distributionManagement>
-        <site>
-            <id>developer.jasig</id>
-            <url>${jasig-site-dist-base}/${project.artifactId}/${project.version}</url>
-        </site>
-    </distributionManagement>
-    
     <issueManagement>
         <url>${jasig-issues-base}/WPT</url>
         <system>${jasig-issues-system}</system>
@@ -457,6 +450,15 @@
                     <version>${jaxbImplVersion}</version>
                 </dependency>
             </dependencies>
+        </profile>
+        <profile>
+            <id>site</id>
+            <distributionManagement>
+                <site>
+                    <id>developer.jasig</id>
+                    <url>${jasig-site-dist-base}/${project.artifactId}/${project.version}</url>
+                </site>
+            </distributionManagement>
         </profile>
     </profiles>
 </project>
