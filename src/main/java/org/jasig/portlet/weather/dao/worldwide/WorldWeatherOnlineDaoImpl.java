@@ -61,8 +61,8 @@ public class WorldWeatherOnlineDaoImpl implements IWeatherDao, DisposableBean, I
     private static final String DATE_PATTERN = "yyyy-MM-dd";
     private static final String DAY_PATTERN = "EEE";
     
-    private static final String FIND_URL = "http://free.worldweatheronline.com/feed/search.ashx?key=@KEY@&query=@QUERY@&num_of_results=3&format=xml";
-    private static final String WEATHER_URL = "http://free.worldweatheronline.com/feed/weather.ashx?key=@KEY@&num_of_days=3&format=xml&q=@LOCATION@";
+    private static final String FIND_URL = "http://api.worldweatheronline.com/free/v1/search.ashx?key=@KEY@&q=@QUERY@&num_of_results=3&format=xml";
+    private static final String WEATHER_URL = "http://api.worldweatheronline.com/free/v1/weather.ashx?key=@KEY@&num_of_days=3&format=xml&q=@LOCATION@";
     private String key = null;
 
     private Properties imageMapping;
