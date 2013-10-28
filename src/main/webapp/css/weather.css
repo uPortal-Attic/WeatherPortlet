@@ -73,6 +73,7 @@
     padding-bottom: 5px;
 }
 .jasigWeatherPortlet .current {
+    line-height: 13px;
     text-align: left;
     float: left;
     padding-top: 5px;
@@ -94,7 +95,7 @@
 }
 .jasigWeatherPortlet .conditions {
     overflow: hidden;
-    height: 120px;
+    height: 140px;
 }
 .jasigWeatherPortlet table {
     margin: 5px 0;
