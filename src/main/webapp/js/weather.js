@@ -93,7 +93,7 @@ var weatherPortlet = weatherPortlet || {};
                     that.locate('searchResults').show();
                 }
                 var error = data.error;
-                if(error.length > 0) {
+                if(error && error.length > 0) {
                 	that.locate('locationSearchErrorMessage').text(error);
                 	that.locate('locationSearchError').show();
                 }
