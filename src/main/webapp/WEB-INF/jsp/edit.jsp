@@ -36,52 +36,51 @@
     <portlet:param name="action" value="delete"/>
 </portlet:actionURL>
 
+<script type="text/javascript" src="<rs:resourceURL value="/rs/jquery/1.10.2/jquery-1.10.2.min.js"/>"></script>
+<script type="text/javascript" src="<rs:resourceURL value="/rs/jqueryui/1.10.3/jquery-ui-1.10.3.min.js"/>"></script>
+<script type="text/javascript" src="<rs:resourceURL value="/rs/fluid/1.5.0/js/fluid-custom.min.js"/>"></script>
+<script type="text/javascript" src="<rs:resourceURL value="/rs/jquery/form/2.28/jquery.form-2.28.min.js"/>"></script>
+<script type="text/javascript" src="${context}/js/weather.min.js"></script>
+<script type="text/javascript">
+weatherPortlet.jQuery(document).ready(function() {
+    $ = weatherPortlet.jQuery;
+    var cityReorderer, cityEditor;
+
+    var cityEditorOpts = {
+        saveOrderUrl : '${saveOrderUrl}',
+        updateUnitUrl : '${updateUnitsUrl}',
+        deleteLocationUrl : '${deleteLocationUrl}',
+        noLocationsMessage: '<spring:message code="edit.noresults.location"/>',
+        searchingMessage: '<spring:message code="edit.search.loading"/>',
+        listeners : {
+            //Closure to deal with cityReorderer being initialized after these options are created
+            addCity : function() {
+                cityReorderer.refresh();
+            },
+            deleteCity : function() {
+                cityReorderer.refresh();
+            }
+        }
+    };
+
+    cityEditor = weatherPortlet.editCities("#${n}jasigWeatherPortlet", cityEditorOpts);
+
+    var reordererOpts = {
+        selectors: {
+            movables: ".movable",
+            grabHandle: ".handle"
+        },
+        listeners : {
+            onRefresh : cityEditor.refreshLocationRows,
+            afterMove : cityEditor.saveOrder
+        }
+    };
+
+    cityReorderer = weatherPortlet.fluid.reorderList("#${n}savedLocationsTable", reordererOpts);
+});
+</script>
 
 <div id="${n}jasigWeatherPortlet" class="jasigWeatherPortlet">
-    <script type="text/javascript" src="<rs:resourceURL value="/rs/jquery/1.3.2/jquery-1.3.2.min.js"/>"></script>
-    <script type="text/javascript" src="<rs:resourceURL value="/rs/jqueryui/1.7.2/jquery-ui-1.7.2.min.js"/>"></script>
-    <script type="text/javascript" src="<rs:resourceURL value="/rs/fluid/1.1.2/js/fluid-all-1.1.2.min.js"/>"></script>
-    <script type="text/javascript" src="<rs:resourceURL value="/rs/jquery/form/2.28/jquery.form-2.28.min.js"/>"></script>
-    <script type="text/javascript" src="${context}/js/weather.min.js"></script>
-    <script type="text/javascript">
-    weatherPortlet.jQuery(document).ready(function() {
-        $ = weatherPortlet.jQuery;
-        var cityReorderer, cityEditor;
-
-        var cityEditorOpts = {
-            saveOrderUrl : '${saveOrderUrl}',
-            updateUnitUrl : '${updateUnitsUrl}',
-            deleteLocationUrl : '${deleteLocationUrl}',
-            noLocationsMessage: '<spring:message code="edit.noresults.location"/>',
-            searchingMessage: '<spring:message code="edit.search.loading"/>',
-            listeners : {
-                //Closure to deal with cityReorderer being initialized after these options are created
-                addCity : function() {
-                    cityReorderer.refresh();
-                },
-                deleteCity : function() {
-                    cityReorderer.refresh();
-                }
-            }
-        };
-
-        cityEditor = weatherPortlet.editCities("#${n}jasigWeatherPortlet", cityEditorOpts);
-
-        var reordererOpts = {
-            selectors: {
-                movables: ".movable",
-                grabHandle: ".handle"
-            },
-            listeners : {
-                onRefresh : cityEditor.refreshLocationRows,
-                afterMove : cityEditor.saveOrder
-            }
-        };
-
-        cityReorderer = weatherPortlet.fluid.reorderList("#${n}savedLocationsTable", reordererOpts);
-    });
-    </script>
-
     <div class="location-search" style="display:none">
         <h2><spring:message code="edit.add.location.button"/></h2>
         <form id="${n}locationSearchForm" class="locate-search-form" action="${context}/ajax/findCity">

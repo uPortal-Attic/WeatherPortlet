@@ -31,7 +31,7 @@
 
 <portlet:defineObjects/>
 <c:set var="useInlineCSSTags" value="${renderRequest.preferences.map['useInlineCSSTags'][0]}"/>
-<c:set var="includeJQuery" value="${renderRequest.preferences.map['includeJQuery'][0]}"/>
+<c:set var="includeJQuery" value="${renderRequest.preferences.map['includeJQuery'][0]}"/> <%-- Not currently used --%>
 <c:set var="showEditLink" value="${renderRequest.preferences.map['showEditLink'][0]}"/>
 
 <c:set var="n"><portlet:namespace/></c:set>
