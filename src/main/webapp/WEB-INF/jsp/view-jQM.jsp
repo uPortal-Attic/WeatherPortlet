@@ -24,16 +24,10 @@
 
 <rs:aggregatedResources path="/resources.xml"/>
 
-
 <div id="${n}jasigWeatherPortlet" class="jasigWeatherPortlet">
 <c:choose>
     <c:when test="${empty weathers}">
         <p><spring:message code="view.location.notset"/></p>
-        <br>
-	<div class="edit-link">
-            <portlet:renderURL var="editUrl"  portletMode="EDIT" />
-            <a href="${editUrl}"><spring:message code="view.edit-link"/></a>
-    </div>
     </c:when>
     <c:otherwise>
         <c:forEach var="weather" items="${weathers}">
@@ -144,7 +138,7 @@
 				</c:forEach>
             </c:if>
             </ul>
-            </c:forEach>
+        </c:forEach>
         <c:if test="${fn:length(errors) > 0}">
             <div class="error">
                 <h4><spring:message code="view.errors.header"/></h4>
@@ -169,4 +163,9 @@
         </div>
     </c:otherwise>
 </c:choose>
+    <br/>
+    <div class="edit-link">
+        <portlet:renderURL var="editUrl"  portletMode="EDIT" />
+        <a href="${editUrl}"><spring:message code="view.edit-link"/></a>
+    </div>
 </div>
