@@ -70,7 +70,7 @@
             </preference>
             <preference>
                 <name>includeJQuery</name>
-                <value>true</value>
+                <value>false</value>
             </preference>
             <preference>
                 <name>useInlineCSSTags</name>
