@@ -30,6 +30,7 @@
     </issueManagement>
     
     <properties>
+        <pluto.version>2.1.0-M3</pluto.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <jaxbApiVersion>2.2.1</jaxbApiVersion>
         <jaxbImplVersion>2.2.1.1</jaxbImplVersion>
@@ -155,9 +156,9 @@
                 <version>1.0.2</version>
             </dependency>
             <dependency>
-                <groupId>org.apache.pluto</groupId>
+                <groupId>org.apache.portals.pluto</groupId>
                 <artifactId>pluto-taglib</artifactId>
-                <version>1.1.7</version>
+                <version>${pluto.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.codehaus.groovy</groupId>
@@ -387,7 +388,7 @@
         </dependency>    
         
         <dependency>
-            <groupId>org.apache.pluto</groupId>
+            <groupId>org.apache.portals.pluto</groupId>
             <artifactId>pluto-taglib</artifactId>
             <scope>provided</scope>
         </dependency>    
