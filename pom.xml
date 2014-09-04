@@ -85,6 +85,30 @@
                 </configuration>
             </plugin>
             <plugin>
+                <groupId>org.jasig.resourceserver</groupId>
+                <artifactId>resource-server-plugin</artifactId>
+                <version>${resourceServerVersion}</version>
+                <executions>
+                    <execution>
+                        <id>aggregate-resources</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>batch-aggregate</goal>
+                        </goals>
+                        <inherited>false</inherited>
+                        <configuration>
+                            <displayJsWarnings>false</displayJsWarnings>
+                            <useGeneratedSources>true</useGeneratedSources>
+                            <includes>
+                                <include>editResources.xml</include>
+                                <include>resources.xml</include>
+                            </includes>
+                            <sharedJavaScriptDirectory>js/</sharedJavaScriptDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
                 <groupId>com.mycila.maven-license-plugin</groupId>
                 <artifactId>maven-license-plugin</artifactId>
                 <configuration>
