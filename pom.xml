@@ -62,8 +62,8 @@
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
-                    <source>1.5</source>
-                    <target>1.5</target>
+                    <source>1.6</source>
+                    <target>1.6</target>
                 </configuration>
             </plugin>
             <plugin>
@@ -82,6 +82,39 @@
                             </includes>
                         </overlay>
                     </overlays>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>com.mycila.maven-license-plugin</groupId>
+                <artifactId>maven-license-plugin</artifactId>
+                <configuration>
+                    <aggregate>true</aggregate>
+                    <excludes>
+                        <exclude>.gitignore</exclude>
+                        <exclude>target/**</exclude>
+                        <exclude>pom.xml.*</exclude>
+                        <exclude>release.properties</exclude>
+                        <exclude>LICENSE</exclude>
+                        <exclude>NOTICE</exclude>
+                        <exclude>NOTICE.template</exclude>
+                        <exclude>src/main/resources/com/microsoft/exchange/Services.wsdl</exclude>
+                        <exclude>src/test/resources/sampleEvents.ics</exclude>
+                        <exclude>**/src/main/webapp/rs/**</exclude>
+                        <exclude>bin/**</exclude>
+                        <exclude>.idea/**</exclude> <!-- Exclude intelliJ files -->
+                        <exclude>overlays/**</exclude> <!-- Exclude intelliJ files -->
+                    </excludes>
+                    <mapping>
+                        <channel>XML_STYLE</channel>
+                    </mapping>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.jasig.maven</groupId>
+                <artifactId>maven-notice-plugin</artifactId>
+                <configuration>
+                    <noticeTemplate>NOTICE.template</noticeTemplate>
+                    <generateChildNotices>false</generateChildNotices>
                 </configuration>
             </plugin>
         </plugins>
