@@ -245,3 +245,4 @@ else {
     jQuery.noConflict(true);
 }
 fluid = null;
+fluid_1_5 = null;
