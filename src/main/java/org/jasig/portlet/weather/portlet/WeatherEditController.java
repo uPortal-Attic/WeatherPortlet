@@ -27,6 +27,8 @@ import java.util.Map;
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 import javax.portlet.PortletPreferences;
+import javax.portlet.PortletRequest;
+import javax.portlet.PortletResponse;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 
@@ -42,6 +44,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.portlet.ModelAndView;
+import org.springframework.web.portlet.bind.annotation.ResourceMapping;
 
 /**
  * This class handles navigation from the edit form.
@@ -54,6 +57,12 @@ import org.springframework.web.portlet.ModelAndView;
 public class WeatherEditController {
 	private IWeatherService weatherService = null;
 	private AjaxPortletSupport ajaxPortletSupport;
+	private WeatherViewController wvc;
+	
+	@Autowired
+	public void setWeatherViewController(WeatherViewController that) {
+	    this.wvc = that;
+	}
 	
 	@Autowired
 	public void setWeatherService(IWeatherService weatherService) {
@@ -181,4 +190,9 @@ public class WeatherEditController {
         model.put("status", "success");
         this.ajaxPortletSupport.redirectAjaxResponse("ajax/json", model, request, response);
     }
+	
+	@ResourceMapping("weatherFeed")
+	public ModelAndView redirectToView(PortletRequest request, PortletResponse response) {
+	    return wvc.getWeatherFeed(request, response);
+	}
 }

@@ -77,7 +77,7 @@ public class WeatherViewController {
     }
     
     @ResourceMapping("weatherFeed")
-    public ModelAndView getWeatherFeed(PortletRequest request, PortletResponse response, ModelMap modelMap) {
+    public ModelAndView getWeatherFeed(PortletRequest request, PortletResponse response) {
         return new ModelAndView("jsonView", getWeatherInfo(request, response));
     }
     
