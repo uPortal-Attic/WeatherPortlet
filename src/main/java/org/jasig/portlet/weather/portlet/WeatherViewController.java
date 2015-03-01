@@ -68,25 +68,21 @@ public class WeatherViewController {
     }
 
     @RequestMapping
-	public ModelAndView viewWeather(RenderRequest request, RenderResponse response) {
-        final Map<String, Object> model = new LinkedHashMap<String, Object>();
-        getWeatherInfo(request, response, model);
-        
+    public ModelAndView viewWeather(RenderRequest request, RenderResponse response) {
         String extension = viewSelector.getViewNameExtension(request);
         String viewName = "view".concat(extension);
         
-		//show view.jsp with a model named 'weather' populated weather data
-		return new ModelAndView(viewName, model);
-	}
+        //show view.jsp with a model named 'weather' populated weather data
+        return new ModelAndView(viewName, getWeatherInfo(request, response));
+    }
     
     @ResourceMapping("weatherFeed")
     public ModelAndView getWeatherFeed(PortletRequest request, PortletResponse response, ModelMap modelMap) {
-        final Map<String, Object> model = new LinkedHashMap<String, Object>();
-        getWeatherInfo(request, response, model);
-        return new ModelAndView("jsonView", model);
+        return new ModelAndView("jsonView", getWeatherInfo(request, response));
     }
     
-    private void getWeatherInfo(PortletRequest request, PortletResponse response, Map<String, Object> model) {
+    private Map<String, Object> getWeatherInfo(PortletRequest request, PortletResponse response) {
+        final Map<String, Object> model = new LinkedHashMap<String, Object>();
         final PortletPreferences prefs = request.getPreferences();
         final List<SavedLocation> savedLocations = this.weatherService.getSavedLocations(prefs);
         
@@ -110,6 +106,7 @@ public class WeatherViewController {
 
         // indicate if the current user is a guest (unauthenticated) user
         model.put( "isGuest", request.getRemoteUser() == null || request.getRemoteUser().equalsIgnoreCase( "guest" ) );
+        return model;
     }
     
 }
