@@ -25,6 +25,8 @@ import java.util.List;
 import java.util.Map;
 
 import javax.portlet.PortletPreferences;
+import javax.portlet.PortletRequest;
+import javax.portlet.PortletResponse;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 
@@ -35,7 +37,9 @@ import org.jasig.portlet.weather.service.IWeatherService;
 import org.jasig.portlet.weather.service.SavedLocation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.portlet.bind.annotation.ResourceMapping;
 import org.springframework.web.portlet.ModelAndView;
 
 /**
@@ -45,6 +49,7 @@ import org.springframework.web.portlet.ModelAndView;
  * @version $Id$
  */
 @Controller
+@RequestMapping("VIEW")
 public class WeatherViewController {
     protected final Log logger = LogFactory.getLog(this.getClass());
     
@@ -62,8 +67,26 @@ public class WeatherViewController {
         this.viewSelector = viewSelector;
     }
 
-    @RequestMapping("VIEW")
+    @RequestMapping
 	public ModelAndView viewWeather(RenderRequest request, RenderResponse response) {
+        final Map<String, Object> model = new LinkedHashMap<String, Object>();
+        getWeatherInfo(request, response, model);
+        
+        String extension = viewSelector.getViewNameExtension(request);
+        String viewName = "view".concat(extension);
+        
+		//show view.jsp with a model named 'weather' populated weather data
+		return new ModelAndView(viewName, model);
+	}
+    
+    @ResourceMapping("weatherFeed")
+    public ModelAndView getWeatherFeed(PortletRequest request, PortletResponse response, ModelMap modelMap) {
+        final Map<String, Object> model = new LinkedHashMap<String, Object>();
+        getWeatherInfo(request, response, model);
+        return new ModelAndView("jsonView", model);
+    }
+    
+    private void getWeatherInfo(PortletRequest request, PortletResponse response, Map<String, Object> model) {
         final PortletPreferences prefs = request.getPreferences();
         final List<SavedLocation> savedLocations = this.weatherService.getSavedLocations(prefs);
         
@@ -80,19 +103,13 @@ public class WeatherViewController {
             }
         }
         
-        final Map<String, Object> model = new LinkedHashMap<String, Object>();
         model.put("weathers", weatherList);
         model.put("errors", errorList);
-		model.put("serviceName", this.weatherService.getWeatherProviderName());
-		model.put("serviceUrl", this.weatherService.getWeatherProviderLink());
+        model.put("serviceName", this.weatherService.getWeatherProviderName());
+        model.put("serviceUrl", this.weatherService.getWeatherProviderLink());
 
         // indicate if the current user is a guest (unauthenticated) user
         model.put( "isGuest", request.getRemoteUser() == null || request.getRemoteUser().equalsIgnoreCase( "guest" ) );
-        
-        String extension = viewSelector.getViewNameExtension(request);
-        String viewName = "view".concat(extension);
-        
-		//show view.jsp with a model named 'weather' populated weather data
-		return new ModelAndView(viewName, model);
-	}
+    }
+    
 }

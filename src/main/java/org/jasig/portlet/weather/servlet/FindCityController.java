@@ -62,7 +62,7 @@ public class FindCityController {
 	        @RequestParam("location") String location,
 	        HttpServletRequest request, HttpServletResponse response) {
 
-        final Map<Object, Object> model = new LinkedHashMap<Object, Object>();
+        final Map<String, Object> model = new LinkedHashMap<String, Object>();
         final Collection<Location> locations = new ArrayList<Location>();
 
         try {
