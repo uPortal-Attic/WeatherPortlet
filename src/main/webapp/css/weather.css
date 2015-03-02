@@ -83,6 +83,7 @@
 }
 .jasigWeatherPortlet .weather-location {
     margin-top: 5px;
+    line-height: normal;
 }
 .jasigWeatherPortlet .forecast {
     float: left;
