@@ -13,7 +13,7 @@
     <packaging>war</packaging>
     
     <name>Weather Portlet</name>
-    <version>1.1.2-SNAPSHOT</version>
+    <version>1.1.2</version>
     <description>Jasig Weather Portlet</description>
     <url>${jasig-site-base}/WeatherPortlet/${project.version}</url>
 
