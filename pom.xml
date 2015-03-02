@@ -21,7 +21,7 @@
         <connection>scm:git:git@github.com:Jasig/WeatherPortlet.git</connection>
         <developerConnection>scm:git:git@github.com:Jasig/WeatherPortlet.git</developerConnection>
         <url>scm:git:git@github.com:Jasig/WeatherPortlet.git</url>
-      <tag>WeatherPortlet-1.1.2</tag>
+      <tag>HEAD</tag>
   </scm>
 
     <issueManagement>
