@@ -80,14 +80,23 @@ public class Forecast implements Serializable {
     }
 
     public String getImgUrl() {
+        imgUrl = secureUrl(imgUrl);
         return imgUrl;
     }
 
     public void setImgUrl(String imgUrl) {
         this.imgUrl = imgUrl;
+        imgUrl = secureUrl(imgUrl);
     }
     
     public String toString() {
         return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE);
+    }
+
+    public String secureUrl(String inputUrl) {
+        if(inputUrl==null) {
+          return inputUrl;
+        }
+        return  inputUrl.replace("http://l","https://s").replace("/a/i/","/zz/combo?/a/i/");
     }
 }
