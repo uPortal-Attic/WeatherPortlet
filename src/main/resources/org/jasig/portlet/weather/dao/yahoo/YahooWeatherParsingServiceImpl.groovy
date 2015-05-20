@@ -39,7 +39,7 @@ class YahooWeatherParsingServiceImpl implements IYahooWeatherParsingService {
         current.setWindDirection(rss.channel.wind.@direction.toString())
         current.setHumidity(rss.channel.atmosphere.@humidity.toDouble())
         current.setPressure(rss.channel.atmosphere.@pressure.toDouble())
-        current.setImgUrl("http://l.yimg.com/a/i/us/we/52/" + rss.channel.item.condition.@code.toString() + ".gif")
+        current.setImgUrl("https://s.yimg.com/zz/combo?/a/i/us/we/52/" + rss.channel.item.condition.@code.toString() + ".gif")
         weather.setCurrentWeather(current)
         
         def location = new Location()
