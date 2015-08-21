@@ -37,7 +37,7 @@
         <logbackVersion>1.0.13</logbackVersion>
         <resourceServerVersion>1.0.42</resourceServerVersion>
         <slf4jVersion>1.7.5</slf4jVersion>
-        <spring.version>3.2.13.RELEASE</spring.version>
+        <spring.version>4.0.9.RELEASE</spring.version>
     </properties>
     <build>
         <finalName>WeatherPortlet</finalName>
