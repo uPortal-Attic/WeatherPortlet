@@ -41,6 +41,7 @@
         <param-value>/WEB-INF/context/*.xml,/WEB-INF/context/overlay/*.xml</param-value>
     </context-param>
 
+    <!-- Must be the first listener so the webAppRootKey gets set for logback -->
     <listener>
         <listener-class>org.springframework.web.util.WebAppRootListener</listener-class>
     </listener>
