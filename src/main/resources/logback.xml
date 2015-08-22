@@ -44,7 +44,7 @@
   <!-- 
    | Specify a local property that sets up the logging directory
    +-->
-  <property scope="local" name="LOG_DIR" value="${WeatherPortlet.webapp.root}/../../logs/${CONTEXT_NAME}" />
+  <property scope="local" name="LOG_DIR" value="${WeatherPortlet.webapp.root}/../../logs" />
 
   <!--
    | Setup a file based logger that rolls
