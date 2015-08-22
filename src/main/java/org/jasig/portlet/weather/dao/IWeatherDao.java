@@ -24,8 +24,6 @@ import org.jasig.portlet.weather.TemperatureUnit;
 import org.jasig.portlet.weather.domain.Location;
 import org.jasig.portlet.weather.domain.Weather;
 
-import com.googlecode.ehcache.annotations.Cacheable;
-
 /**
  * Weather data access interface. Implement this interface to retrieve weather
  * information from source.
@@ -38,19 +36,13 @@ public interface IWeatherDao {
 	/**
 	 * Gets the weather from an implemented source.
 	 * 
-	 * @param locationCode
-	 *            A string value representing the location to retrieve weather
-	 *            from.
-	 * @param metric
-	 *            A boolean value representing metric or not.
-	 * @return A Weather object representing the current weather and an optional
-	 *         forecast.
+	 * @param locationCode A string value representing the location to retrieve weather from.
+	 * @return A Weather object representing the current weather and an optional forecast.
 	 */
 	public Weather getWeather(String locationCode, TemperatureUnit unit);
 
 	/**
-	 * @param location
-	 *            A String representing a location to find
+	 * @param location A String representing a location to find
 	 * @return A collection of locations representing the possible location or
 	 *         an empty or null collection representing location not found.
 	 */

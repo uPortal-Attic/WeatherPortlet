@@ -99,7 +99,7 @@ public class AddInitParamsInterceptor extends HandlerInterceptorAdapter
     /**
      * Allows for overriding the default modelPrefix
      * 
-     * @param modelPrefix
+     * @param modelPrefix prefix for model
      */
     public void setModelPrefix(String modelPrefix) {
         this.modelPrefix = modelPrefix;

@@ -41,6 +41,12 @@ public interface IWeatherService {
 	public Collection<Location> find(String location);
 	
 	/**
+	 * Adds a weather location.
+	 *
+	 * @param prefs portlet preferences
+	 * @param locationCode location code
+	 * @param location location
+	 * @param unit temperatur unit
 	 * @throws DuplicateLocationException If a location with the specified code already exists
 	 */
 	public SavedLocation addWeatherLocation(PortletPreferences prefs, String locationCode, String location, TemperatureUnit unit);
