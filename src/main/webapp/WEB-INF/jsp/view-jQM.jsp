@@ -60,7 +60,6 @@
                                     <img width="${currW}" class="portlet-icon ui-li-thumb" id="firstimage" height="${currH}" src="${context}/${currImgPath}/${current.imgName}${currExt}" alt="${current.condition}" title="${current.condition}"/><br/>
                                 </c:otherwise>
                             </c:choose>
-                                <!-- div class="ui-btn-text "-->
 				            <h3 class="ui-li-heading">
                                 ${current.temperature}&#xB0; ${weather.temperatureUnit}
 				            </h3>
@@ -99,7 +98,6 @@
                         </c:choose>
                 
                     </p>
-                    <!-- /div-->
             </li>
 		    <c:if test="${not empty weather.forecast}">
             <c:set var="counter" value="0"/>
