@@ -74,7 +74,7 @@
         script-source="classpath:org/jasig/portlet/weather/dao/yahoo/YahooLocationParsingServiceImpl.groovy"/>
 
 
-	<!-- messages.propreties Configuration -->
+	 <!--messages.properties Configuration -->
 	<bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
 		<property name="basenames">
 			<list>
@@ -82,7 +82,7 @@
 			</list>
 		</property>
 	</bean>
-
+    
     <bean id="ajaxPortletSupportService" class="org.jasig.web.service.AjaxPortletSupportService"/>
 
 	<!-- ========================= PORTLET SPECIFIC DEFINITIONS ========================= -->

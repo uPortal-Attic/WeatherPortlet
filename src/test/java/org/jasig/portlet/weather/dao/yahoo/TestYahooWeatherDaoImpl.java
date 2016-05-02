@@ -30,6 +30,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.InputStream;
 import java.util.List;
+import java.util.Locale;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "/testContext.xml")
@@ -45,13 +46,14 @@ public class TestYahooWeatherDaoImpl {
     
     @Autowired(required = true)
     private ApplicationContext applicationContext;
-    
+
     @Test
     public void test() throws Exception {
         InputStream is = applicationContext.getResource("classpath:/2502265YQL.xml").getInputStream();
         Weather weather = weatherParsingService.parseWeather(is);
         Assert.assertEquals(weather.getForecast().size(), 10);
         Assert.assertEquals(weather.getCurrentWeather().getCondition(), "Mostly Sunny");
+        Assert.assertEquals(weather.getPressureUnit(), "mb");
     }
     
     @Test
@@ -59,6 +61,11 @@ public class TestYahooWeatherDaoImpl {
         InputStream is = applicationContext.getResource("classpath:/yahooLondonSearchYQL.xml").getInputStream();
         List<Location> locations = locationParsingService.parseLocations(is);
         Assert.assertEquals(locations.size(), 10);
+    }
+
+    @Test
+    public void shouldReturnUnitsFromPropertiesFile() {
+        Assert.assertEquals(applicationContext.getMessage("units.pressure.inches", null, Locale.getDefault()), "in");
     }
 
 }

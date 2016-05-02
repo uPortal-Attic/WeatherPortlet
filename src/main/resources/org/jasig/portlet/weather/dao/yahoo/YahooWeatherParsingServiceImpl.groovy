@@ -17,13 +17,24 @@
  * under the License.
  */
 
+
+
+
+
+
+
 import org.jasig.portlet.weather.dao.yahoo.IYahooWeatherParsingService
 import org.jasig.portlet.weather.domain.Current
 import org.jasig.portlet.weather.domain.Forecast
 import org.jasig.portlet.weather.domain.Location
 import org.jasig.portlet.weather.domain.Weather
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.context.ApplicationContext
 
 class YahooWeatherParsingServiceImpl implements IYahooWeatherParsingService {
+
+    @Autowired
+    ApplicationContext context
 
     Weather parseWeather(InputStream xml) {
         def rss = new XmlSlurper().parse(xml)
@@ -41,6 +52,11 @@ class YahooWeatherParsingServiceImpl implements IYahooWeatherParsingService {
         current.setWindDirection(rss.results.channel.wind.@direction.toString())
         current.setHumidity(rss.results.channel.atmosphere.@humidity.toDouble())
         current.setPressure(rss.results.channel.atmosphere.@pressure.toDouble())
+        if (current.getPressure() > 33) {
+            weather.setPressureUnit(context.getMessage("units.pressure.millibar", null, Locale.getDefault()))
+        } else {
+            weather.setPressureUnit(context.getMessage("units.pressure.inches", null, Locale.getDefault()))
+        }
         current.setImgUrl("https://s.yimg.com/zz/combo?/a/i/us/we/52/" + rss.results.channel.item.condition.@code.toString() + ".gif")
         weather.setCurrentWeather(current)
         
