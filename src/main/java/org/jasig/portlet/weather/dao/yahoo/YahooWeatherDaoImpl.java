@@ -54,8 +54,8 @@ import org.springframework.dao.DataRetrievalFailureException;
 
 public class YahooWeatherDaoImpl implements IWeatherDao, DisposableBean, InitializingBean {
 
-    private static final String FIND_URL = "http://where.yahooapis.com/v1/places.q(@QUERY@);count=10?appid=@KEY@";
-    private static final String WEATHER_URL = "http://weather.yahooapis.com/forecastrss?w=@LOCATION@&u=@UNIT@";
+    private static final String FIND_URL = "http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20geo.places(10)%20where%20text%3D%22@QUERY@%22";
+    private static final String WEATHER_URL = "http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20weather.forecast%20where%20woeid%3D@LOCATION@%20and%20u%3D%22@UNIT@%22";
     private static final String ERR_API_MISSING_KEY = "exception.missing.APIKey";
     private static final String ERR_GENERAL_KEY = "exception.generalError.title";
 

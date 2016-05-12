@@ -16,46 +16,58 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-import java.io.InputStream
-import groovy.xml.StreamingMarkupBuilder
-import org.jasig.portlet.weather.domain.*
+
 import org.jasig.portlet.weather.dao.yahoo.IYahooWeatherParsingService
+import org.jasig.portlet.weather.domain.Current
+import org.jasig.portlet.weather.domain.Forecast
+import org.jasig.portlet.weather.domain.Location
+import org.jasig.portlet.weather.domain.Weather
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.context.ApplicationContext
 
 class YahooWeatherParsingServiceImpl implements IYahooWeatherParsingService {
+
+    @Autowired
+    ApplicationContext context
 
     Weather parseWeather(InputStream xml) {
         def rss = new XmlSlurper().parse(xml)
         
         def weather = new Weather()
-        weather.setPressureUnit(rss.channel.units.@pressure.toString())
-        weather.setTemperatureUnit(rss.channel.units.@temperature.toString())
-        weather.setWindUnit(rss.channel.units.@speed.toString())
-        weather.setMoreInformationLink(rss.channel.link.toString())
+        weather.setPressureUnit(rss.results.channel.units.@pressure.toString())
+        weather.setTemperatureUnit(rss.results.channel.units.@temperature.toString())
+        weather.setWindUnit(rss.results.channel.units.@speed.toString())
+        weather.setMoreInformationLink(rss.results.channel.link.toString())
         
         def current = new Current()
-        current.setCondition(rss.channel.item.condition.@text.toString())
-        current.setTemperature(rss.channel.item.condition.@temp.toInteger())
-        current.setWindSpeed(rss.channel.wind.@speed.toDouble())
-        current.setWindDirection(rss.channel.wind.@direction.toString())
-        current.setHumidity(rss.channel.atmosphere.@humidity.toDouble())
-        current.setPressure(rss.channel.atmosphere.@pressure.toDouble())
-        current.setImgUrl("https://s.yimg.com/zz/combo?/a/i/us/we/52/" + rss.channel.item.condition.@code.toString() + ".gif")
+        current.setCondition(rss.results.channel.item.condition.@text.toString())
+        current.setTemperature(rss.results.channel.item.condition.@temp.toInteger())
+        current.setWindSpeed(rss.results.channel.wind.@speed.toDouble())
+        current.setWindDirection(rss.results.channel.wind.@direction.toString())
+        current.setHumidity(rss.results.channel.atmosphere.@humidity.toDouble())
+        current.setPressure(rss.results.channel.atmosphere.@pressure.toDouble())
+        if (current.getPressure() > 33) {
+            weather.setPressureUnit(context.getMessage("units.pressure.millibar", null, Locale.getDefault()))
+        } else {
+            weather.setPressureUnit(context.getMessage("units.pressure.inches", null, Locale.getDefault()))
+        }
+        current.setImgUrl("https://s.yimg.com/zz/combo?/a/i/us/we/52/" + rss.results.channel.item.condition.@code.toString() + ".gif")
         weather.setCurrentWeather(current)
         
         def location = new Location()
-        location.setCity(rss.channel.location.@city.toString())
-        if (!rss.channel.location.@region.toString().equals("")) {
-            location.setStateOrCountry(rss.channel.location.@region.toString())
+        location.setCity(rss.results.channel.location.@city.toString())
+        if (!rss.results.channel.location.@region.toString().equals("")) {
+            location.setStateOrCountry(rss.results.channel.location.@region.toString())
         } else {
-            location.setStateOrCountry(rss.channel.location.@country.toString())
+            location.setStateOrCountry(rss.results.channel.location.@country.toString())
         }
-        location.setLatitude(rss.channel.item.lat.toDouble())
-        location.setLongitude(rss.channel.item.long.toDouble())
+        location.setLatitude(rss.results.channel.item.lat.toDouble())
+        location.setLongitude(rss.results.channel.item.long.toDouble())
         location.setLongitude()
         weather.setLocation(location)
         
         def list = new ArrayList()
-        for (f in rss.channel.item.forecast) {
+        for (f in rss.results.channel.item.forecast) {
             def forecast = new Forecast()
             forecast.setDay(f.@day.toString())
             forecast.setHighTemperature(f.@high.toInteger())
