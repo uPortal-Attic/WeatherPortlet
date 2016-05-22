@@ -31,5 +31,14 @@
 
     <lang:groovy id="locationParsingService"
         script-source="classpath:org/jasig/portlet/weather/dao/yahoo/YahooLocationParsingServiceImpl.groovy"/>
-            
+
+    <!--messages.properties Configuration -->
+    <bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
+        <property name="basenames">
+            <list>
+                <value>messages</value>
+            </list>
+        </property>
+    </bean>
+
 </beans>
