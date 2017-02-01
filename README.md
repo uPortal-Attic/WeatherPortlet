@@ -28,7 +28,7 @@ The Weather Portlet has been bundled with uPortal since 3.2.0.
 
 The default weather service is [Yahoo! Weather](https://developer.yahoo.com/weather/).
 Weather locations are most commonly configured by the portal developer/administrator
-using portlet preferences. *Currently this method does not require an API key.*
+using portlet preferences. **Currently this method does not require an API key.**
 
 #### Example Weather Locations Configuration:
 
@@ -54,9 +54,9 @@ using portlet preferences. *Currently this method does not require an API key.*
 </portlet-preference>
 ```
 
-You can discover `locationCodes` for your locations by visiting the associated page
-in Yahoo! Weather.  For example, the following URL belongs to the Yahoo! Weather page
-for Phoenix, AZ:
+You can discover `locationCodes` for your locations by inspecting the URL of the
+associated page in Yahoo! Weather.  For example, the following URL belongs to the
+Yahoo! Weather page for Phoenix, AZ:
 
   - <https://www.yahoo.com/news/weather/united-states/arizona/phoenix-2471390/>
 
@@ -64,8 +64,9 @@ The location code for Phoenix is 2471390.
 
 ### <a name="yahoo!"></a> Yahoo! Weather API Key
 
-The Apereo Weather Portlet provides an EDIT mode that allows users to manage their own
-weather locations.  To use it, you must provide a valid API key from developer.yahoo.com.
+The Apereo Weather Portlet includes an optional EDIT mode that allows end users to
+manage their own weather locations.  To use it, you must provide a valid API key
+from developer.yahoo.com.
 
 To obtain an API key, you must [Create an App](https://developer.yahoo.com/apps/create)
 in the Yahoo! Developer Network portal.  Once you create your app, copy the
@@ -87,13 +88,14 @@ Paste the `Client Secret` in the space provided within
 </bean>
 ```
 
-You must assemble and deploy a new build of the Weather Portlet for this change to take effect.
+As with all portlets, you must package and deploy a new build of the Weather Portlet
+for this change to take effect.
 
 ## <a name="help"></a> Where to Get Help
 The <uportal-user@apereo.org> mailing list is the best place to go with
 questions related to Apereo portlets and uPortal.
 
-Issues should be reported at <https://issues.jasig.org/browse/WPP>.
+Issues should be reported at <https://issues.jasig.org/browse/WPT>.
 Check if your issue has already been reported. If so, comment that you are also
 experiencing the issue and add any detail that could help resolve it. Feel free to
 create an issue if it has not been reported. Creating an account is free and can be
