@@ -1,5 +1,7 @@
 # Apereo Weather Portlet
 
+[![Build Status](https://travis-ci.org/Jasig/WeatherPortlet.svg?branch=master)](https://travis-ci.org/Jasig/WeatherPortlet)
+
 This is a [Sponsored Portlet][] in the uPortal project.
 
 [Link to old documentation](https://wiki.jasig.org/display/PLT/Weather+Portlet)
