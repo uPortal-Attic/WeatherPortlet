@@ -34,7 +34,7 @@ using portlet preferences. **Currently this method does not require an API key.*
 
 #### Example Weather Locations Configuration:
 
-```
+``` xml
 <portlet-preference>
     <name>locationCodes</name>
     <value>2459115</value>
@@ -77,7 +77,7 @@ in the Yahoo! Developer Network portal.  Once you create your app, copy the
 Paste the `Client Secret` in the space provided within
 `src/main/webapp/WEB-INF/context/applicationContext.xml`:
 
-```
+``` xml
 <!--
     Yahoo! Weather DAO Implementation
 -->
