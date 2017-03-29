@@ -1,6 +1,7 @@
 # Apereo Weather Portlet
 
-[![Build Status](https://travis-ci.org/Jasig/WeatherPortlet.svg?branch=master)](https://travis-ci.org/Jasig/WeatherPortlet)
+[![Linux Build Status](https://travis-ci.org/Jasig/WeatherPortlet.svg?branch=master)](https://travis-ci.org/Jasig/WeatherPortlet)
+[![Windows Build status](https://ci.appveyor.com/api/projects/status/jkkl5vy59gx4rayi/branch/master?svg=true)](https://ci.appveyor.com/project/ChristianMurphy/weatherportlet/branch/master)
 
 This is a [Sponsored Portlet][] in the uPortal project.
 
