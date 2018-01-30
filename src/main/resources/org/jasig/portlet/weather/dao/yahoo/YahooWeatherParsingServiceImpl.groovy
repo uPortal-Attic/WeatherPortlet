@@ -43,8 +43,8 @@ class YahooWeatherParsingServiceImpl implements IYahooWeatherParsingService {
             //same link XML block.  We want the second link.
             weather.setMoreInformationLink(link.substring(link.indexOf("*")+1))
         } else {
-        	//Fallback case, though shouldn't occur.
-	        weather.setMoreInformationLink(link)      
+            //Fallback case, though shouldn't occur.
+            weather.setMoreInformationLink(link)      
         }
         
         def current = new Current()
