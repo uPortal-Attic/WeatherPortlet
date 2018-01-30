@@ -39,11 +39,11 @@ class YahooWeatherParsingServiceImpl implements IYahooWeatherParsingService {
         weather.setWindUnit(rss.results.channel.units.@speed.toString())
         def link = rss.results.channel.link.toString()
         if((link != null) && (link.indexOf("*") != -1)) {
-            //Yahoo API states there's a * character between two links in the 
-            //same link XML block.  We want the second link.
-            weather.setMoreInformationLink(link.substring(link.indexOf("*")+1))
+            // Yahoo API states there's a * character between two links in the 
+            // same link XML block.  We want the second link.
+            weather.setMoreInformationLink(link.substring(link.indexOf("*") + 1))
         } else {
-            //Fallback case, though shouldn't occur.
+            // Fallback case, though shouldn't occur.
             weather.setMoreInformationLink(link)      
         }
         
