@@ -24,7 +24,7 @@
         <channel>
             <yweather:units xmlns:yweather="http://xml.weather.yahoo.com/ns/rss/1.0" distance="mi" pressure="in" speed="mph" temperature="F" />
             <title>Yahoo! Weather - Sunnyvale, CA, US</title>
-            <link>http://us.rd.yahoo.com/dailynews/rss/weather/Country__Country/*https://weather.yahoo.com/country/state/city-2502265/</link>
+            <link>https://us.rd.yahoo.com/dailynews/rss/weather/Country__Country/*https://weather.yahoo.com/country/state/city-2502265/</link>
             <description>Yahoo! Weather for Sunnyvale, CA, US</description>
             <language>en-us</language>
             <lastBuildDate>Wed, 27 Apr 2016 05:00 PM PDT</lastBuildDate>
@@ -37,14 +37,14 @@
                 <title>Yahoo! Weather</title>
                 <width>142</width>
                 <height>18</height>
-                <link>http://weather.yahoo.com</link>
-                <url>http://l.yimg.com/a/i/brand/purplelogo//uh/us/news-wea.gif</url>
+                <link>https://weather.yahoo.com</link>
+                <url>https://l.yimg.com/a/i/brand/purplelogo//uh/us/news-wea.gif</url>
             </image>
             <item>
                 <title>Conditions for Sunnyvale, CA, US at 04:00 PM PDT</title>
                 <geo:lat xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#">37.371609</geo:lat>
                 <geo:long xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#">-122.038254</geo:long>
-                <link>http://us.rd.yahoo.com/dailynews/rss/weather/Country__Country/*https://weather.yahoo.com/country/state/city-2502265/</link>
+                <link>https://us.rd.yahoo.com/dailynews/rss/weather/Country__Country/*https://weather.yahoo.com/country/state/city-2502265/</link>
                 <pubDate>Wed, 27 Apr 2016 04:00 PM PDT</pubDate>
                 <yweather:condition xmlns:yweather="http://xml.weather.yahoo.com/ns/rss/1.0" code="34" date="Wed, 27 Apr 2016 04:00 PM PDT" temp="62" text="Mostly Sunny" />
                 <yweather:forecast xmlns:yweather="http://xml.weather.yahoo.com/ns/rss/1.0" code="47" date="27 Apr 2016" day="Wed" high="65" low="51" text="Scattered Thunderstorms" />
@@ -57,7 +57,7 @@
                 <yweather:forecast xmlns:yweather="http://xml.weather.yahoo.com/ns/rss/1.0" code="28" date="04 May 2016" day="Wed" high="77" low="55" text="Mostly Cloudy" />
                 <yweather:forecast xmlns:yweather="http://xml.weather.yahoo.com/ns/rss/1.0" code="28" date="05 May 2016" day="Thu" high="73" low="56" text="Mostly Cloudy" />
                 <yweather:forecast xmlns:yweather="http://xml.weather.yahoo.com/ns/rss/1.0" code="30" date="06 May 2016" day="Fri" high="71" low="56" text="Partly Cloudy" />
-                <description><![CDATA[<img src="http://l.yimg.com/a/i/us/we/52/23.gif"/> <BR /> <b>Current Conditions:</b> <BR />Breezy <BR /> <BR /> <b>Forecast:</b> <BR /> Wed - Scattered Thunderstorms. High: 65Low: 51 <BR /> Thu - Mostly Sunny. High: 71Low: 51 <BR /> Fri - Partly Cloudy. High: 77Low: 51 <BR /> Sat - Mostly Sunny. High: 79Low: 52 <BR /> Sun - Sunny. High: 88Low: 59 <BR /> <BR /> <a href="http://us.rd.yahoo.com/dailynews/rss/weather/Country__Country/*https://weather.yahoo.com/country/state/city-2502265/">Full Forecast at Yahoo! Weather</a> <BR /> <BR /> (provided by <a href="http://www.weather.com" >The Weather Channel</a>) <BR />]]></description>
+                <description><![CDATA[<img src="http://l.yimg.com/a/i/us/we/52/23.gif"/> <BR /> <b>Current Conditions:</b> <BR />Breezy <BR /> <BR /> <b>Forecast:</b> <BR /> Wed - Scattered Thunderstorms. High: 65Low: 51 <BR /> Thu - Mostly Sunny. High: 71Low: 51 <BR /> Fri - Partly Cloudy. High: 77Low: 51 <BR /> Sat - Mostly Sunny. High: 79Low: 52 <BR /> Sun - Sunny. High: 88Low: 59 <BR /> <BR /> <a href="https://us.rd.yahoo.com/dailynews/rss/weather/Country__Country/*https://weather.yahoo.com/country/state/city-2502265/">Full Forecast at Yahoo! Weather</a> <BR /> <BR /> (provided by <a href="http://www.weather.com" >The Weather Channel</a>) <BR />]]></description>
                 <guid isPermaLink="false" />
             </item>
         </channel>
