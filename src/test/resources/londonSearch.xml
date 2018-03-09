@@ -26,7 +26,7 @@
         <latitude>51.500</latitude>
         <longitude>-0.120</longitude>
         <population>7421228</population>
-        <weatherUrl><![CDATA[http://www.worldweatheronline.com/weather/United-Kingdom/806139/London/815790/info.aspx]]></weatherUrl>
+        <weatherUrl><![CDATA[https://www.worldweatheronline.com/weather/United-Kingdom/806139/London/815790/info.aspx]]></weatherUrl>
     </result>
     <result>
         <areaName><![CDATA[London]]></areaName>
@@ -35,7 +35,7 @@
         <latitude>42.980</latitude>
         <longitude>-81.250</longitude>
         <population>346774</population>
-        <weatherUrl><![CDATA[http://www.worldweatheronline.com/weather/Canada/291889/London/294607/info.aspx]]></weatherUrl>
+        <weatherUrl><![CDATA[https://www.worldweatheronline.com/weather/Canada/291889/London/294607/info.aspx]]></weatherUrl>
     </result>
     <result>
         <areaName><![CDATA[London]]></areaName>
@@ -44,6 +44,6 @@
         <latitude>-24.300</latitude>
         <longitude>30.580</longitude>
         <population>0</population>
-        <weatherUrl><![CDATA[http://www.worldweatheronline.com/weather/South-Africa/2610093/London/2615914/info.aspx]]></weatherUrl>
+        <weatherUrl><![CDATA[https://www.worldweatheronline.com/weather/South-Africa/2610093/London/2615914/info.aspx]]></weatherUrl>
     </result>
 </search_api>

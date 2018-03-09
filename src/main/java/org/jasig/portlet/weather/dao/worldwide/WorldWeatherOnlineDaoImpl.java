@@ -59,25 +59,25 @@ public class WorldWeatherOnlineDaoImpl implements IWeatherDao, DisposableBean, I
 
     private static final String DATE_PATTERN = "yyyy-MM-dd";
     private static final String DAY_PATTERN = "EEE";
-    
-    private static final String FIND_URL = "http://api.worldweatheronline.com/free/v1/search.ashx?key=@KEY@&q=@QUERY@&num_of_results=3&format=xml";
-    private static final String WEATHER_URL = "http://api.worldweatheronline.com/free/v1/weather.ashx?key=@KEY@&num_of_days=3&format=xml&q=@LOCATION@";
+
+    private static final String FIND_URL = "https://api.worldweatheronline.com/free/v1/search.ashx?key=@KEY@&q=@QUERY@&num_of_results=3&format=xml";
+    private static final String WEATHER_URL = "https://api.worldweatheronline.com/free/v1/weather.ashx?key=@KEY@&num_of_days=3&format=xml&q=@LOCATION@";
     private String key = null;
 
     private Properties imageMapping;
-    
+
     //Multi-threaded connection manager for exclusive access
     private final MultiThreadedHttpConnectionManager connectionManager = new MultiThreadedHttpConnectionManager();
-    
+
     //Define the HttpClient here and pass it so we only define one instance
     private final HttpClient httpClient = new HttpClient(connectionManager);
-    
+
     //Default timeout of 5 seconds
     private int connectionTimeout = 5000;
-    
+
     //Default timeout of 5 seconds
     private int readTimeout = 5000;
-    
+
     //Default retry of 5 times
     private int timesToRetry = 5;
 
@@ -85,7 +85,7 @@ public class WorldWeatherOnlineDaoImpl implements IWeatherDao, DisposableBean, I
     public void setConnectionTimeout(int connectionTimeout) {
         this.connectionTimeout = connectionTimeout;
     }
-    
+
     public void setReadTimeout(int readTimeout) {
         this.readTimeout = readTimeout;
     }
@@ -93,11 +93,11 @@ public class WorldWeatherOnlineDaoImpl implements IWeatherDao, DisposableBean, I
     public void setTimesToRetry(int timesToRetry) {
         this.timesToRetry = timesToRetry;
     }
-    
+
     public void setKey(String key) {
         this.key = key;
     }
-    
+
     public void setImageMapping(Resource imageMapping) {
         this.imageMapping = new Properties();
         InputStream is = null;
@@ -110,7 +110,7 @@ public class WorldWeatherOnlineDaoImpl implements IWeatherDao, DisposableBean, I
             IOUtils.closeQuietly(is);
         }
     }
-    
+
     /* (non-Javadoc)
      * @see org.springframework.beans.factory.InitializingBean#afterPropertiesSet()
      */
@@ -119,7 +119,7 @@ public class WorldWeatherOnlineDaoImpl implements IWeatherDao, DisposableBean, I
         final HttpConnectionManagerParams params = httpConnectionManager.getParams();
         params.setConnectionTimeout(connectionTimeout);
         params.setSoTimeout(readTimeout);
-        
+
         params.setParameter(HttpMethodParams.RETRY_HANDLER, new HttpMethodRetryHandler() {
             public boolean retryMethod(final HttpMethod method, final IOException exception, int executionCount) {
                 if (executionCount >= timesToRetry) {
@@ -175,11 +175,11 @@ public class WorldWeatherOnlineDaoImpl implements IWeatherDao, DisposableBean, I
 
             // Read the response body
             inputStream = getMethod.getResponseBodyAsStream();
-            
+
             List<Location> locations = deserializeSearchResults(inputStream);
 
             return locations;
-            
+
         } catch (HttpException e) {
             throw new RuntimeException("http protocol exception while getting data from weather service from: " + url, e);
         } catch (IOException e) {
@@ -191,9 +191,9 @@ public class WorldWeatherOnlineDaoImpl implements IWeatherDao, DisposableBean, I
             IOUtils.closeQuietly(inputStream);
             //release the connection
             getMethod.releaseConnection();
-        }       
+        }
     }
-    
+
     /* (non-Javadoc)
      * @see org.jasig.portlet.weather.dao.IWeatherDao#getWeather(java.lang.String, org.jasig.portlet.weather.TemperatureUnit)
      */
@@ -208,7 +208,7 @@ public class WorldWeatherOnlineDaoImpl implements IWeatherDao, DisposableBean, I
             location.setStateOrCountry(locationParts[1]);
         }
         weather.setLocation(location);
-        weather.setMoreInformationLink("http://www.worldweatheronline.com/weather.aspx?q=" + QuietUrlCodec.encode(locationCode, Constants.URL_ENCODING));
+        weather.setMoreInformationLink("https://www.worldweatheronline.com/weather.aspx?q=" + QuietUrlCodec.encode(locationCode, Constants.URL_ENCODING));
 
         return weather;
     }
@@ -218,9 +218,9 @@ public class WorldWeatherOnlineDaoImpl implements IWeatherDao, DisposableBean, I
     }
 
     public String getWeatherProviderLink() {
-        return "http://www.worldweatheronline.com/";
+        return "https://www.worldweatheronline.com/";
     }
-    
+
     protected Object getAndDeserialize(String url, TemperatureUnit unit) {
         HttpMethod getMethod = new GetMethod(url);
         InputStream inputStream = null;
@@ -234,11 +234,11 @@ public class WorldWeatherOnlineDaoImpl implements IWeatherDao, DisposableBean, I
 
             // Read the response body
             inputStream = getMethod.getResponseBodyAsStream();
-            
+
             Weather weather = deserializeWeatherResult(inputStream, unit);
 
             return weather;
-            
+
         } catch (HttpException e) {
             throw new RuntimeException("http protocol exception while getting data from weather service from: " + url, e);
         } catch (IOException e) {
@@ -252,28 +252,28 @@ public class WorldWeatherOnlineDaoImpl implements IWeatherDao, DisposableBean, I
             IOUtils.closeQuietly(inputStream);
             //release the connection
             getMethod.releaseConnection();
-        }       
+        }
     }
-    
+
     protected Weather deserializeWeatherResult(InputStream inputStream, TemperatureUnit unit) throws JAXBException, ParseException {
         JAXBContext jaxbContext = JAXBContext.newInstance(WeatherData.class);
         Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
         WeatherData data = (WeatherData) unmarshaller.unmarshal(inputStream);
-        
+
         Weather weather = new Weather();
-        
+
         Current current = new Current();
         current.setCondition(data.getCondition().getDescription());
         current.setHumidity(data.getCondition().getHumidity());
         current.setPressure(data.getCondition().getPressure());
         current.setWindDirection(data.getCondition().getWindDir());
-        
+
         if (data.getCondition().getWeatherIconUrl() != null && data.getCondition().getWeatherIconUrl().contains("night")) {
             current.setImgName(imageMapping.getProperty("image.night." + data.getCondition().getWeatherCode()));
         } else {
             current.setImgName(imageMapping.getProperty("image.day." + data.getCondition().getWeatherCode()));
         }
-        
+
         switch (unit) {
             case C:
                 current.setTemperature(data.getCondition().getTempC());
@@ -307,7 +307,7 @@ public class WorldWeatherOnlineDaoImpl implements IWeatherDao, DisposableBean, I
 
             Date date = dateFormat.parse(f.getDate());
             forecast.setDay(dayFormat.format(date));
-            
+
             switch (unit) {
                 case C:
                     forecast.setHighTemperature(f.getTempMaxC());
@@ -320,7 +320,7 @@ public class WorldWeatherOnlineDaoImpl implements IWeatherDao, DisposableBean, I
             forecasts.add(forecast);
         }
         weather.setForecast(forecasts);
-        
+
         return weather;
     }
 
@@ -331,14 +331,14 @@ public class WorldWeatherOnlineDaoImpl implements IWeatherDao, DisposableBean, I
         SearchData data = (SearchData) unmarshaller.unmarshal(inputStream);
 
         List<Location> locations = new ArrayList<Location>();
-        
+
         for (LocationResult l : data.getResults()) {
             Location location = new Location();
             location.setCity(l.getCity());
             location.setLatitude(l.getLatitude());
             location.setLongitude(l.getLongitude());
             location.setStateOrCountry(l.getRegion() != null ? l.getRegion() : l.getCountry());
-            
+
             StringBuffer code = new StringBuffer();
             code.append(l.getCity());
             if (l.getRegion() != null && !l.getRegion().contains(", ")) {
@@ -350,7 +350,7 @@ public class WorldWeatherOnlineDaoImpl implements IWeatherDao, DisposableBean, I
             location.setLocationCode(code.toString());
             locations.add(location);
         }
-        
+
         return locations;
     }
 

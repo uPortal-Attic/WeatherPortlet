@@ -22,7 +22,7 @@
 <places xmlns="http://where.yahooapis.com/v1/schema.rng"
     xmlns:yahoo="http://www.yahooapis.com/v1/base.rng" yahoo:start="0"
     yahoo:count="10" yahoo:total="24">
-    <place yahoo:uri="http://where.yahooapis.com/v1/place/44418"
+    <place yahoo:uri="https://where.yahooapis.com/v1/place/44418"
         xml:lang="en-us">
         <woeid>44418</woeid>
         <placeTypeName code="7">Town</placeTypeName>
@@ -51,7 +51,7 @@
         <areaRank>7</areaRank>
         <popRank>13</popRank>
     </place>
-    <place yahoo:uri="http://where.yahooapis.com/v1/place/4063"
+    <place yahoo:uri="https://where.yahooapis.com/v1/place/4063"
         xml:lang="en-us">
         <woeid>4063</woeid>
         <placeTypeName code="7">Town</placeTypeName>
@@ -80,7 +80,7 @@
         <areaRank>6</areaRank>
         <popRank>11</popRank>
     </place>
-    <place yahoo:uri="http://where.yahooapis.com/v1/place/2441293"
+    <place yahoo:uri="https://where.yahooapis.com/v1/place/2441293"
         xml:lang="en-us">
         <woeid>2441293</woeid>
         <placeTypeName code="7">Town</placeTypeName>
@@ -109,7 +109,7 @@
         <areaRank>3</areaRank>
         <popRank>8</popRank>
     </place>
-    <place yahoo:uri="http://where.yahooapis.com/v1/place/2441291"
+    <place yahoo:uri="https://where.yahooapis.com/v1/place/2441291"
         xml:lang="en-us">
         <woeid>2441291</woeid>
         <placeTypeName code="7">Town</placeTypeName>
@@ -138,7 +138,7 @@
         <areaRank>1</areaRank>
         <popRank>8</popRank>
     </place>
-    <place yahoo:uri="http://where.yahooapis.com/v1/place/2441279"
+    <place yahoo:uri="https://where.yahooapis.com/v1/place/2441279"
         xml:lang="en-us">
         <woeid>2441279</woeid>
         <placeTypeName code="7">Town</placeTypeName>
@@ -167,7 +167,7 @@
         <areaRank>1</areaRank>
         <popRank>1</popRank>
     </place>
-    <place yahoo:uri="http://where.yahooapis.com/v1/place/2441292"
+    <place yahoo:uri="https://where.yahooapis.com/v1/place/2441292"
         xml:lang="en-us">
         <woeid>2441292</woeid>
         <placeTypeName code="7">Town</placeTypeName>
@@ -196,7 +196,7 @@
         <areaRank>3</areaRank>
         <popRank>8</popRank>
     </place>
-    <place yahoo:uri="http://where.yahooapis.com/v1/place/2441289"
+    <place yahoo:uri="https://where.yahooapis.com/v1/place/2441289"
         xml:lang="en-us">
         <woeid>2441289</woeid>
         <placeTypeName code="7">Town</placeTypeName>
@@ -225,7 +225,7 @@
         <areaRank>2</areaRank>
         <popRank>1</popRank>
     </place>
-    <place yahoo:uri="http://where.yahooapis.com/v1/place/2441278"
+    <place yahoo:uri="https://where.yahooapis.com/v1/place/2441278"
         xml:lang="en-us">
         <woeid>2441278</woeid>
         <placeTypeName code="7">Town</placeTypeName>
@@ -254,7 +254,7 @@
         <areaRank>2</areaRank>
         <popRank>1</popRank>
     </place>
-    <place yahoo:uri="http://where.yahooapis.com/v1/place/2441286"
+    <place yahoo:uri="https://where.yahooapis.com/v1/place/2441286"
         xml:lang="en-us">
         <woeid>2441286</woeid>
         <placeTypeName code="7">Town</placeTypeName>
@@ -283,7 +283,7 @@
         <areaRank>0</areaRank>
         <popRank>1</popRank>
     </place>
-    <place yahoo:uri="http://where.yahooapis.com/v1/place/2441281"
+    <place yahoo:uri="https://where.yahooapis.com/v1/place/2441281"
         xml:lang="en-us">
         <woeid>2441281</woeid>
         <placeTypeName code="7">Town</placeTypeName>

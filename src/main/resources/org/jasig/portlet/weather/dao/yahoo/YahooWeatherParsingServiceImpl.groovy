@@ -81,7 +81,7 @@ class YahooWeatherParsingServiceImpl implements IYahooWeatherParsingService {
             forecast.setHighTemperature(f.@high.toInteger())
             forecast.setLowTemperature(f.@low.toInteger())
             forecast.setCondition(f.@text.toString())
-            forecast.setImgUrl("http://l.yimg.com/a/i/us/we/52/" + f.@code.toString() + ".gif")
+            forecast.setImgUrl("https://s.yimg.com/zz/combo?/a/i/us/we/52/" + f.@code.toString() + ".gif")
             list.add(forecast)
         }
         weather.setForecast(list)
