@@ -1,8 +1,7 @@
 # Apereo Weather Portlet
 
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.jasig.portlet/WeatherPortlet/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.jasig.portlet/WeatherPortlet)
-[![Linux Build Status](https://travis-ci.org/Jasig/WeatherPortlet.svg?branch=master)](https://travis-ci.org/Jasig/WeatherPortlet)
-[![Windows Build status](https://ci.appveyor.com/api/projects/status/jkkl5vy59gx4rayi/branch/master?svg=true)](https://ci.appveyor.com/project/ChristianMurphy/weatherportlet/branch/master)
+[![build status](https://github.com/uPortal-Project/WeatherPortlet/workflows/CI/badge.svg?branch=master)](https://github.com/uPortal-Project/WeatherPortlet/actions)
 
 This is a [Sponsored Portlet][] in the uPortal project.
 
