@@ -30,7 +30,7 @@
     </issueManagement>
 
     <properties>
-        <pluto.version>2.1.0-M3</pluto.version>
+        <pluto.version>3.1.1</pluto.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <jaxbApiVersion>2.2.1</jaxbApiVersion>
         <jaxbImplVersion>2.2.1.1</jaxbImplVersion>
