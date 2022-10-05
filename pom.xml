@@ -36,7 +36,7 @@
         <jaxbImplVersion>2.2.1.1</jaxbImplVersion>
         <logbackVersion>1.4.3</logbackVersion>
         <resourceServerVersion>1.0.43</resourceServerVersion>
-        <slf4jVersion>1.7.32</slf4jVersion>
+        <slf4jVersion>1.7.36</slf4jVersion>
         <spring.version>4.0.9.RELEASE</spring.version>
     </properties>
     <build>
